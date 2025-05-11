@@ -33,7 +33,7 @@
 }
 
 .navbar-menu-item.tutor a {
-  color: #1890ff;
+  color: #0077ff;
 }
 
 .navbar-signin {
@@ -42,6 +42,6 @@
 }
 
 .navbar-login-button {
-  background: #1890ff;
-  border-color: #1890ff;
+  background: #0077ff;
+  border-color: #0077ff;
 }

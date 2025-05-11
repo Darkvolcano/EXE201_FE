@@ -27,7 +27,7 @@
 }
 
 .hero-title .highlight {
-  color: #1890ff;
+  color: #0077ff;
 }
 
 .hero-description {
@@ -51,7 +51,7 @@
   display: block;
   font-size: 24px;
   font-weight: bold;
-  color: #1890ff;
+  color: #0077ff;
   margin-bottom: 5px;
 }
 
@@ -79,7 +79,7 @@
 .search-button {
   height: 48px;
   border-radius: 0 24px 24px 0;
-  background: #1890ff;
+  background: #0077ff;
   border: none;
   padding: 0 30px;
   font-size: 16px;
@@ -111,7 +111,7 @@
 .image-placeholder-bottom {
   width: 400px;
   height: 400px;
-  background: #1890ff;
+  background: #0077ff;
   border-radius: 20px;
 }
 
@@ -121,7 +121,7 @@
 
 .about-label {
   font-size: 12px;
-  color: #1890ff;
+  color: #0077ff;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 10px;
@@ -151,7 +151,7 @@
 .get-started-button {
   height: 48px;
   border-radius: 24px;
-  background: #1890ff;
+  background: #0077ff;
   border: none;
   padding: 0 30px;
   font-size: 16px;
@@ -160,7 +160,7 @@
 
 .watch-video-button {
   font-size: 16px;
-  color: #1890ff;
+  color: #0077ff;
   display: flex;
   align-items: center;
 }
@@ -172,7 +172,7 @@
   line-height: 24px;
   text-align: center;
   border-radius: 50%;
-  background: #1890ff;
+  background: #0077ff;
   color: #fff;
   margin-right: 10px;
 }
@@ -192,7 +192,7 @@
 
 .why-choose-label {
   font-size: 12px;
-  color: #1890ff;
+  color: #0077ff;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 10px;
@@ -229,7 +229,7 @@
   line-height: 24px;
   text-align: center;
   border-radius: 50%;
-  background: #1890ff;
+  background: #0077ff;
   color: #fff;
   margin-right: 10px;
   font-size: 14px;
@@ -242,7 +242,7 @@
 .image-placeholder-why-choose {
   width: 400px;
   height: 400px;
-  background: #1890ff;
+  background: #0077ff;
   border-radius: 20px;
 }
 
@@ -338,7 +338,7 @@
 
 .pricing-label {
   font-size: 12px;
-  color: #1890ff;
+  color: #0077ff;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 10px;
@@ -374,7 +374,7 @@
 }
 
 .plan-card.highlighted {
-  background: #1890ff;
+  background: #0077ff;
   color: #fff;
 }
 
@@ -431,14 +431,14 @@
   border-radius: 20px;
   background: #fff;
   border: 1px solid #d9d9d9;
-  color: #1890ff;
+  color: #0077ff;
   font-size: 14px;
   padding: 0 20px;
 }
 
 .plan-card.highlighted .plan-button {
   background: #fff;
-  color: #1890ff;
+  color: #0077ff;
 }
 
 /* Testimonial Section */
@@ -449,7 +449,7 @@
 
 .testimonial-label {
   font-size: 12px;
-  color: #1890ff;
+  color: #0077ff;
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-bottom: 10px;
@@ -525,7 +525,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: #1890ff;
+  background: #0077ff;
   border: none;
   color: #fff;
   font-size: 16px;
