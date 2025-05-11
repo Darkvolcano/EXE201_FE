@@ -1,0 +1,47 @@
+.navbar-container {
+  background: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.navbar-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #595959;
+}
+
+.navbar-menu {
+  background: transparent;
+  border: none;
+  line-height: 64px;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-menu-item {
+  margin: 0 15px;
+  color: #595959;
+}
+
+.navbar-menu-item a {
+  color: #595959;
+  text-decoration: none;
+}
+
+.navbar-menu-item.tutor a {
+  color: #1890ff;
+}
+
+.navbar-signin {
+  margin-right: 15px;
+  color: #595959;
+}
+
+.navbar-login-button {
+  background: #1890ff;
+  border-color: #1890ff;
+}

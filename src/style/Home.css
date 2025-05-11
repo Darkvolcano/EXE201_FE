@@ -1,0 +1,535 @@
+.homepage-container {
+  font-family: "Arial", sans-serif;
+  background: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 80px;
+  background: #fff;
+}
+
+.hero-text {
+  max-width: 50%;
+}
+
+.hero-title {
+  font-size: 64px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.hero-title .highlight {
+  color: #1890ff;
+}
+
+.hero-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #595959;
+  margin-bottom: 30px;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #1890ff;
+  margin-bottom: 5px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #595959;
+  text-transform: uppercase;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 300px;
+  height: 48px;
+  border-radius: 24px 0 0 24px;
+  border: 1px solid #d9d9d9;
+  border-right: none;
+  padding: 0 20px;
+  font-size: 16px;
+}
+
+.search-button {
+  height: 48px;
+  border-radius: 0 24px 24px 0;
+  background: #1890ff;
+  border: none;
+  padding: 0 30px;
+  font-size: 16px;
+}
+
+.hero-image {
+  max-width: 45%;
+}
+
+.image-placeholder-top {
+  width: 400px;
+  height: 500px;
+  background: #e8e8e8;
+}
+
+/* About Section */
+.about-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 80px;
+  background: #fff;
+}
+
+.about-image {
+  max-width: 45%;
+}
+
+.image-placeholder-bottom {
+  width: 400px;
+  height: 400px;
+  background: #1890ff;
+  border-radius: 20px;
+}
+
+.about-text {
+  max-width: 50%;
+}
+
+.about-label {
+  font-size: 12px;
+  color: #1890ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.about-title {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.about-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #595959;
+  margin-bottom: 30px;
+}
+
+.about-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.get-started-button {
+  height: 48px;
+  border-radius: 24px;
+  background: #1890ff;
+  border: none;
+  padding: 0 30px;
+  font-size: 16px;
+  margin-right: 20px;
+}
+
+.watch-video-button {
+  font-size: 16px;
+  color: #1890ff;
+  display: flex;
+  align-items: center;
+}
+
+.play-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  background: #1890ff;
+  color: #fff;
+  margin-right: 10px;
+}
+
+/* Why Choose Tutorify Section */
+.why-choose-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 60px 80px;
+  background: #fff;
+}
+
+.why-choose-text {
+  max-width: 50%;
+}
+
+.why-choose-label {
+  font-size: 12px;
+  color: #1890ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.why-choose-title {
+  font-size: 40px;
+  font-weight: 900;
+  line-height: 1.2;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.why-choose-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.why-choose-list li {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #595959;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.check-icon {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  text-align: center;
+  border-radius: 50%;
+  background: #1890ff;
+  color: #fff;
+  margin-right: 10px;
+  font-size: 14px;
+}
+
+.why-choose-image {
+  max-width: 45%;
+}
+
+.image-placeholder-why-choose {
+  width: 400px;
+  height: 400px;
+  background: #1890ff;
+  border-radius: 20px;
+}
+
+/* Top Mentor Section */
+.top-mentor-section {
+  padding: 60px 80px;
+  background: #fff;
+  text-align: center;
+}
+
+.top-mentor-title {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.top-mentor-description {
+  font-size: 16px;
+  color: #595959;
+  margin-bottom: 40px;
+}
+
+.mentor-list {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.mentor-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  width: 30%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mentor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mentor-image-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #e8e8e8;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.mentor-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 8px 0;
+}
+
+.mentor-role {
+  font-size: 14px;
+  color: #595959;
+  margin: 0 0 10px 0;
+}
+
+.mentor-experience {
+  font-size: 14px;
+  color: #595959;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clock-icon {
+  margin-right: 5px;
+}
+
+.mentor-rating {
+  font-size: 14px;
+  color: #595959;
+}
+
+.stars {
+  color: #fadb14;
+}
+
+/* Pricing Section */
+.pricing-section {
+  padding: 60px 80px;
+  background: #fff;
+}
+
+.pricing-label {
+  font-size: 12px;
+  color: #1890ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.pricing-title {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.pricing-description {
+  font-size: 16px;
+  color: #595959;
+  margin-bottom: 40px;
+}
+
+.pricing-plans {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.plan-card {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  text-align: center;
+  width: 23%;
+}
+
+.plan-card.highlighted {
+  background: #1890ff;
+  color: #fff;
+}
+
+.plan-card.highlighted .plan-title,
+.plan-card.highlighted .plan-description,
+.plan-card.highlighted .plan-features li,
+.plan-card.highlighted .plan-price,
+.plan-card.highlighted .plan-period {
+  color: #fff;
+}
+
+.plan-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px 0;
+}
+
+.plan-description {
+  font-size: 14px;
+  color: #595959;
+  margin: 0 0 20px 0;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+}
+
+.plan-features li {
+  font-size: 14px;
+  color: #595959;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plan-price {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+.plan-period {
+  font-size: 14px;
+  color: #595959;
+}
+
+.plan-button {
+  height: 40px;
+  border-radius: 20px;
+  background: #fff;
+  border: 1px solid #d9d9d9;
+  color: #1890ff;
+  font-size: 14px;
+  padding: 0 20px;
+}
+
+.plan-card.highlighted .plan-button {
+  background: #fff;
+  color: #1890ff;
+}
+
+/* Testimonial Section */
+.testimonial-section {
+  padding: 60px 80px;
+  background: #fff;
+}
+
+.testimonial-label {
+  font-size: 12px;
+  color: #1890ff;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.testimonial-title {
+  font-size: 40px;
+  font-weight: 900;
+  color: #1a1a1a;
+  margin: 0 0 40px 0;
+}
+
+.testimonial-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.testimonial-text {
+  max-width: 60%;
+}
+
+.testimonial-quote {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #595959;
+  margin: 0 0 20px 0;
+}
+
+.testimonial-author {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 5px 0;
+}
+
+.testimonial-role {
+  font-size: 14px;
+  color: #595959;
+}
+
+.testimonial-image {
+  max-width: 35%;
+}
+
+.image-placeholder-testimonial {
+  width: 300px;
+  height: 300px;
+  background: #e8e8e8;
+  border-radius: 10px;
+}
+
+.testimonial-navigation {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.testimonial-counter {
+  font-size: 14px;
+  color: #595959;
+  margin-right: 20px;
+}
+
+.testimonial-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.arrow-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #1890ff;
+  border: none;
+  color: #fff;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
