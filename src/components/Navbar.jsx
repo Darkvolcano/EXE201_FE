@@ -1,9 +1,19 @@
 import React from "react";
-import { Menu, Button } from "antd";
+import { Menu, Button, Badge } from "antd";
 import { Link } from "react-router-dom";
 import "../style/Navbar.css";
+import {
+  BellOutlined,
+  HeartOutlined,
+  ShoppingCartOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import useAuthStore from "../hooks/authenStoreApi";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+
   return (
     <div className="navbar-container">
       <div className="navbar-logo">TUTORIFY</div>
@@ -30,11 +40,54 @@ const Navbar = () => {
         </Menu.Item>
       </Menu>
 
-      <div>
-        <span className="navbar-signin">Sign In</span>
-        <Button type="primary" className="navbar-login-button">
-          Login
-        </Button>
+      <div className="navbar-user-section">
+        {!user ? (
+          <>
+            <span
+              className="navbar-signin"
+              onClick={() => navigate("/register")}
+            >
+              Sign In
+            </span>
+            <Button
+              type="primary"
+              className="navbar-login-button"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+          </>
+        ) : (
+          <>
+            <div className="navbar-icons">
+              <Badge dot color="blue" className="navbar-badge">
+                <BellOutlined className="navbar-icon" />
+              </Badge>
+              <Badge className="navbar-badge">
+                <HeartOutlined className="navbar-icon" />
+              </Badge>
+              <Badge
+                count={user.cartItems || 2}
+                color="blue"
+                className="navbar-badge"
+              >
+                <ShoppingCartOutlined className="navbar-icon" />
+              </Badge>
+            </div>
+            <div className="user-profile">
+              <Badge size="small">
+                <img
+                  src={
+                    user.image ||
+                    "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-183042379.jpg"
+                  }
+                  className="user-avatar"
+                  alt="User Avatar"
+                />
+              </Badge>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

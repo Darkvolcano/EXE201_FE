@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import axiosInstance from "@/configs/axios";
+import axiosInstance from "../configs/axios";
 
 const useAuthStore = create((set) => {
   const loadStoredAuth = () => {
@@ -20,29 +19,24 @@ const useAuthStore = create((set) => {
 
     login: async (values) => {
       try {
-        const response = await axiosInstance.post(
-          "authentication/login",
-          values,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
+        const response = await axiosInstance.post("auth/login", values, {
+          headers: { "Content-Type": "application/json" },
+        });
 
         const data = response.data;
-        if (data.data?.accessToken) {
-          const decoded = jwtDecode(data.data.accessToken);
-
+        if (data.token && data.user) {
           const user = {
-            accountId: decoded.sub,
-            username: decoded.accountName,
-            role: decoded.role,
+            fullName: data.user.fullName,
+            email: data.user.email,
+            phone: data.user.phone,
+            role: data.user.role,
           };
 
           localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("token", data.data.accessToken);
+          localStorage.setItem("token", data.token);
 
-          set({ user, token: data.data.accessToken, error: null });
-          return { success: true, message: data.message, role: decoded.role };
+          set({ user, token: data.token, error: null });
+          return { success: true, message: data.message, role: user.role };
         } else {
           set({ error: "Login failed" });
           return { success: false, message: "Login failed", role: "" };
@@ -52,10 +46,6 @@ const useAuthStore = create((set) => {
           axios.isAxiosError(error) && error.response?.data?.message
             ? error.response.data.message
             : error.message;
-
-        if (errorMessage === "Incorrect account name or password!") {
-          errorMessage = "Tài khoản hoặc mật khẩu không đúng";
-        }
 
         set({ error: errorMessage });
         return { success: false, message: errorMessage, role: "" };
