@@ -1,0 +1,72 @@
+.upload-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 290px;
+  background: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.upload-card {
+  background: #fff;
+  padding: 30px;
+  width: -webkit-fill-available;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.upload-title {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.upload-steps {
+  margin-bottom: 20px;
+}
+
+.upload-form .ant-form-item {
+  margin-bottom: 20px;
+}
+
+.upload-form .ant-input,
+.upload-form .ant-input-textarea {
+  border-radius: 5px;
+}
+
+.submit-button {
+  width: 100%;
+  background: #0077ff;
+  border: none;
+  border-radius: 5px;
+}
+
+.waiting-step,
+.result-step {
+  padding: 20px;
+}
+
+.waiting-text,
+.result-text {
+  display: block;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.steps-container {
+  margin-bottom: 30px;
+}
+
+.back-button,
+.done-button {
+  margin: 0 10px;
+  border-radius: 5px;
+}
+
+.done-button {
+  background: #0077ff;
+  color: #fff;
+  border: none;
+}

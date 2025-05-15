@@ -1,8 +1,7 @@
 import React from "react";
 import { Input, Button } from "antd";
 import "../style/Home.css";
-import { SearchOutlined } from "@ant-design/icons";
-import SearchIcon from "../components/SearchIcon";
+import SearchIconGray from "../components/SearchIconGray";
 
 const Home = () => {
   return (
@@ -45,7 +44,7 @@ const Home = () => {
             <Input
               placeholder="Search for a mentor"
               className="search-input"
-              prefix={<SearchIcon />}
+              prefix={<SearchIconGray />}
             />
             <Button type="primary" className="search-button">
               Search

@@ -1,5 +1,5 @@
 import React from "react";
-import { Menu, Button, Badge } from "antd";
+import { Menu, Button, Badge, Dropdown } from "antd";
 import { Link } from "react-router-dom";
 import "../style/Navbar.css";
 import {
@@ -12,7 +12,20 @@ import useAuthStore from "../hooks/authenStoreApi";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="logout" onClick={handleLogout}>
+        Logout
+      </Menu.Item>
+    </Menu>
+  );
 
   return (
     <div className="navbar-container">
@@ -27,7 +40,7 @@ const Navbar = () => {
           <Link to="/">Home</Link>
         </Menu.Item>
         <Menu.Item key="course" className="navbar-menu-item">
-          <Link to="/course">Course</Link>
+          <Link to="/courses">Course</Link>
         </Menu.Item>
         <Menu.Item key="tutor" className="navbar-menu-item tutor">
           <Link to="/tutor">Tutor</Link>
@@ -74,7 +87,7 @@ const Navbar = () => {
                 <ShoppingCartOutlined className="navbar-icon" />
               </Badge>
             </div>
-            <div className="user-profile">
+            {/* <div className="user-profile">
               <Badge size="small">
                 <img
                   src={
@@ -85,6 +98,24 @@ const Navbar = () => {
                   alt="User Avatar"
                 />
               </Badge>
+            </div> */}
+            <div className="user-profile">
+              <Dropdown
+                overlay={menu}
+                trigger={["click"]}
+                placement="bottomRight"
+              >
+                <Badge size="small">
+                  <img
+                    src={
+                      user.image ||
+                      "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-183042379.jpg"
+                    }
+                    className="user-avatar"
+                    alt="User Avatar"
+                  />
+                </Badge>
+              </Dropdown>
             </div>
           </>
         )}
