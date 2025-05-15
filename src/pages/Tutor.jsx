@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Checkbox, Input, Radio, Slider, Select } from "antd";
 import "../style/Tutor.css";
+import SearchIconWhite from "../components/SearchIconWhite";
 
 const { Option } = Select;
 
@@ -28,10 +29,10 @@ const Tutor = () => {
       <div className="search-bar">
         <Input
           placeholder="Search for tutors by subject, level, location, etc."
-          suffix={<span className="search-icon">🔍</span>}
-          className="search-input"
+          suffix={<SearchIconWhite />}
+          className="search-input-tutor"
         />
-        <Select defaultValue="latest" className="sort-select">
+        <Select defaultValue="latest" className="sort-select-tutor">
           <Option value="latest">Sort by: Latest</Option>
           <Option value="popularity">Sort by: Popularity</Option>
           <Option value="years">Sort by: Years</Option>

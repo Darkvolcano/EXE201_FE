@@ -11,10 +11,11 @@ const Register = () => {
   const { mutate: register, isPending } = useTutorRegister();
 
   const onFinish = (values) => {
+    const email = values.email;
     register(
       {
         fullName: values.fullName,
-        email: values.email,
+        email: email,
         phone: values.phone,
         password: values.password,
       },
@@ -22,7 +23,7 @@ const Register = () => {
         onSuccess: (data) => {
           if (data.status === 201) {
             message.success(data.message);
-            navigate("/login");
+            navigate("/verify-otp", { state: { email } });
           } else {
             message.error(data.message || "Registration failed");
           }
