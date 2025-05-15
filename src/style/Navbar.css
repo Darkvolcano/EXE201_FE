@@ -17,7 +17,6 @@
 .navbar-menu {
   background: transparent;
   border: none;
-  line-height: 64px;
   flex: 1;
   display: flex;
   justify-content: center;
@@ -31,6 +30,7 @@
 .navbar-menu-item a {
   color: #595959;
   text-decoration: none;
+  font-family: "Poppins", sans-serif;
 }
 
 .navbar-menu-item.tutor a {
@@ -40,9 +40,11 @@
 .navbar-signin {
   margin-right: 15px;
   color: #595959;
+  font-family: "Poppins", sans-serif;
 }
 
 .navbar-login-button {
+  font-family: "Poppins", sans-serif;
   background: #0077ff;
   border-color: #0077ff;
 }
