@@ -1,17 +1,16 @@
 import React from "react";
 import { Input, Button } from "antd";
 import "../style/Home.css";
+import { SearchOutlined } from "@ant-design/icons";
+import SearchIcon from "../components/SearchIcon";
 
 const Home = () => {
   return (
     <div className="homepage-container">
-      {/* Hero Section */}
       <div className="hero-section">
         <div className="hero-text">
           <h1 className="hero-title">
-            START BE
-            <br />
-            YOUR <span className="highlight">BEST SELF</span>
+            START BECOME YOUR <span className="highlight">BEST SELF</span>
           </h1>
           <p className="hero-description">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Risus
@@ -35,19 +34,31 @@ const Home = () => {
               <span className="stat-label">STUDENT SUCCESS</span>
             </div>
           </div>
-          <div className="search-bar">
-            <Input placeholder="Search for a mentor" className="search-input" />
+          <div
+            style={{
+              display: "flex",
+              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
+              padding: 20,
+              borderRadius: 20,
+            }}
+          >
+            <Input
+              placeholder="Search for a mentor"
+              className="search-input"
+              prefix={<SearchIcon />}
+            />
             <Button type="primary" className="search-button">
               Search
             </Button>
           </div>
         </div>
         <div className="hero-image">
-          <div className="image-placeholder-top"></div>
+          <div className="image-placeholder-top">
+            <img src="/src/assets/home-first.png" />
+          </div>
         </div>
       </div>
 
-      {/* About Section */}
       <div className="about-section">
         <div className="about-image">
           <div className="image-placeholder-bottom"></div>
@@ -79,7 +90,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Why Choose Tutorify Section */}
       <div className="why-choose-section">
         <div className="why-choose-text">
           <span className="why-choose-label">WHY US</span>
@@ -104,7 +114,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Top Mentor Section */}
       <div className="top-mentor-section">
         <h2 className="top-mentor-title">Our Top Mentor At Tutorify</h2>
         <p className="top-mentor-description">
@@ -147,7 +156,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Pricing Section */}
       <div className="pricing-section">
         <span className="pricing-label">PRICING</span>
         <h2 className="pricing-title">How Much Do I Have To Pay</h2>
@@ -245,7 +253,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Testimonial Section */}
       <div className="testimonial-section">
         <span className="testimonial-label">TESTIMONI</span>
         <h2 className="testimonial-title">What They Say About Us</h2>

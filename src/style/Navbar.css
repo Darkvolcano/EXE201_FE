@@ -2,6 +2,7 @@
   background: #fff;
   padding: 10px 20px;
   display: flex;
+  height: 45px;
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid #e8e8e8;
@@ -44,4 +45,44 @@
 .navbar-login-button {
   background: #0077ff;
   border-color: #0077ff;
+}
+
+.navbar-user-section {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-icons {
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.navbar-badge {
+  margin: 0 11px;
+}
+
+.navbar-icon {
+  font-size: 20px;
+  color: #595959;
+  cursor: pointer;
+}
+
+.navbar-icon:hover {
+  color: #0077ff;
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #0077ff;
+  background: #fff;
 }

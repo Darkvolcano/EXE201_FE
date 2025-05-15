@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: "https://exe202-booking-tutor-backend.onrender.com/",
+  baseURL: "https://exe202-booking-tutor-backend.onrender.com/api/",
   headers: {
     "Content-Type": "application/json",
     Accept: "*/*",
