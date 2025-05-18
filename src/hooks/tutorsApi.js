@@ -37,17 +37,3 @@ export const useTutorRegisterCertificate = () => {
   });
 };
 
-// New hook for fetching tutors from courses API
-export const useFetchCourses = () => {
-  return useQuery({
-    queryKey: ["courses"],
-    queryFn: async () => {
-      const response = await axiosInstance.get("courses");
-      // Extract only tutor (account + certifications) info from each course
-      return response.data.data.courses.map((item) => ({
-        account: item.account,
-        certifications: item.certifications,
-      }));
-    },
-  });
-};

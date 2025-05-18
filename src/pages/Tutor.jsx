@@ -2,12 +2,19 @@ import React from "react";
 import { Button, Checkbox, Input, Radio, Slider, Select } from "antd";
 import "../style/Tutor.css";
 import SearchIconWhite from "../components/SearchIconWhite";
-import { useFetchCourses } from "../hooks/tutorsApi"; // update import
+import { useGetCourse } from "../hooks/coursesApi";
 
 const { Option } = Select;
 
 const Tutor = () => {
-  const { data: tutors = [], isLoading, isError } = useFetchCourses(); // update hook
+  // Use the hook from coursesApi.js
+  const { data, isLoading, isError } = useGetCourse();
+  // Extract tutors from courses data
+  const tutors =
+    data?.data?.courses?.map((item) => ({
+      account: item.account,
+      certifications: item.certifications,
+    })) || [];
 
   // Log để kiểm tra dữ liệu trả về từ API
   console.log("Tutors data:", tutors);
