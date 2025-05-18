@@ -15,30 +15,16 @@ const RegisterUser = () => {
       const response = await axiosInstance.post("auth/register", newAccount);
       return response.data;
     },
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (data.message === "Account created successfully! Please check your email for OTP.") {
         message.success(data.message);
-        navigate("/verify-otp", { state: { email: newAccount.email } });
+        navigate("/verify-otp-user", { state: { email: variables.email } });
       } else {
         message.error(data.message || "Registration failed");
       }
     },
     onError: (error) => {
       message.error(error.response?.data?.message || "Registration failed");
-    },
-  });
-
-  const verifyOtpMutation = useMutation({
-    mutationFn: async (otpData) => {
-      const response = await axiosInstance.post("auth/verify-otp", otpData);
-      return response.data;
-    },
-    onSuccess: (data) => {
-      message.success(data.message || "Account verified successfully!");
-      navigate("/login");
-    },
-    onError: (error) => {
-      message.error(error.response?.data?.message || "OTP verification failed");
     },
   });
 
@@ -56,7 +42,7 @@ const RegisterUser = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-            Join Us Today!
+          Join Tutorify
         </Title>
         <Text className="auth-subtitle">
           Create an account to start your learning journey.
