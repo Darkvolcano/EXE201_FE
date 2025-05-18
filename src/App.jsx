@@ -14,6 +14,8 @@ import Register from "./pages/Register";
 import VerifyOTP from "./pages/VerifyOTP";
 import Courses from "./pages/Courses";
 import UploadCertificate from "./pages/UploadCertificate";
+import VerifyOTPUser from "./pages/VerifyOTPUser";
+import RegisterUser from "./pages/RegisterUser";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -40,6 +42,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/register-user" element={<RegisterUser />} />
+          <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
         </Route>
       </Routes>
     </Router>
