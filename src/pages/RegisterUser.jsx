@@ -10,31 +10,31 @@ const { Title, Text } = Typography;
 const RegisterUser = () => {
   const navigate = useNavigate();
 
-  const registerMutation = useMutation({
+  const registerUserMutation = useMutation({
     mutationFn: async (newAccount) => {
       const response = await axiosInstance.post("auth/register", newAccount);
       return response.data;
     },
-    onSuccess: (data, variables) => {
-      if (data.message === "Account created successfully! Please check your email for OTP.") {
-        message.success(data.message);
-        navigate("/verify-otp-user", { state: { email: variables.email } });
-      } else {
-        message.error(data.message || "Registration failed");
-      }
-    },
-    onError: (error) => {
-      message.error(error.response?.data?.message || "Registration failed");
-    },
   });
 
   const onFinish = (values) => {
-    registerMutation.mutate({
-      fullName: values.fullName,
-      email: values.email,
-      phone: values.phone,
-      password: values.password,
-    });
+    registerUserMutation.mutate(
+      {
+        fullName: values.fullName,
+        email: values.email,
+        phone: values.phone,
+        password: values.password,
+      },
+      {
+        onSuccess: (data) => {
+          message.success(data.message || "Account created successfully! Please check your email for OTP.");
+          navigate("/verify-otp-user", { state: { email: values.email } });
+        },
+        onError: (error) => {
+          message.error(error.response?.data?.message || "Registration failed");
+        },
+      }
+    );
   };
 
   return (
@@ -42,17 +42,12 @@ const RegisterUser = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-          Join Tutorify
+          Join Us Today !
         </Title>
         <Text className="auth-subtitle">
-          Create an account to start your learning journey.
+          Create your account to start your learning journey with us.
         </Text>
-        <Form
-          name="register-user"
-          layout="vertical"
-          onFinish={onFinish}
-          className="auth-form"
-        >
+        <Form name="register-user" layout="vertical" onFinish={onFinish} className="auth-form">
           <Form.Item
             label="Full Name"
             name="fullName"
@@ -119,7 +114,7 @@ const RegisterUser = () => {
               htmlType="submit"
               size="large"
               className="auth-button"
-              loading={registerMutation.isPending}
+              loading={registerUserMutation.isPending}
               block
             >
               Sign Up
