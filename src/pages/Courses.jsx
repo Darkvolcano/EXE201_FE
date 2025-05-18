@@ -1,13 +1,58 @@
-import React from "react";
-import { Button, Checkbox, Input, Radio, Select, Slider } from "antd";
+import React, { useState } from "react";
+import {
+  Button,
+  Checkbox,
+  Input,
+  Radio,
+  Select,
+  Modal,
+  message,
+  Form,
+} from "antd";
 import "../style/Courses.css";
 import SearchIconWhite from "../components/SearchIconWhite";
 import useAuthStore from "../hooks/authenStoreApi";
+import { useCreateCourse } from "../hooks/coursesApi";
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const Courses = () => {
   const { user } = useAuthStore();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
+
+  const { mutate: createCourse, isLoading } = useCreateCourse();
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const onFinish = (values) => {
+    const payload = {
+      name: values.name,
+      description: values.description,
+      image: values.image,
+      price: parseFloat(values.price),
+    };
+    createCourse(payload, {
+      onSuccess: () => {
+        message.success("Course created successfully!");
+        setIsModalVisible(false);
+        form.resetFields();
+      },
+      onError: (error) => {
+        message.error(
+          error.response?.data?.message || "Failed to create course."
+        );
+      },
+    });
+  };
 
   return (
     <div className="course-container">
@@ -42,7 +87,11 @@ const Courses = () => {
         </Select>
         {user.role === "Tutor" ? (
           <>
-            <Button type="primary" className="create-course-button">
+            <Button
+              type="primary"
+              className="create-course-button"
+              onClick={showModal}
+            >
               Create courses
             </Button>
           </>
@@ -174,6 +223,83 @@ const Courses = () => {
           </div>
         </div>
       </div>
+
+      <Modal
+        title="Create New Course"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        width={600}
+        className="create-course-modal"
+      >
+        <Form
+          form={form}
+          name="create-course"
+          layout="vertical"
+          onFinish={onFinish}
+          initialValues={{ price: 0 }}
+          className="create-course-form"
+        >
+          <Form.Item
+            label="Course Name"
+            name="name"
+            rules={[
+              { required: true, message: "Please input the course name!" },
+            ]}
+          >
+            <Input placeholder="e.g., Introduction to Cloud Computing" />
+          </Form.Item>
+          <Form.Item
+            label="Description"
+            name="description"
+            rules={[
+              { required: true, message: "Please input the description!" },
+            ]}
+          >
+            <TextArea
+              rows={4}
+              placeholder="e.g., Learn the fundamentals of cloud computing"
+            />
+          </Form.Item>
+          <Form.Item
+            label="Image URL"
+            name="image"
+            rules={[
+              { required: true, message: "Please input the image URL!" },
+              { type: "url", message: "Please input a valid URL!" },
+            ]}
+          >
+            <Input placeholder="e.g., https://example.com/course.jpg" />
+          </Form.Item>
+          <Form.Item
+            label="Price"
+            name="price"
+            rules={[
+              { required: true, message: "Please input the price!" },
+              { min: 0, message: "Price cannot be negative!" },
+            ]}
+          >
+            <Input type="number" placeholder="e.g., 99.99" />
+          </Form.Item>
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="submit-course-button"
+              loading={isLoading}
+            >
+              Create Course
+            </Button>
+            <Button
+              className="cancel-course-button"
+              onClick={handleCancel}
+              style={{ marginLeft: 8 }}
+            >
+              Cancel
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
