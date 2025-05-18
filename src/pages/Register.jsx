@@ -152,10 +152,20 @@ const Register = () => {
             </Button>
           </Form.Item>
         </Form>
-        <Text className="auth-link">
-          Already have an account?{" "}
-          <a onClick={() => navigate("/login")}>Log in here</a>
-        </Text>
+        <div className="auth-footer">
+          <Text className="auth-link">
+            Already have an account? <a onClick={() => navigate("/login")}>Log in here</a>
+          </Text>
+          <Button
+            type="primary"
+            size="large"
+            className="auth-button"
+            onClick={() => navigate("/register-user")}
+            style={{ marginTop: 10 }}
+          >
+            Register as a User
+          </Button>
+        </div>
       </div>
     </div>
   );
