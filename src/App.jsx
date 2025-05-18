@@ -14,6 +14,7 @@ import Register from "./pages/Register";
 import VerifyOTP from "./pages/VerifyOTP";
 import Courses from "./pages/Courses";
 import UploadCertificate from "./pages/UploadCertificate";
+import AIChat from "./pages/AIChat";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -34,6 +35,7 @@ function App() {
           <Route path="/tutor" element={<Tutor />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/upload-certificate" element={<UploadCertificate />} />
+          <Route path="/ai-chat" element={<AIChat />} />
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>
