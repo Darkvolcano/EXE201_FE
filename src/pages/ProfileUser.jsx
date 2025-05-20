@@ -1,72 +1,59 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Card, Avatar, Typography, Button, message } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
-import axiosInstance from "../configs/axios";
-import "../style/Auth.css";
-
-const { Title, Text } = Typography;
+import { Avatar } from "antd";
+import { useProfileUser } from "../hooks/userProfileApi";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
+import "../style/ProfileUser.css";
 
 const Profile = () => {
+  const { data, isLoading, error } = useProfileUser();
   const navigate = useNavigate();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["userProfile"],
-    queryFn: async () => {
-      const response = await axiosInstance.get("/account/profile");
-      return response.data;
-    },
-    onError: (error) => {
-      message.error(error.response?.data?.message || "Failed to load profile");
-    },
-  });
-
   const handleEditProfile = () => {
-    navigate("/edit-profile"); // Có thể tạo trang edit sau
+    navigate("/edit-profile-user");
   };
 
-  if (isLoading) return <div className="auth-container"><Text>Loading...</Text></div>;
-  if (error) return <div className="auth-container"><Text>Error loading profile</Text></div>;
+  if (isLoading) return (
+    <div className="profile-container">
+      <LoadingSpinner />
+    </div>
+  );
+  if (error) return (
+    <div className="profile-container">
+      <ErrorMessage message="Error loading profile" />
+    </div>
+  );
 
   return (
     <>
-      <Navbar />
-      <div className="auth-container">
-        <Card className="auth-card" style={{ maxWidth: 500, margin: "20px auto" }}>
-          <div style={{ textAlign: "center" }}>
-            <Avatar
-              size={120}
+      <div className="profile-container">
+        <div className="profile-card">
+          <div className="profile-header">
+          <Avatar
+              size={200}
               src={data?.avatar || <UserOutlined />}
               style={{ marginBottom: 20 }}
             />
-            <Title level={2} style={{ margin: 0 }}>
-              {data?.fullName || "User Name"}
-            </Title>
-            <Text type="secondary">{data?.email || "email@example.com"}</Text>
+            <h2 className="name">{data?.fullName || "User Name"}</h2>
+            <p className="email">{data?.email || "email@example.com"}</p>
           </div>
-          <div style={{ marginTop: 20 }}>
-            <Text strong>Phone Number:</Text>
-            <Text style={{ marginLeft: 10 }}>{data?.phone || "N/A"}</Text>
+          <div className="info">
+            <strong>Phone Number:</strong>
+            <span>{data?.phone || "N/A"}</span>
           </div>
-          <div style={{ marginTop: 10 }}>
-            <Text strong>Balance:</Text>
-            <Text style={{ marginLeft: 10 }}>{data?.balance || 0} VND</Text>
+          <div className="info">
+            <strong>Balance:</strong>
+            <span>{data?.balance || 0} VND</span>
           </div>
-          <Button
-            type="primary"
-            size="large"
-            className="auth-button"
+          <button
+            className="editButton"
             onClick={handleEditProfile}
-            style={{ marginTop: 20, width: "100%" }}
           >
             Edit Profile
-          </Button>
-        </Card>
+          </button>
+        </div>
       </div>
-      <Footer />
     </>
   );
 };
