@@ -1,6 +1,6 @@
 .tutor-profile-wrapper {
   display: grid;
-  grid-template-columns: 0.6fr 2fr 0.5fr;
+  grid-template-columns: auto 2fr 0.3fr;
   min-height: calc(100vh - 120px);
   background-color: #f0f2f5;
   gap: 20px;
@@ -13,7 +13,8 @@
   display: grid;
   grid-template-rows: 0.33fr 0.05fr auto 0.15fr;
   min-height: 100%;
-  border-radius: 8px
+  border-radius: 8px;
+  min-width: 250px;
 }
 
 .sidebar-title {
