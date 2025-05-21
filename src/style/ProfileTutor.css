@@ -1,17 +1,19 @@
 .tutor-profile-wrapper {
-  display: flex;
+  display: grid;
+  grid-template-columns: 0.6fr 2fr 0.5fr;
   min-height: calc(100vh - 120px);
   background-color: #f0f2f5;
+  gap: 20px;
+  padding: 20px;
 }
 
-/* Sidebar */
 .sidebar {
-  width: 20%;
   background: #ffffff;
-  border-right: 1px solid #1a73e8;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: 0.33fr 0.05fr auto 0.15fr;
+  min-height: 100%;
+  border-radius: 8px
 }
 
 .sidebar-title {
@@ -41,6 +43,7 @@
 
 .menu-list {
   flex-grow: 1;
+  overflow-y: auto;
 }
 
 .menu-item {
@@ -55,6 +58,10 @@
   border-radius: 4px;
 }
 
+.sidebar-footer {
+  margin-top: auto;
+}
+
 .profile-settings-button {
   background-color: #1a73e8;
   color: white;
@@ -62,7 +69,7 @@
   padding: 10px;
   border-radius: 4px;
   margin-bottom: 10px;
-  cursor: pointer;
+  width: 100%;
 }
 
 .logout-button {
@@ -71,13 +78,18 @@
   border: none;
   padding: 10px;
   border-radius: 4px;
-  cursor: pointer;
+  width: 100%;
 }
 
 /* Nội dung chính */
 .tutor-profile-container {
-  width: 60%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 100%;
+  background: #ffffff;
+  border-radius: 8px;
 }
 
 .welcome-section {
@@ -85,8 +97,7 @@
   color: white;
   padding: 20px;
   border-radius: 8px;
-  margin-bottom: 20px;
-  position: relative;
+  margin: 0;
 }
 
 .welcome-section h1 {
@@ -114,21 +125,24 @@
 }
 
 .courses-section {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
-  margin-bottom: 20px;
+  margin: 0;
 }
 
 .course-card {
   background: #ffffff;
   border-radius: 8px;
   padding: 10px;
-  width: 30%;
   text-align: center;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .course-card img {
   width: 100%;
+  height: auto;
   border-radius: 4px;
 }
 
@@ -146,7 +160,9 @@
 .schedule-section {
   background: #ffffff;
   border-radius: 8px;
-  padding: 20px;
+  /* padding: 20px; */
+  margin: 0;
+  flex-grow: 1;
 }
 
 .schedule-section h2 {
@@ -154,10 +170,33 @@
   color: #1a73e8;
 }
 
-.schedule-item {
+.schedule-table {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 2fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.schedule-header {
+  display: contents;
+}
+
+.schedule-header span {
+  font-weight: bold;
+  color: #1a73e8;
+  padding: 5px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.schedule-row {
+  display: contents;
+}
+
+.schedule-row span {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
   align-items: center;
 }
 
@@ -166,6 +205,10 @@
   border-radius: 4px;
   color: white;
   font-weight: bold;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .subject.coding { background-color: #4CAF50; }
@@ -182,22 +225,35 @@
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
+  width: 100%;
+  height: 100%;
+}
+
+.see-all {
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 10px;
+  cursor: pointer;
 }
 
 /* Cột phụ bên phải */
 .right-sidebar {
-  width: 20%;
-  padding: 20px;
+  /* padding: 20px; */
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
-/* Thông tin cá nhân */
 .profile-info {
   background: #ffffff;
   border-radius: 8px;
   padding: 15px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .profile-avatar {
@@ -206,25 +262,38 @@
 
 .profile-details h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   color: #1a73e8;
+  display: flex;
+  align-items: center;
+}
+
+.profile-details h3 svg {
+  margin-right: 8px;
 }
 
 .profile-details p {
-  margin: 5px 0 0;
+  margin: 8px 0 0;
   font-size: 14px;
-  color: #666;
+  color: #333;
+  display: flex;
+  align-items: center;
+}
+
+.profile-details p svg {
+  margin-right: 8px;
+  color: #1a73e8;
 }
 
 /* Your Stats Section */
-.stats-section, .support-section {
+.stats-section {
   background: #ffffff;
   border-radius: 8px;
   padding: 20px;
-  margin-bottom: 20px;
+  flex-grow: 1;
 }
 
-.stats-section h2, .support-section h2 {
+.stats-section h2 {
   color: #1a73e8;
   margin-top: 0;
 }
@@ -253,11 +322,47 @@
   cursor: pointer;
 }
 
-.support-item {
+/* Support Section */
+.support-section {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: auto;
+}
+
+.support-section h2 {
+  color: #1a73e8;
+  margin-top: 0;
+}
+
+.support-table {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.support-header {
+  display: contents;
+}
+
+.support-header span {
+  font-weight: bold;
+  color: #1a73e8;
+  padding: 5px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+}
+
+.support-row {
+  display: contents;
+}
+
+.support-row span {
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
 .follow-button {
@@ -267,15 +372,6 @@
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
-}
-
-.see-all {
-  background-color: #1a73e8;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
   width: 100%;
-  margin-top: 10px;
-  cursor: pointer;
+  height: 100%;
 }
