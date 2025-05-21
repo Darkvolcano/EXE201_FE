@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Upload, Typography } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { useProfileUser, useEditProfileUser } from "../hooks/userProfileApi";
+import { useProfileUser, useEditProfileUser } from "../hooks/ProfileApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import "../style/ProfileUser.css";

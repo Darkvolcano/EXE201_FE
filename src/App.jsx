@@ -18,10 +18,18 @@ import VerifyOTPUser from "./pages/VerifyOTPUser";
 import RegisterUser from "./pages/RegisterUser";
 import ProfileUser from "./pages/ProfileUser";
 import EditProfileUser from "./pages/EditProfileUser";
+import TutorProfile from "./pages/ProfileTutor";
 
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
+    <Outlet />
+    <Footer />
+  </>
+);
+
+const LayoutWithFooter = () => (
+  <>
     <Outlet />
     <Footer />
   </>
@@ -40,6 +48,11 @@ function App() {
           <Route path="/upload-certificate" element={<UploadCertificate />} />
           <Route path="/profile-user" element={<ProfileUser />} />
           <Route path="/edit-profile-user" element={<EditProfileUser />} />
+          <Route path="/profile-tutor" element={<TutorProfile />} />
+        </Route>
+
+        <Route element={<LayoutWithFooter />}>
+          
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>

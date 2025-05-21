@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "antd";
-import { useProfileUser } from "../hooks/userProfileApi";
+import { useProfileUser } from "../hooks/ProfileApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import "../style/ProfileUser.css";
