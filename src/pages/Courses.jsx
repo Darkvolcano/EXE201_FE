@@ -12,7 +12,7 @@ import {
 import "../style/Courses.css";
 import SearchIconWhite from "../components/SearchIconWhite";
 import useAuthStore from "../hooks/authenStoreApi";
-import { useCreateCourse } from "../hooks/coursesApi";
+import { useCreateCourse, useGetCourse } from "../hooks/coursesApi";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -23,6 +23,10 @@ const Courses = () => {
   const [form] = Form.useForm();
 
   const { mutate: createCourse, isLoading } = useCreateCourse();
+  const { data, isLoading: isLoadingCourses, isError } = useGetCourse();
+
+  // Lấy danh sách course từ API
+  const courses = data?.data?.courses?.map((item) => item.course) || [];
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -127,99 +131,45 @@ const Courses = () => {
 
         <div className="course-list-container">
           <div className="course-grid">
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 1</h3>
-              <p className="course-category">Beginner Course 1</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 2</h3>
-              <p className="course-category">Beginner Course 2</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★☆</span> (200)
-              </div>
-            </div>
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 3</h3>
-              <p className="course-category">Beginner Course 3</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★☆</span> (200)
-              </div>
-            </div>
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 1</h3>
-              <p className="course-category">Beginner Course 1</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 2</h3>
-              <p className="course-category">Beginner Course 2</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="course-card">
-              <div
-                className="course-image"
-                style={{
-                  backgroundImage:
-                    "url(https://via.placeholder.com/300?text=ENGLISH+Hello+ABC+Don't+the+?)",
-                }}
-              ></div>
-              <h3 className="course-name">English Course 3</h3>
-              <p className="course-category">Beginner Course 3</p>
-              <p className="course-duration">24 hours - 1 hour a day</p>
-              <div className="course-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
+            {isLoadingCourses && <div>Loading...</div>}
+            {isError && <div>Failed to load courses.</div>}
+            {!isLoadingCourses && !isError && courses.length === 0 && (
+              <div>No courses found.</div>
+            )}
+            {!isLoadingCourses &&
+              !isError &&
+              courses.map((course) => (
+                <div className="course-card" key={course._id}>
+                  <div
+                    className="course-image"
+                    style={{
+                      backgroundImage: `url(${
+                        course.image ||
+                        "https://via.placeholder.com/300x200?text=Course"
+                      })`,
+                    }}
+                  ></div>
+                  <h3 className="course-name">{course.name}</h3>
+                  <div className="course-category">Beginner</div>
+                  <div className="course-duration">
+                    <span className="course-meta-icon">🕒</span>
+                    24 hours - 1 hour a day
+                  </div>
+                  <div className="course-rating">
+                    <span className="stars">
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span>★</span>
+                      <span style={{ color: "#e0e0e0" }}>★</span>
+                    </span>
+                    <span>(200)</span>
+                  </div>
+                </div>
+              ))}
           </div>
           <div className="pagination">
-            <span>Showing 6 Courses from 1 Pages</span>
+            <span>Showing {courses.length} Courses</span>
           </div>
         </div>
       </div>
