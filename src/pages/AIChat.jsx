@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Input, Avatar, Collapse, Tooltip, message } from "antd";
+import { Button, Input, Avatar, Collapse, Tooltip, message, Tabs } from "antd";
 import {
   UserOutlined,
   SunOutlined,
@@ -12,9 +12,11 @@ import {
   SmileOutlined,
 } from "@ant-design/icons";
 import "../style/AIChat.css";
+import ROBOT_AI from "../assets/robot-ai.png";
 
 const { Panel } = Collapse;
 const { Search } = Input;
+const { TabPane } = Tabs;
 
 const AIChat = () => {
   const [theme, setTheme] = useState("light");
@@ -102,6 +104,19 @@ const AIChat = () => {
 
   return (
     <div className={`tutorify-container ${theme}`}>
+      <div className="course-header-ai">
+        <div className="course-content-ai">
+          <h1 className="header-title">Hello! I'm your AI Tutor Assistant</h1>
+          <h1 className="header-title">Let's find your perfect mentor!</h1>
+          <p className="header-subtitle">
+            Learn more effectively with professional tutors. Choose a tutor
+            based on your needs.
+          </p>
+        </div>
+        <div className="course-image-ai">
+          <img src={ROBOT_AI} height={180} />
+        </div>
+      </div>
       <div className="header">
         <div className="header-left">
           <Avatar size={32} icon={<UserOutlined />} className="profile-icon" />
@@ -129,18 +144,17 @@ const AIChat = () => {
       <div className="main-content">
         <div className="sidebar">
           <div className="sidebar-section">
+            <Tabs defaultActiveKey="1" className="header-tabs">
+              <TabPane tab="Main" key="1" />
+              <TabPane tab="Settings" key="2" />
+              <TabPane tab="Payment" key="3" />
+            </Tabs>
             <span className="section-title">TutorifyGPT</span>
             <div className="subsection">
-              <span>Main</span>
-            </div>
-            <div className="subsection">
-              <span>Settings</span>
-            </div>
-            <div className="subsection">
-              <span>Payment</span>
-            </div>
-            <div className="subsection">
               <span>SlothPilot</span>
+            </div>
+            <div className="subsection">
+              <span>Designer</span>
             </div>
             <div className="subsection active">
               <span>Schedule Planner</span>
@@ -149,9 +163,9 @@ const AIChat = () => {
               <span>Subject Assistant</span>
             </div>
           </div>
-          <div className="sidebar-section">
+          {/* <div className="sidebar-section">
             <span className="section-title">Designer</span>
-          </div>
+          </div> */}
           <Collapse defaultActiveKey={["1"]} className="recent-chats">
             <Panel header="Recent Chats" key="1">
               {recentChats.map((chat, index) => (

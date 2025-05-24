@@ -1,0 +1,421 @@
+.course-player-container {
+  display: flex;
+  flex-direction: column;
+  background: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, sans-serif;
+}
+
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  /* background: #1890ff;
+  color: #fff; */
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.course-title {
+  display: flex;
+  align-items: center;
+}
+
+.back-arrow {
+  margin-right: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.course-title span {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.metadata {
+  display: flex;
+  gap: 16px;
+  margin-left: 16px;
+  font-size: 12px;
+  color: #fff;
+}
+
+.metadata span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.review-button {
+  border: 1px solid #fff;
+  color: #fff;
+  background: transparent;
+}
+
+.review-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #fff;
+}
+
+.next-button {
+  background: #fff;
+  color: #fff;
+}
+
+.next-button:hover {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.video-section {
+  flex: 2;
+  padding: 16px;
+}
+
+.video-card {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.video-placeholder {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: #1890ff;
+  border-radius: 4px 4px 0 0;
+  overflow: hidden;
+}
+
+.video-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 48px;
+  opacity: 0.8;
+}
+
+.lecture-title {
+  font-size: 32px;
+  font-weight: 500;
+  color: #333;
+  margin: 16px 0;
+}
+
+.metadata {
+  display: flex;
+  gap: 16px;
+  font-size: 12px;
+  color: #666;
+  /* margin-bottom: 16px; */
+}
+
+.metadata span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.content-tabs {
+  margin-top: 16px;
+}
+
+.content-tabs .ant-tabs-tab {
+  font-size: 14px;
+  color: #666;
+}
+
+.content-tabs .ant-tabs-tab-active {
+  color: #1890ff;
+  font-weight: 500;
+}
+
+.content-tabs .ant-tabs-ink-bar {
+  background: #1890ff;
+}
+
+.description-content,
+.lecture-notes,
+.attach-file,
+.comments {
+  padding: 16px;
+  color: #333;
+}
+
+.lecture-notes ul {
+  list-style-type: disc;
+  padding-left: 20px;
+  margin-bottom: 16px;
+}
+
+.lecture-notes li {
+  margin-bottom: 8px;
+}
+
+.download-notes {
+  background: #1890ff;
+  border-color: #1890ff;
+  display: flex;
+  align-items: center;
+}
+
+.download-file .anticon {
+  margin-right: 8px;
+}
+
+.comments .comment-count {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.comment-item {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.comment-item .ant-avatar {
+  margin-right: 12px;
+}
+
+.comment-content {
+  flex: 1;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.comment-user {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.comment-role {
+  color: #1890ff;
+  margin-left: 4px;
+}
+
+.comment-time {
+  font-size: 12px;
+  color: #666;
+}
+
+.comment-text,
+.comment-subtext,
+.comment-subsubtext {
+  font-size: 14px;
+  color: #333;
+  margin: 4px 0;
+}
+
+.reply-button {
+  font-size: 14px;
+  color: #8c94a3 !important;
+  padding: 0;
+  border: none !important;
+  outline: none !important;
+}
+
+/* .reply-button:hover {
+  color: #40a9ff;
+} */
+
+.replies {
+  margin-top: 16px;
+}
+
+.reply-item {
+  display: flex;
+  margin-bottom: 16px;
+  margin-left: 32px;
+}
+
+.reply-item .ant-avatar {
+  margin-right: 12px;
+}
+
+.reply-content {
+  flex: 1;
+}
+
+.reply-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.reply-user {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.reply-role {
+  color: #1890ff;
+  margin-left: 4px;
+}
+
+.reply-time {
+  font-size: 12px;
+  color: #666;
+}
+
+.reply-text {
+  font-size: 14px;
+  color: #333;
+  margin: 4px 0;
+}
+
+.sidebar-course {
+  flex: 1;
+  /* padding: 16px;
+  background: #fff;
+  border-left: 1px solid #d9d9d9; */
+}
+
+.content-card {
+  height: 100%;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+.header-course {
+  padding: 16px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.header-course h3 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.progress-bar {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.progress-text {
+  font-size: 16px;
+  color: #52c41a;
+  display: block;
+  text-align: right;
+}
+
+.section-collapse .ant-collapse-header {
+  font-size: 14px;
+  color: #333;
+  padding: 12px 16px !important;
+}
+
+.section-collapse .ant-collapse-content {
+  border-top: 1px solid #d9d9d9;
+}
+
+.section-collapse .ant-collapse-content-box {
+  padding: 0 16px 16px !important;
+}
+
+.lecture-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+.lecture-item .lecture-title {
+  flex: 1;
+  /* color: #1890ff; */
+  margin: 0;
+  font-size: 14px;
+}
+
+.lecture-item .lecture-duration {
+  font-size: 12px;
+  color: #666;
+  margin-left: 16px;
+}
+
+.lecture-item .play-button {
+  padding: 0;
+  color: #fa8c16;
+}
+
+.lecture-item .play-button:hover {
+  color: #d46b08;
+}
+
+.lecture-count {
+  margin-right: 8px;
+  color: #666;
+}
+
+.duration {
+  color: #666;
+}
+
+.actions {
+  padding: 16px;
+  border-top: 1px solid #d9d9d9;
+  text-align: right;
+}
+
+.review-button,
+.next-button {
+  margin-left: 8px;
+  background: #1890ff;
+  border-color: #1890ff;
+}
+
+.review-button:hover,
+.next-button:hover {
+  background: #40a9ff;
+  border-color: #40a9ff;
+}
+
+.progress {
+  display: flex;
+  justify-content: space-between;
+}
+
+.attach {
+  display: flex;
+  flex-direction: column;
+}
+
+.file-icon {
+  display: flex;
+  gap: 10px;
+}
+
+.file-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
