@@ -38,6 +38,7 @@ function App() {
           <Route path="/upload-certificate" element={<UploadCertificate />} />
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/course-detail" element={<CoursePlayer />} />
+          <Route path="/courses/:id" element={<CoursePlayer />} />
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>

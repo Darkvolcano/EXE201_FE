@@ -19,3 +19,14 @@ export const useGetCourse = () => {
     },
   });
 };
+
+export const useGetCourseFeedback = (courseId) => {
+  return useQuery({
+    queryKey: ["course-feedback", courseId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`feedback/course/${courseId}`);
+      return response.data;
+    },
+    enabled: !!courseId,
+  });
+};
