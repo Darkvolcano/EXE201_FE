@@ -2,13 +2,12 @@ import { useState } from 'react';
 import '../style/Dashboard.css';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { 
-  Home, Package, Heart, List, Layers, FileText, Calendar, 
-  CheckSquare, Phone, File, Grid, Users, Table, Settings, 
-  LogOut, Search, Bell, TrendingUp, Award, BookOpen, User
+  Search, Bell, TrendingUp, Award, BookOpen, User 
 } from 'lucide-react';
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { useDashboardData } from '../hooks/dashboardApi';
+import Sidebar from '../components/Sidebar';
 
 export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState('2025');
@@ -67,41 +66,7 @@ export default function Dashboard() {
   return (
     <div className="dashboard-container">
       {/* Sidebar */}
-      <div className="sidebar">
-        <div className="sidebar-header">
-          <h1 className="sidebar-title">Tutorify</h1>
-        </div>
-
-        <div className="sidebar-nav">
-          <div className="main-nav-section">
-            <NavItem icon={<Home size={18} />} label="Dashboard" active={true} />
-            <NavItem icon={<Package size={18} />} label="Products" />
-            <NavItem icon={<Heart size={18} />} label="Favorites" />
-            <NavItem icon={<List size={18} />} label="Order Lists" />
-            <NavItem icon={<Layers size={18} />} label="Product Stock" />
-          </div>
-          
-          <div className="pages-nav-section">
-            <div className="sidebar-nav-section">
-              <p className="sidebar-nav-section-title">Pages</p>
-            </div>
-            
-            <NavItem icon={<FileText size={18} />} label="Pricing" />
-            <NavItem icon={<Calendar size={18} />} label="Calendar" />
-            <NavItem icon={<CheckSquare size={18} />} label="To-Do" />
-            <NavItem icon={<Phone size={18} />} label="Contact" />
-            <NavItem icon={<File size={18} />} label="Invoice" />
-            <NavItem icon={<Grid size={18} />} label="UI Elements" />
-            <NavItem icon={<Users size={18} />} label="Team" />
-            <NavItem icon={<Table size={18} />} label="Table" />
-          </div>
-          
-          <div className="settings-logout-section">
-            <NavItem icon={<Settings size={18} />} label="Settings" />
-            <NavItem icon={<LogOut size={18} />} label="Logout" />
-          </div>
-        </div>
-      </div>
+      <Sidebar />
 
       {/* Main Content */}
       <div className="main-content">
@@ -387,18 +352,6 @@ export default function Dashboard() {
           </div>
         </main>
       </div>
-    </div>
-  );
-}
-
-// Navigation Item Component
-function NavItem({ icon, label, active = false }) {
-  return (
-    <div className={`nav-item ${active ? 'active' : ''}`}>
-      <div className={`nav-item-icon ${active ? 'active' : ''}`}>
-        {icon}
-      </div>
-      <span className={`nav-item-label ${active ? 'active' : ''}`}>{label}</span>
     </div>
   );
 }

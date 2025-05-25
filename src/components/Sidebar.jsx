@@ -1,31 +1,76 @@
-import React from "react";
-import "../style/Sidebar.css";
+import { 
+  Home, Package, Heart, List, Layers, FileText, Calendar, 
+  CheckSquare, Phone, File, Grid, Users, Table, Settings, 
+  LogOut 
+} from 'lucide-react';
+import { NavItem } from './NavItem';
 
-const Sidebar = ({ activeMenu }) => {
+export default function Sidebar({ title = "Tutorify" }) {
+  const mainNavItems = [
+    { icon: <Home size={18} />, label: "Dashboard", active: true },
+    { icon: <Package size={18} />, label: "Products" },
+    { icon: <Heart size={18} />, label: "Favorites" },
+    { icon: <List size={18} />, label: "Order Lists" },
+    { icon: <Layers size={18} />, label: "Product Stock" },
+  ];
+
+  const pagesNavItems = [
+    { icon: <FileText size={18} />, label: "Pricing" },
+    { icon: <Calendar size={18} />, label: "Calendar" },
+    { icon: <CheckSquare size={18} />, label: "To-Do" },
+    { icon: <Phone size={18} />, label: "Contact" },
+    { icon: <File size={18} />, label: "Invoice" },
+    { icon: <Grid size={18} />, label: "UI Elements" },
+    { icon: <Users size={18} />, label: "Team" },
+    { icon: <Table size={18} />, label: "Table" },
+  ];
+
+  const settingsLogoutItems = [
+    { icon: <Settings size={18} />, label: "Settings" },
+    { icon: <LogOut size={18} />, label: "Logout" },
+  ];
+
   return (
     <div className="sidebar">
-      <div className="menu-list">
-        <div className={`menu-item ${activeMenu === "Dashboard" ? "active" : ""}`}>
-          Dashboard
+      <div className="sidebar-header">
+        <h1 className="sidebar-title">{title}</h1>
+      </div>
+
+      <div className="sidebar-nav">
+        <div className="main-nav-section">
+          {mainNavItems.map((item, index) => (
+            <NavItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              active={item.active}
+            />
+          ))}
         </div>
-        <div className="menu-item">Products</div>
-        <div className="menu-sub-item">Favorites</div>
-        <div className="menu-sub-item">Order Lists</div>
-        <div className="menu-sub-item">Product Stock</div>
-        <div className="menu-item">Pages</div>
-        <div className="menu-sub-item">Pricing</div>
-        <div className="menu-sub-item">Builder</div>
-        <div className="menu-sub-item">To-Do</div>
-        <div className="menu-sub-item">Contact</div>
-        <div className="menu-sub-item">Invoice</div>
-        <div className="menu-sub-item">UI Elements</div>
-        <div className="menu-sub-item">Team</div>
-        <div className="menu-sub-item">Table</div>
-        <div className="menu-item">Settings</div>
-        <div className="menu-item">Logout</div>
+
+        <div className="pages-nav-section">
+          <div className="sidebar-nav-section">
+            <p className="sidebar-nav-section-title">Pages</p>
+          </div>
+          {pagesNavItems.map((item, index) => (
+            <NavItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+            />
+          ))}
+        </div>
+
+        <div className="settings-logout-section">
+          {settingsLogoutItems.map((item, index) => (
+            <NavItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
-};
-
-export default Sidebar;
+}
