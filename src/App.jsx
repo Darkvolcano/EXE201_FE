@@ -20,6 +20,7 @@ import ProfileUser from "./pages/ProfileUser";
 import EditProfileUser from "./pages/EditProfileUser";
 import TutorProfile from "./pages/ProfileTutor";
 import Dashboard from "./pages/Dashboard";
+import AdminProfile from "./pages/ProfileAdmin";
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
@@ -62,6 +63,7 @@ function App() {
           <Route path="/register-user" element={<RegisterUser />} />
           <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile-admin" element={<AdminProfile />} />
         </Route>
       </Routes>
     </Router>

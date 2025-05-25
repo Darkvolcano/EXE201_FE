@@ -3,7 +3,7 @@ import {
   CheckSquare, Phone, File, Grid, Users, Table, Settings, 
   LogOut 
 } from 'lucide-react';
-import { NavItem } from './NavItem';
+import { NavItem } from './NavItemAdmin';
 
 export default function Sidebar({ title = "Tutorify" }) {
   const mainNavItems = [

@@ -7,7 +7,7 @@ import {
 import LoadingSpinner from '../components/LoadingSpinner';
 import ErrorMessage from '../components/ErrorMessage';
 import { useDashboardData } from '../hooks/dashboardApi';
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/SidebarAdmin';
 
 export default function Dashboard() {
   const [selectedYear, setSelectedYear] = useState('2025');
