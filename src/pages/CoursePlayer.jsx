@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Tabs, Button, Progress, Collapse, Avatar, Checkbox } from "antd";
+import { Card, Tabs, Button, Progress, Collapse, Avatar, Checkbox, Form, Input } from "antd";
 import {
   PlayCircleOutlined,
   UserOutlined,
@@ -13,11 +13,17 @@ import {
 import PaperIcon from "../components/paper";
 import ReplyIcon from "../components/reply";
 import "../style/CoursePlayer.css";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetCourseFeedback } from "../hooks/coursesApi";
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
 const CoursePlayer = () => {
+  const { id } = useParams();
+  const { data, isLoading, isError } = useGetCourseFeedback(id);
+  const navigate = useNavigate();
+
   const courseData = {
     title: "Complete ASP.NET Core Razor Pages Web Development [.NET 8 Updated]",
     sections: 6,
@@ -325,6 +331,71 @@ This course is beginner-friendly and perfect for those who have never coded befo
                 </div>
               </TabPane>
             </Tabs>
+            <div className="feedback-section" style={{ marginTop: 32 }}>
+              <h2 style={{ marginBottom: 12 }}>Feedback</h2>
+              {isLoading && <div>Loading feedback...</div>}
+              {isError && <div>Failed to load feedback.</div>}
+              {!isLoading && !isError && data?.data?.length === 0 && (
+                <div>No feedback yet.</div>
+              )}
+              {!isLoading && !isError && data?.data?.length > 0 && (
+                <div>
+                  {data.data.map((fb) => (
+                    <div
+                      key={fb._id}
+                      style={{
+                        marginBottom: 18,
+                        borderBottom: "1px solid #eee",
+                        paddingBottom: 12,
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 12,
+                        }}
+                      >
+                        <img
+                          src={fb.accountId.avatar}
+                          alt={fb.accountId.fullName}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: "50%",
+                          }}
+                        />
+                        <div>
+                          <b>{fb.accountId.fullName}</b>
+                          <div
+                            style={{
+                              fontSize: 13,
+                              color: "#888",
+                            }}
+                          >
+                            {new Date(fb.createdAt).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ margin: "8px 0" }}>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <span
+                            key={i}
+                            style={{
+                              color: i < fb.rating ? "#FFB400" : "#e0e0e0",
+                              fontSize: 18,
+                            }}
+                          >
+                            ★
+                          </span>
+                        ))}
+                      </div>
+                      <div>{fb.comment}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </Card>
         </div>
         <div className="sidebar-course">

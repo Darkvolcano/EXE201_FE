@@ -16,6 +16,7 @@ import Courses from "./pages/Courses";
 import UploadCertificate from "./pages/UploadCertificate";
 import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
+import About from "./pages/About";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -33,11 +34,13 @@ function App() {
       <Routes>
         <Route element={<LayoutWithNavFooter />}>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/tutor" element={<Tutor />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/upload-certificate" element={<UploadCertificate />} />
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/course-detail" element={<CoursePlayer />} />
+          <Route path="/courses/:id" element={<CoursePlayer />} />
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>

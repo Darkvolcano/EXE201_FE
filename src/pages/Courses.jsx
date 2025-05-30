@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Button,
   Checkbox,
@@ -21,6 +22,7 @@ const Courses = () => {
   const { user } = useAuthStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const { mutate: createCourse, isLoading } = useCreateCourse();
   const { data, isLoading: isLoadingCourses, isError } = useGetCourse();
@@ -139,7 +141,12 @@ const Courses = () => {
             {!isLoadingCourses &&
               !isError &&
               courses.map((course) => (
-                <div className="course-card" key={course._id}>
+                <div
+                  className="course-card"
+                  key={course._id}
+                  onClick={() => navigate(`/courses/${course._id}`)}
+                  style={{ cursor: "pointer" }}
+                >
                   <div
                     className="course-image"
                     style={{
