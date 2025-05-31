@@ -21,6 +21,10 @@ import EditProfileUser from "./pages/EditProfileUser";
 import TutorProfile from "./pages/ProfileTutor";
 import Dashboard from "./pages/Dashboard";
 import AdminProfile from "./pages/ProfileAdmin";
+import AIChat from "./pages/AIChat";
+import CoursePlayer from "./pages/CoursePlayer";
+import About from "./pages/About";
+
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
@@ -44,6 +48,7 @@ function App() {
       <Routes>
         <Route element={<LayoutWithNavFooter />}>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
           <Route path="/tutor" element={<Tutor />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/upload-certificate" element={<UploadCertificate />} />
@@ -54,6 +59,9 @@ function App() {
 
         <Route element={<LayoutWithFooter />}>
           
+          <Route path="/ai-chat" element={<AIChat />} />
+          <Route path="/course-detail" element={<CoursePlayer />} />
+          <Route path="/courses/:id" element={<CoursePlayer />} />
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>
