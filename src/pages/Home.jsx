@@ -60,7 +60,9 @@ const Home = () => {
 
       <div className="about-section">
         <div className="about-image">
-          <div className="image-placeholder-bottom"></div>
+          <div className="image-placeholder-bottom">
+            <img src="/src/assets/home-second.png" />
+          </div>
         </div>
         <div className="about-text">
           <span className="about-label">ABOUT US</span>
@@ -109,7 +111,9 @@ const Home = () => {
           </ul>
         </div>
         <div className="why-choose-image">
-          <div className="image-placeholder-why-choose"></div>
+          <div className="image-placeholder-why-choose">
+            <img src="/src/assets/home-third.jpg" />
+          </div>
         </div>
       </div>
 
@@ -120,7 +124,9 @@ const Home = () => {
         </p>
         <div className="mentor-list">
           <div className="mentor-card">
-            <div className="mentor-image-placeholder"></div>
+            <div className="mentor-image-placeholder">
+              <img src="/src/assets/mentor-first.jpg" alt="Mentor" />
+            </div>
             <h3 className="mentor-name">RIZQI ASSEGAF</h3>
             <p className="mentor-role">SD-SMA Mentor</p>
             <p className="mentor-experience">
@@ -131,7 +137,9 @@ const Home = () => {
             </div>
           </div>
           <div className="mentor-card">
-            <div className="mentor-image-placeholder"></div>
+            <div className="mentor-image-placeholder">
+              <img src="/src/assets/mentor-second.png" alt="Mentor" />
+            </div>
             <h3 className="mentor-name">RIFKY SURYA</h3>
             <p className="mentor-role">SD-SMA Mentor</p>
             <p className="mentor-experience">
@@ -142,7 +150,9 @@ const Home = () => {
             </div>
           </div>
           <div className="mentor-card">
-            <div className="mentor-image-placeholder"></div>
+            <div className="mentor-image-placeholder">
+              <img src="/src/assets/mentor-third.jpeg" alt="Mentor" />
+            </div>
             <h3 className="mentor-name">LOUIS CAHYA</h3>
             <p className="mentor-role">SD-SMA Mentor</p>
             <p className="mentor-experience">
@@ -270,7 +280,9 @@ const Home = () => {
             <p className="testimonial-role">Student At Tutorify</p>
           </div>
           <div className="testimonial-image">
-            <div className="image-placeholder-testimonial"></div>
+            <div className="image-placeholder-testimonial">
+              <img src="/src/assets/home-final.jpg" alt="Testimonial" />
+            </div>
           </div>
         </div>
         <div className="testimonial-navigation">

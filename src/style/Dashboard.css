@@ -38,10 +38,11 @@
   width: 250px;
   background-color: #fff;
   border-right: 1px solid #e5e7eb;
-  height: 100%;
+  height: 100vh;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  flex-shrink: 0; /* Prevent sidebar from shrinking */
 }
 
 .sidebar-header {
@@ -116,10 +117,13 @@
   color: #4F46E5;
 }
 
-/* Main Content Styles */
+/* Main Content Styles - FIXED */
 .main-content {
   flex: 1;
-  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden; /* Prevent main content from overflowing */
 }
 
 /* Header Styles */
@@ -127,8 +131,7 @@
   background-color: #fff;
   border-bottom: 1px solid #e5e7eb;
   padding: 12px 24px;
-  position: sticky;
-  top: 0;
+  flex-shrink: 0; /* Prevent header from shrinking */
   z-index: 10;
 }
 
@@ -220,9 +223,11 @@
   margin: 0;
 }
 
-/* Dashboard Main Content */
+/* Dashboard Main Content - FIXED */
 .dashboard-main {
+  flex: 1;
   padding: 24px;
+  overflow-y: auto; /* Allow scrolling within dashboard content */
 }
 
 .dashboard-header {
@@ -298,6 +303,7 @@
 
 .summary-content {
   flex: 1;
+  min-width: 0; /* Allow text to wrap properly */
 }
 
 .summary-content h3 {
@@ -334,6 +340,8 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
 .revenue-title {
@@ -370,11 +378,53 @@
   width: 100%;
 }
 
-/* Detailed Stats Layout */
+/* Detailed Stats Layout - FIXED */
 .detailed-stats-container {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 1024px) {
+  .detailed-stats-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .summary-cards {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .revenue-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+  
+  .header {
+    padding: 12px 16px;
+  }
+  
+  .dashboard-main {
+    padding: 16px;
+  }
+  
+  .search-container {
+    width: 200px;
+  }
+  
+  .header-actions {
+    gap: 12px;
+  }
+  
+  .summary-cards {
+    grid-template-columns: 1fr;
+  }
 }
 
 .stats-column {
@@ -431,6 +481,7 @@
   justify-content: space-between;
   align-items: center;
   margin-top: 16px;
+  gap: 16px;
 }
 
 .status-legend {
@@ -452,6 +503,7 @@
   border-radius: 50%;
   margin-right: 8px;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .legend-color.active {
@@ -465,6 +517,7 @@
 /* Status Percentage */
 .status-percentage {
   text-align: center;
+  flex-shrink: 0;
 }
 
 .percentage-circle {
@@ -503,11 +556,20 @@
   gap: 16px;
 }
 
+.profile-avatar {
+  flex-shrink: 0;
+}
+
 .profile-avatar img {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   border: 2px solid #e5e7eb;
+}
+
+.profile-info {
+  flex: 1;
+  min-width: 0;
 }
 
 .profile-info h3 {
@@ -521,6 +583,7 @@
   font-size: 14px;
   color: #6b7280;
   margin: 0;
+  word-break: break-word;
 }
 
 .profile-stats {
