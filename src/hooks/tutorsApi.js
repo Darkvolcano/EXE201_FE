@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axiosInstance from "../configs/axios";
 
 export const useTutorRegister = () => {
@@ -36,3 +36,4 @@ export const useTutorRegisterCertificate = () => {
     },
   });
 };
+
