@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Tabs, Button, Progress, Collapse, Avatar, Checkbox, Form, Input } from "antd";
 import {
   PlayCircleOutlined,
@@ -14,14 +14,43 @@ import PaperIcon from "../components/paper";
 import ReplyIcon from "../components/reply";
 import "../style/CoursePlayer.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetCourseFeedback } from "../hooks/coursesApi";
+import { useGetCourseFeedback, useGetCourseChapters, useGetChapterContents } from "../hooks/coursesApi";
+import { useQueries } from "@tanstack/react-query";
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
 const CoursePlayer = () => {
   const { id } = useParams();
-  const { data, isLoading, isError } = useGetCourseFeedback(id);
+  const { data: feedbackData, isLoading: isLoadingFeedback, isError: isErrorFeedback } = useGetCourseFeedback(id);
+  const { data: chaptersData, isLoading: isLoadingChapters, isError: isErrorChapters } = useGetCourseChapters(id);
+
+  // Fetch all contents for all chapters
+  const chapterContentQueries = useQueries({
+    queries:
+      chaptersData?.map((chapter) => ({
+        queryKey: ["chapter-contents", chapter._id],
+        queryFn: () => useGetChapterContents._fn(chapter._id), // use the axiosInstance-based hook function
+        enabled: !!chaptersData,
+      })) || [],
+  });
+
+  // Helper to expose the axiosInstance-based fetcher for useQueries
+  useGetChapterContents._fn = async (chapterId) => {
+    // This uses the same axiosInstance as your hooks/coursesApi.js
+    const { default: axiosInstance } = await import("../configs/axios");
+    const response = await axiosInstance.get(`contents/chapter/${chapterId}`);
+    return response.data;
+  };
+
+  // Map chapterId to its contents
+  const chapterContentsMap = {};
+  chaptersData?.forEach((chapter, idx) => {
+    chapterContentsMap[chapter._id] = chapterContentQueries[idx]?.data || [];
+  });
+
+  const [activeChapterKey, setActiveChapterKey] = useState(null);
+
   const navigate = useNavigate();
 
   const courseData = {
@@ -87,50 +116,31 @@ This course is beginner-friendly and perfect for those who have never coded befo
     ],
   };
 
-  const courseSections = [
-    {
-      title: "Getting Started",
-      lectures: [
-        { id: 1, title: "1. What is C#?", duration: "07:31" },
-        { id: 2, title: "2. Sign up in Visual Studio Code", duration: "07:31" },
-        { id: 3, title: "3. Teaser of Razor Page", duration: "07:31" },
-        { id: 4, title: "4. Razor Page Introduction", duration: "07:31" },
-      ],
-      lectureCount: 4,
-      totalDuration: "25m",
-      completed: 1,
-    },
-    {
-      title: "Secret of Good Design",
-      lectures: 52,
-      totalDuration: "5h 49m",
-    },
-    {
-      title: "Practice Design Like a Pro",
-      lectures: 43,
-      totalDuration: "5h 1m",
-    },
-    {
-      title: "Web Development (workflow)",
-      lectures: 137,
-      totalDuration: "10h 6m",
-    },
-    {
-      title: "Secrets of Making Money Freelancing",
-      lectures: 21,
-      totalDuration: "3h 8m",
-    },
-    {
-      title: "Advanced",
-      lectures: 39,
-      totalDuration: "1h 31m",
-    },
-    {
-      title: "What's Next",
-      lectures: 7,
-      totalDuration: "17m",
-    },
-  ];
+  // Replace courseSections with chapters from API if available
+  const courseSections =
+    chaptersData?.length > 0
+      ? chaptersData.map((chapter, idx) => ({
+          title: chapter.title,
+          lectures: [],
+          lectureCount: 0,
+          totalDuration: "",
+          completed: 0,
+        }))
+      : [
+          // fallback to old static data if no chapters
+          {
+            title: "Getting Started",
+            lectures: [
+              { id: 1, title: "1. What is C#?", duration: "07:31" },
+              { id: 2, title: "2. Sign up in Visual Studio Code", duration: "07:31" },
+              { id: 3, title: "3. Teaser of Razor Page", duration: "07:31" },
+              { id: 4, title: "4. Razor Page Introduction", duration: "07:31" },
+            ],
+            lectureCount: 4,
+            totalDuration: "25m",
+            completed: 1,
+          },
+        ];
 
   return (
     <div className="course-player-container">
@@ -333,14 +343,14 @@ This course is beginner-friendly and perfect for those who have never coded befo
             </Tabs>
             <div className="feedback-section" style={{ marginTop: 32 }}>
               <h2 style={{ marginBottom: 12 }}>Feedback</h2>
-              {isLoading && <div>Loading feedback...</div>}
-              {isError && <div>Failed to load feedback.</div>}
-              {!isLoading && !isError && data?.data?.length === 0 && (
+              {isLoadingFeedback && <div>Loading feedback...</div>}
+              {isErrorFeedback && <div>Failed to load feedback.</div>}
+              {!isLoadingFeedback && !isErrorFeedback && feedbackData?.data?.length === 0 && (
                 <div>No feedback yet.</div>
               )}
-              {!isLoading && !isError && data?.data?.length > 0 && (
+              {!isLoadingFeedback && !isErrorFeedback && feedbackData?.data?.length > 0 && (
                 <div>
-                  {data.data.map((fb) => (
+                  {feedbackData.data.map((fb) => (
                     <div
                       key={fb._id}
                       style={{
@@ -406,50 +416,56 @@ This course is beginner-friendly and perfect for those who have never coded befo
                 <span className="progress-text">15% Completed</span>
               </div>
               <Progress
-                percent={courseData.progress}
+                percent={15}
                 showInfo={false}
                 strokeColor="#52c41a"
                 className="progress-bar"
               />
             </div>
-            <Collapse accordion className="section-collapse">
-              {courseSections.map((section, index) => (
-                <Panel
-                  header={section.title}
-                  key={index + 1}
-                  extra={
-                    <span>
-                      <span className="lecture-count">
-                        {typeof section.lectures === "number"
-                          ? section.lectures
-                          : section.lectureCount}{" "}
-                        lectures
-                      </span>
-                      <span className="duration">
-                        <ClockCircleOutlined /> {section.totalDuration || "N/A"}
-                      </span>
-                    </span>
-                  }
-                >
-                  {typeof section.lectures !== "number" &&
-                    section.lectures.map((lecture) => (
-                      <div key={lecture.id} className="lecture-item">
-                        <span className="lecture-title">
-                          <Checkbox></Checkbox> {lecture.id}. {lecture.title}
+            {isLoadingChapters ? (
+              <div style={{ padding: 16 }}>Loading chapters...</div>
+            ) : isErrorChapters ? (
+              <div style={{ padding: 16, color: "red" }}>Failed to load chapters.</div>
+            ) : (
+              <Collapse
+                accordion
+                className="section-collapse"
+                onChange={(key) => setActiveChapterKey(key)}
+                activeKey={activeChapterKey}
+              >
+                {chaptersData?.length > 0 &&
+                  chaptersData.map((chapter) => (
+                    <Panel
+                      header={chapter.title}
+                      key={chapter._id}
+                      extra={
+                        <span>
+                          <span className="lecture-count">0 lectures</span>
+                          <span className="duration">
+                            <ClockCircleOutlined /> N/A
+                          </span>
                         </span>
-                        <span className="lecture-duration">
-                          {lecture.duration}
-                        </span>
-                        <Button
-                          type="link"
-                          icon={<PlayCircleOutlined />}
-                          className="play-button"
-                        />
-                      </div>
-                    ))}
-                </Panel>
-              ))}
-            </Collapse>
+                      }
+                    >
+                      {/* Always show contentDescription(s) */}
+                      {chapterContentQueries.length === 0 ||
+                      chapterContentQueries.some((q) => q.isLoading) ? (
+                        <div style={{ color: "#888" }}>Loading contents...</div>
+                      ) : chapterContentsMap[chapter._id]?.length > 0 ? (
+                        <ul style={{ paddingLeft: 20, margin: 0 }}>
+                          {chapterContentsMap[chapter._id].map((content) => (
+                            <li key={content._id} style={{ marginBottom: 8 }}>
+                              {content.contentDescription}
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <div style={{ color: "#888" }}>No contents in this chapter.</div>
+                      )}
+                    </Panel>
+                  ))}
+              </Collapse>
+            )}
           </Card>
         </div>
       </div>
