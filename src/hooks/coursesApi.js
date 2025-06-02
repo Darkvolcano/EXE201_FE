@@ -30,3 +30,25 @@ export const useGetCourseFeedback = (courseId) => {
     enabled: !!courseId,
   });
 };
+
+export const useGetCourseChapters = (courseId) => {
+  return useQuery({
+    queryKey: ["course-chapters", courseId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`chapters/course/${courseId}`);
+      return response.data;
+    },
+    enabled: !!courseId,
+  });
+};
+
+export const useGetChapterContents = (chapterId, enabled = true) => {
+  return useQuery({
+    queryKey: ["chapter-contents", chapterId],
+    queryFn: async () => {
+      const response = await axiosInstance.get(`contents/chapter/${chapterId}`);
+      return response.data;
+    },
+    enabled: !!chapterId && enabled,
+  });
+};
