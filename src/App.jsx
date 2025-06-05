@@ -14,6 +14,13 @@ import Register from "./pages/Register";
 import VerifyOTP from "./pages/VerifyOTP";
 import Courses from "./pages/Courses";
 import UploadCertificate from "./pages/UploadCertificate";
+import VerifyOTPUser from "./pages/VerifyOTPUser";
+import RegisterUser from "./pages/RegisterUser";
+import ProfileUser from "./pages/ProfileUser";
+import EditProfileUser from "./pages/EditProfileUser";
+import TutorProfile from "./pages/ProfileTutor";
+import Dashboard from "./pages/Dashboard";
+import AdminProfile from "./pages/ProfileAdmin";
 import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
 import Pricing from "./pages/Price";
@@ -22,6 +29,13 @@ import About from "./pages/About";
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
+    <Outlet />
+    <Footer />
+  </>
+);
+
+const LayoutWithFooter = () => (
+  <>
     <Outlet />
     <Footer />
   </>
@@ -39,6 +53,13 @@ function App() {
           <Route path="/tutor" element={<Tutor />} />
           <Route path="/courses" element={<Courses />} />
           <Route path="/upload-certificate" element={<UploadCertificate />} />
+          <Route path="/profile-user" element={<ProfileUser />} />
+          <Route path="/edit-profile-user" element={<EditProfileUser />} />
+          <Route path="/profile-tutor" element={<TutorProfile />} />
+        </Route>
+
+        <Route element={<LayoutWithFooter />}>
+          
           <Route path="/ai-chat" element={<AIChat />} />
           <Route path="/course-detail" element={<CoursePlayer />} />
           <Route path="/pricing" element={<Pricing />} />
@@ -49,6 +70,10 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
+          <Route path="/register-user" element={<RegisterUser />} />
+          <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/profile-admin" element={<AdminProfile />} />
         </Route>
       </Routes>
     </Router>

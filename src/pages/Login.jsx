@@ -19,7 +19,11 @@ const Login = () => {
           navigate("/");
         } else if (response.role === "Tutor") {
           navigate("/");
-        } else {
+        }
+        else if (response.role === "User") {
+          navigate("/");
+        }
+        else {
           navigate("/home-page");
         }
         message.success("Login successfully");

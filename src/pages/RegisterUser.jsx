@@ -1,38 +1,37 @@
 import React from "react";
 import { Form, Input, Button, message, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useTutorRegister } from "../hooks/tutorsApi";
+import { useMutation } from "@tanstack/react-query";
+import axiosInstance from "../configs/axios";
 import "../style/Auth.css";
 
 const { Title, Text } = Typography;
 
-const Register = () => {
+const RegisterUser = () => {
   const navigate = useNavigate();
-  const { mutate: register, isPending } = useTutorRegister();
+
+  const registerUserMutation = useMutation({
+    mutationFn: async (newAccount) => {
+      const response = await axiosInstance.post("auth/register", newAccount);
+      return response.data;
+    },
+  });
 
   const onFinish = (values) => {
-    const email = values.email;
-    register(
+    registerUserMutation.mutate(
       {
         fullName: values.fullName,
-        email: email,
+        email: values.email,
         phone: values.phone,
         password: values.password,
       },
       {
         onSuccess: (data) => {
-          if (data.status === 201) {
-            message.success(data.message);
-            navigate("/verify-otp", { state: { email } });
-          } else {
-            message.error(data.message || "Registration failed");
-          }
+          message.success(data.message || "Account created successfully! Please check your email for OTP.");
+          navigate("/verify-otp-user", { state: { email: values.email } });
         },
         onError: (error) => {
-          message.error(
-            error.response?.data?.message ||
-              "Registration failed: " + error.message
-          );
+          message.error(error.response?.data?.message || "Registration failed");
         },
       }
     );
@@ -43,30 +42,19 @@ const Register = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-          Join Tutorify
+          Join Us Today !
         </Title>
         <Text className="auth-subtitle">
-          Create an account to start your learning or teaching journey.
+          Create your account to start your learning journey with us.
         </Text>
-        <Form
-          name="register"
-          layout="vertical"
-          onFinish={onFinish}
-          className="auth-form"
-        >
+        <Form name="register-user" layout="vertical" onFinish={onFinish} className="auth-form">
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[
-              { required: true, message: "Please input your full name!" },
-            ]}
+            rules={[{ required: true, message: "Please input your full name!" }]}
             style={{ marginBottom: 10 }}
           >
-            <Input
-              placeholder="Enter your full name"
-              className="auth-input"
-              size="large"
-            />
+            <Input placeholder="Enter your full name" className="auth-input" size="large" />
           </Form.Item>
           <Form.Item
             label="Email"
@@ -77,29 +65,18 @@ const Register = () => {
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input
-              placeholder="Enter your email"
-              className="auth-input"
-              size="large"
-            />
+            <Input placeholder="Enter your email" className="auth-input" size="large" />
           </Form.Item>
           <Form.Item
             label="Phone Number"
             name="phone"
             rules={[
               { required: true, message: "Please input your phone number!" },
-              {
-                pattern: /^[0-9]{10,15}$/,
-                message: "Please enter a valid phone number!",
-              },
+              { pattern: /^[0-9]{10,15}$/, message: "Please enter a valid phone number!" },
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input
-              placeholder="Enter your phone number"
-              className="auth-input"
-              size="large"
-            />
+            <Input placeholder="Enter your phone number" className="auth-input" size="large" />
           </Form.Item>
           <Form.Item
             label="Password"
@@ -110,11 +87,7 @@ const Register = () => {
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input.Password
-              placeholder="Enter your password"
-              className="auth-input"
-              size="large"
-            />
+            <Input.Password placeholder="Enter your password" className="auth-input" size="large" />
           </Form.Item>
           <Form.Item
             label="Confirm Password"
@@ -133,11 +106,7 @@ const Register = () => {
             ]}
             style={{ marginBottom: 20 }}
           >
-            <Input.Password
-              placeholder="Confirm your password"
-              className="auth-input"
-              size="large"
-            />
+            <Input.Password placeholder="Confirm your password" className="auth-input" size="large" />
           </Form.Item>
           <Form.Item>
             <Button
@@ -145,7 +114,7 @@ const Register = () => {
               htmlType="submit"
               size="large"
               className="auth-button"
-              loading={isPending}
+              loading={registerUserMutation.isPending}
               block
             >
               Sign Up
@@ -160,10 +129,10 @@ const Register = () => {
             type="primary"
             size="large"
             className="auth-button"
-            onClick={() => navigate("/register-user")}
+            onClick={() => navigate("/register")}
             style={{ marginTop: 10 }}
           >
-            Register as a User
+            Register as a Tutor
           </Button>
         </div>
       </div>
@@ -171,4 +140,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterUser;
