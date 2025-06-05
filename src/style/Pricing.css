@@ -51,13 +51,15 @@
 
 .course-details {
   margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
 }
 
 .course-details .ant-typography {
-  display: block;
+  display: flex;
   font-size: 14px;
   color: #666;
-  margin-bottom: 8px;
+  align-items: center;
 }
 
 .course-details .anticon {
