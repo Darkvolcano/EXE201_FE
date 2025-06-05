@@ -2,10 +2,23 @@ import React from "react";
 import { Button, Checkbox, Input, Radio, Slider, Select } from "antd";
 import "../style/Tutor.css";
 import SearchIconWhite from "../components/SearchIconWhite";
+import { useGetCourse } from "../hooks/coursesApi";
 
 const { Option } = Select;
 
 const Tutor = () => {
+  // Use the hook from coursesApi.js
+  const { data, isLoading, isError } = useGetCourse();
+  // Extract tutors from courses data
+  const tutors =
+    data?.data?.courses?.map((item) => ({
+      account: item.account,
+      certifications: item.certifications,
+    })) || [];
+
+  // Log để kiểm tra dữ liệu trả về từ API
+  console.log("Tutors data:", tutors);
+
   return (
     <div className="mentor-search-container">
       {/* Header Section */}
@@ -71,106 +84,55 @@ const Tutor = () => {
 
         {/* Mentor List */}
         <div className="mentor-list-container">
-          <div className="mentor-grid">
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Rizqi Assegaf</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 10 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Rifky Surya</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 7 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★☆</span> (200)
-              </div>
-            </div>
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Louis Cahya</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 5 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★☆</span> (200)
-              </div>
-            </div>
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Rizqi Assegaf</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 10 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Rifky Surya</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 10 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
-            <div className="mentor-card">
-              <div
-                className="mentor-image"
-                style={{
-                  backgroundImage: "url(https://via.placeholder.com/150)",
-                }}
-              ></div>
-              <h3 className="mentor-name">Louis Cahya</h3>
-              <p className="mentor-role">SD-SMA Mentor</p>
-              <p className="mentor-experience">
-                <span className="clock-icon">🕒</span> 10 years
-              </p>
-              <div className="mentor-rating">
-                <span className="stars">★★★★★</span> (200)
-              </div>
-            </div>
+          <div className="mentor-grid-friendly">
+            {isLoading && <div>Loading...</div>}
+            {isError && <div>Failed to load tutors.</div>}
+            {!isLoading && !isError && tutors.length === 0 && (
+              <div>No tutors found.</div>
+            )}
+            {!isLoading &&
+              !isError &&
+              tutors.map((tutor) => (
+                <div className="mentor-card-friendly" key={tutor.account._id}>
+                  <div className="mentor-img-wrap">
+                    <img
+                      className="mentor-img"
+                      src={
+                        tutor.certifications[0]?.image[0] ||
+                        "https://via.placeholder.com/200x200?text=Tutor"
+                      }
+                      alt={tutor.account.fullName}
+                    />
+                  </div>
+                  <div className="mentor-info-wrap">
+                    <div className="mentor-name">
+                      {tutor.account.fullName || "No Name"}
+                    </div>
+                    <div className="mentor-role">
+                      {tutor.certifications[0]?.name || tutor.account.role}
+                    </div>
+                    <div className="mentor-meta">
+                      <span className="mentor-meta-icon">🕒</span>
+                      <span>
+                        {tutor.certifications[0]?.experience || 0} years
+                      </span>
+                    </div>
+                    <div className="mentor-rating-row">
+                      <span className="mentor-stars">
+                        <span style={{ color: "#FFB400" }}>★</span>
+                        <span style={{ color: "#FFB400" }}>★</span>
+                        <span style={{ color: "#FFB400" }}>★</span>
+                        <span style={{ color: "#FFB400" }}>★</span>
+                        <span style={{ color: "#FFB400" }}>★</span>
+                      </span>
+                      <span className="mentor-rating-count">(200)</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
           <div className="pagination">
-            <span>Showing 6 Mentors from 1 Pages</span>
+            <span>Showing {tutors.length} Mentors</span>
           </div>
         </div>
       </div>

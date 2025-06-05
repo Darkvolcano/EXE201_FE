@@ -1,0 +1,136 @@
+.about-container {
+  background: #f7faff;
+  min-height: 100vh;
+  padding: 40px 0 60px 0;
+}
+
+.about-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  padding: 48px 0 32px 0;
+  background: linear-gradient(90deg, #0077ff 0%, #5ec6fa 100%);
+  color: #fff;
+}
+
+.about-hero-img {
+  width: 340px;
+  height: 340px;
+  border-radius: 24px;
+  object-fit: cover;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  background: #fff;
+}
+
+.about-hero-content {
+  max-width: 520px;
+}
+
+.about-hero-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.about-hero-desc {
+  font-size: 1.15rem;
+  margin-bottom: 28px;
+  line-height: 1.7;
+}
+
+.about-hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 24px;
+}
+
+.about-stat {
+  text-align: center;
+}
+
+.about-stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.about-stat-label {
+  font-size: 1rem;
+  color: #e0e0e0;
+}
+
+.about-section {
+  max-width: 900px;
+  margin: 48px auto 0 auto;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  padding: 40px 36px;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.about-section-img {
+  width: 220px;
+  height: 220px;
+  border-radius: 16px;
+  object-fit: cover;
+  background: #f0f2f5;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+
+.about-section-content {
+  flex: 1;
+}
+
+.about-section-title {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #0077ff;
+}
+
+.about-section-desc {
+  font-size: 1.08rem;
+  color: #444;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+
+.about-values-list {
+  margin: 0 0 18px 0;
+  padding: 0 0 0 18px;
+  color: #0077ff;
+  font-size: 1.08rem;
+}
+
+.about-values-list li {
+  margin-bottom: 7px;
+  color: #222;
+}
+
+.about-cta-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+@media (max-width: 900px) {
+  .about-hero {
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px 0 24px 0;
+  }
+  .about-section {
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 12px;
+    gap: 24px;
+  }
+  .about-section-content {
+    width: 100%;
+  }
+}
