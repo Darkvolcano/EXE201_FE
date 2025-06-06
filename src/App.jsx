@@ -34,13 +34,6 @@ const LayoutWithNavFooter = () => (
   </>
 );
 
-const LayoutWithFooter = () => (
-  <>
-    <Outlet />
-    <Footer />
-  </>
-);
-
 const LayoutWithoutNavFooter = () => <Outlet />;
 
 function App() {
@@ -56,13 +49,9 @@ function App() {
           <Route path="/profile-user" element={<ProfileUser />} />
           <Route path="/edit-profile-user" element={<EditProfileUser />} />
           <Route path="/profile-tutor" element={<TutorProfile />} />
-        </Route>
-
-        <Route element={<LayoutWithFooter />}>
-          
           <Route path="/ai-chat" element={<AIChat />} />
-          <Route path="/course-detail" element={<CoursePlayer />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/course-detail" element={<CoursePlayer />} />
           <Route path="/courses/:id" element={<CoursePlayer />} />
         </Route>
 
