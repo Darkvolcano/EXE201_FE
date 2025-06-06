@@ -165,7 +165,7 @@ const AIChat = () => {
           <Button icon={<SettingOutlined />} className="settings-icon" />
         </div>
       </div>
-      <div className="main-content">
+      <div style={{ display: "flex" }}>
         <div className="sidebar">
           <div className="sidebar-section">
             <Tabs defaultActiveKey="1" className="header-tabs">

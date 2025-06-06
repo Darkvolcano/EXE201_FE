@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import { Card, Tabs, Button, Progress, Collapse, Avatar, Checkbox, Form, Input } from "antd";
+import {
+  Card,
+  Tabs,
+  Button,
+  Progress,
+  Collapse,
+  Avatar,
+  Checkbox,
+  Form,
+  Input,
+} from "antd";
 import {
   PlayCircleOutlined,
   UserOutlined,
@@ -14,7 +24,11 @@ import PaperIcon from "../components/paper";
 import ReplyIcon from "../components/reply";
 import "../style/CoursePlayer.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetCourseFeedback, useGetCourseChapters, useGetChapterContents } from "../hooks/coursesApi";
+import {
+  useGetCourseFeedback,
+  useGetCourseChapters,
+  useGetChapterContents,
+} from "../hooks/coursesApi";
 import { useQueries } from "@tanstack/react-query";
 
 const { TabPane } = Tabs;
@@ -22,8 +36,16 @@ const { Panel } = Collapse;
 
 const CoursePlayer = () => {
   const { id } = useParams();
-  const { data: feedbackData, isLoading: isLoadingFeedback, isError: isErrorFeedback } = useGetCourseFeedback(id);
-  const { data: chaptersData, isLoading: isLoadingChapters, isError: isErrorChapters } = useGetCourseChapters(id);
+  const {
+    data: feedbackData,
+    isLoading: isLoadingFeedback,
+    isError: isErrorFeedback,
+  } = useGetCourseFeedback(id);
+  const {
+    data: chaptersData,
+    isLoading: isLoadingChapters,
+    isError: isErrorChapters,
+  } = useGetCourseChapters(id);
 
   // Fetch all contents for all chapters
   const chapterContentQueries = useQueries({
@@ -132,7 +154,11 @@ This course is beginner-friendly and perfect for those who have never coded befo
             title: "Getting Started",
             lectures: [
               { id: 1, title: "1. What is C#?", duration: "07:31" },
-              { id: 2, title: "2. Sign up in Visual Studio Code", duration: "07:31" },
+              {
+                id: 2,
+                title: "2. Sign up in Visual Studio Code",
+                duration: "07:31",
+              },
               { id: 3, title: "3. Teaser of Razor Page", duration: "07:31" },
               { id: 4, title: "4. Razor Page Introduction", duration: "07:31" },
             ],
@@ -169,7 +195,7 @@ This course is beginner-friendly and perfect for those who have never coded befo
           </Button>
         </div>
       </div>
-      <div className="main-content">
+      <div style={{ display: "flex" }}>
         <div className="video-section">
           <Card className="video-card">
             <div className="video-placeholder">
@@ -345,66 +371,68 @@ This course is beginner-friendly and perfect for those who have never coded befo
               <h2 style={{ marginBottom: 12 }}>Feedback</h2>
               {isLoadingFeedback && <div>Loading feedback...</div>}
               {isErrorFeedback && <div>Failed to load feedback.</div>}
-              {!isLoadingFeedback && !isErrorFeedback && feedbackData?.data?.length === 0 && (
-                <div>No feedback yet.</div>
-              )}
-              {!isLoadingFeedback && !isErrorFeedback && feedbackData?.data?.length > 0 && (
-                <div>
-                  {feedbackData.data.map((fb) => (
-                    <div
-                      key={fb._id}
-                      style={{
-                        marginBottom: 18,
-                        borderBottom: "1px solid #eee",
-                        paddingBottom: 12,
-                      }}
-                    >
+              {!isLoadingFeedback &&
+                !isErrorFeedback &&
+                feedbackData?.data?.length === 0 && <div>No feedback yet.</div>}
+              {!isLoadingFeedback &&
+                !isErrorFeedback &&
+                feedbackData?.data?.length > 0 && (
+                  <div>
+                    {feedbackData.data.map((fb) => (
                       <div
+                        key={fb._id}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 12,
+                          marginBottom: 18,
+                          borderBottom: "1px solid #eee",
+                          paddingBottom: 12,
                         }}
                       >
-                        <img
-                          src={fb.accountId.avatar}
-                          alt={fb.accountId.fullName}
+                        <div
                           style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 12,
                           }}
-                        />
-                        <div>
-                          <b>{fb.accountId.fullName}</b>
-                          <div
+                        >
+                          <img
+                            src={fb.accountId.avatar}
+                            alt={fb.accountId.fullName}
                             style={{
-                              fontSize: 13,
-                              color: "#888",
+                              width: 40,
+                              height: 40,
+                              borderRadius: "50%",
                             }}
-                          >
-                            {new Date(fb.createdAt).toLocaleDateString()}
+                          />
+                          <div>
+                            <b>{fb.accountId.fullName}</b>
+                            <div
+                              style={{
+                                fontSize: 13,
+                                color: "#888",
+                              }}
+                            >
+                              {new Date(fb.createdAt).toLocaleDateString()}
+                            </div>
                           </div>
                         </div>
+                        <div style={{ margin: "8px 0" }}>
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                color: i < fb.rating ? "#FFB400" : "#e0e0e0",
+                                fontSize: 18,
+                              }}
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                        <div>{fb.comment}</div>
                       </div>
-                      <div style={{ margin: "8px 0" }}>
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              color: i < fb.rating ? "#FFB400" : "#e0e0e0",
-                              fontSize: 18,
-                            }}
-                          >
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                      <div>{fb.comment}</div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                )}
             </div>
           </Card>
         </div>
@@ -425,7 +453,9 @@ This course is beginner-friendly and perfect for those who have never coded befo
             {isLoadingChapters ? (
               <div style={{ padding: 16 }}>Loading chapters...</div>
             ) : isErrorChapters ? (
-              <div style={{ padding: 16, color: "red" }}>Failed to load chapters.</div>
+              <div style={{ padding: 16, color: "red" }}>
+                Failed to load chapters.
+              </div>
             ) : (
               <Collapse
                 accordion
@@ -460,7 +490,9 @@ This course is beginner-friendly and perfect for those who have never coded befo
                           ))}
                         </ul>
                       ) : (
-                        <div style={{ color: "#888" }}>No contents in this chapter.</div>
+                        <div style={{ color: "#888" }}>
+                          No contents in this chapter.
+                        </div>
                       )}
                     </Panel>
                   ))}
