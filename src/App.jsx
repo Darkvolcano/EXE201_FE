@@ -25,6 +25,7 @@ import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
 import Pricing from "./pages/Price";
 import About from "./pages/About";
+import Profile from "./pages/Profile";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -53,6 +54,7 @@ function App() {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/course-detail" element={<CoursePlayer />} />
           <Route path="/courses/:id" element={<CoursePlayer />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route element={<LayoutWithoutNavFooter />}>

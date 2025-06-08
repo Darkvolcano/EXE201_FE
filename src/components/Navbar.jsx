@@ -21,6 +21,14 @@ const Navbar = () => {
 
   const menu = (
     <Menu>
+      <Menu.Item
+        key="profile"
+        onClick={() => {
+          navigate("/profile");
+        }}
+      >
+        Profile
+      </Menu.Item>
       <Menu.Item key="logout" onClick={handleLogout}>
         Logout
       </Menu.Item>
