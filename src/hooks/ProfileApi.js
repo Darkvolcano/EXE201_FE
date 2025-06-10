@@ -27,3 +27,31 @@ export const useEditProfileUser = () => {
     },
   });
 };
+
+export const useEditProfileTutor = () => {
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: (updatedData) => axiosInstance.put("/account/profile", updatedData).then((response) => response.data),
+    onSuccess: (data) => {
+      message.success(data.message || "Profile updated successfully!");
+      navigate("/profile-tutor");
+    },
+    onError: (error) => {
+      message.error(error.response?.data?.message || "Failed to update profile");
+    },
+  });
+};
+
+export const useEditProfileAdmin = () => {
+  const navigate = useNavigate();
+  return useMutation({
+    mutationFn: (updatedData) => axiosInstance.put("/account/profile", updatedData).then((response) => response.data),
+    onSuccess: (data) => {
+      message.success(data.message || "Profile updated successfully!");
+      navigate("/profile-admin");
+    },
+    onError: (error) => {
+      message.error(error.response?.data?.message || "Failed to update profile");
+    },
+  });
+};

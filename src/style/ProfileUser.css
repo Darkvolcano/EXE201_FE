@@ -1,4 +1,6 @@
-.profile-container {
+/* ProfileUser.css - Unique class names to avoid conflicts with AdminProfile.css */
+
+.user-profile-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,95 +9,205 @@
   padding: 20px;
 }
 
-.profile-card {
+.user-profile-box {
   background: #ffffff;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  padding: 30px;
+  padding: 40px;
   width: 100%;
   max-width: 500px;
-}
-
-.profile-header {
   text-align: center;
-  margin-bottom: 20px;
 }
 
-.avatar {
-  margin-bottom: 20px;
+.user-profile-top {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
-.name {
-  margin: 0;
+.user-avatar {
+  margin-bottom: 20px;
+  border: 4px solid #f0f2f5;
+}
+
+.user-fullname {
+  margin: 0 0 10px 0;
   color: #1a73e8;
+  font-size: 28px;
+  font-weight: 600;
 }
 
-.email {
+.user-email-text {
   display: block;
-  margin-top: 5px;
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 16px;
 }
 
-.info {
-  margin-top: 10px;
+.user-details-section {
+  margin-bottom: 30px;
+}
+
+.user-detail-item {
+  margin: 15px 0;
   display: flex;
-  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #1a73e8;
 }
 
-.editButton {
+.user-detail-item strong {
+  color: #333;
+  font-weight: 600;
+}
+
+.user-detail-item span {
+  color: #666;
+  font-weight: 500;
+}
+
+.user-edit-btn {
   background-color: #1a73e8;
-  border-color: #1a73e8;
-  margin-top: 20px;
+  border: none;
+  color: white;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
   width: 100%;
+  transition: all 0.3s ease;
 }
 
-.editButton:hover {
+.user-edit-btn:hover {
   background-color: #1557b0;
-  border-color: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
 }
 
-.profile-title {
+.user-edit-btn:active {
+  transform: translateY(0);
+}
+
+/* User Profile Form Styles (for edit page) */
+.user-profile-form-title {
   text-align: center;
   color: #1a73e8;
+  margin-bottom: 30px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.user-profile-form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.user-profile-form-container .ant-form-item {
   margin-bottom: 20px;
 }
 
-.profile-form .ant-form-item {
-  margin-bottom: 15px;
+.user-profile-form-container .ant-input {
+  border-radius: 8px;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
 }
 
-.profile-form .ant-input,
-.profile-form .ant-btn {
-  border-radius: 4px;
+.user-profile-form-container .ant-input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.1);
 }
 
-.profile-form-buttons {
+.user-form-button-group {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
+  gap: 15px;
+  margin-top: 30px;
 }
 
-.profile-button {
+.user-form-save-btn {
   background-color: #1a73e8;
-  border-color: #1a73e8;
+  border: none;
   color: #ffffff;
-  padding: 0 30px;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.profile-button:hover,
-.profile-button:focus {
+.user-form-save-btn:hover,
+.user-form-save-btn:focus {
   background-color: #1557b0;
-  border-color: #1557b0;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
 }
 
-.profile-button-cancel {
+.user-form-cancel-btn {
   background-color: #f5f5f5;
-  border-color: #d9d9d9;
-  color: #000000;
-  padding: 0 30px;
+  border: 2px solid #d9d9d9;
+  color: #666;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.profile-button-cancel:hover,
-.profile-button-cancel:focus {
+.user-form-cancel-btn:hover,
+.user-form-cancel-btn:focus {
   background-color: #e8e8e8;
   border-color: #c6c6c6;
+  transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .user-profile-wrapper {
+    padding: 10px;
+    min-height: calc(100vh - 80px);
+  }
+  
+  .user-profile-box,
+  .user-profile-form-container {
+    padding: 20px;
+    margin: 10px;
+  }
+  
+  .user-fullname {
+    font-size: 24px;
+  }
+  
+  .user-detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .user-form-button-group {
+    flex-direction: column;
+  }
+  
+  .user-form-save-btn,
+  .user-form-cancel-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-avatar {
+    width: 150px !important;
+    height: 150px !important;
+  }
+  
+  .user-profile-box {
+    max-width: 100%;
+  }
 }
