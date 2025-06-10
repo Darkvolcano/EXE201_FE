@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart } from 'lucide-react';
+import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles } from 'lucide-react';
 import '../style/Home.css';
 import heroImage from '../assets/home-first.png';
 import mentor1Image from '../assets/mentor-first.jpg';
@@ -47,7 +47,7 @@ const ModernHomepage = () => {
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.6, color: '#1a202c' }}>
       {/* Hero Section - Improved Layout */}
       <section style={{ 
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+        background: 'linear-gradient(135deg,rgb(61, 90, 219) 100%)', 
         minHeight: '100vh', 
         display: 'flex', 
         alignItems: 'center',
@@ -204,7 +204,7 @@ const ModernHomepage = () => {
                 border: '1px solid rgba(255,255,255,0.2)'
               }}>
                 <img 
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=400&fit=crop" 
+                  src={heroImage} 
                   alt="Students learning" 
                   style={{ 
                     width: '100%', 
@@ -219,48 +219,193 @@ const ModernHomepage = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="about-section">
-        <div className="about-container">
-          <div className="about-image-wrapper">
-            <div className="about-image-container">
-              <img src={aboutImage} alt="Learning experience" className="about-image" />
-              <h3 className="about-card-title">Why Students Choose Tutorify</h3>
-              <div className="about-features">
-                {["Personalized 1-on-1 learning experience", "Expert mentors with proven track records", "Flexible scheduling that fits your lifestyle", "Advanced learning analytics and progress tracking"].map((feature, index) => (
-                  <div key={index} className="feature-item">
-                    <div className="feature-check">
-                      <Check className="icon-sm" />
-                    </div>
-                    <span>{feature}</span>
-                  </div>
-                ))}
+      
+{/* About Section - Fixed */}
+<section style={{
+  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+  padding: '6rem 0',
+  position: 'relative'
+}}>
+  <div style={{
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem',
+    width: '100%'
+  }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '6rem',
+      alignItems: 'center'
+    }}>
+      {/* Image Side */}
+      <div style={{
+        position: 'relative'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '24px',
+          padding: '2rem',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(0,0,0,0.05)'
+        }}>
+          <img 
+            src={aboutImage} 
+            alt="Learning experience" 
+            style={{
+              width: '100%',
+              height: '300px 80%',
+              objectFit: 'cover',
+              borderRadius: '16px',
+              marginBottom: '2rem'
+            }}
+          />
+          
+          <h3 style={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#1a202c',
+            marginBottom: '1.5rem',
+            textAlign: 'center'
+          }}>
+            Why Students Choose Tutorify
+          </h3>
+          
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
+            {[
+              "Personalized 1-on-1 learning experience",
+              "Expert mentors with proven track records", 
+              "Flexible scheduling that fits your lifestyle",
+              "Advanced learning analytics and progress tracking"
+            ].map((feature, index) => (
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+                padding: '0.5rem 0'
+              }}>
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #10b981 0%, #059669 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  marginTop: '2px'
+                }}>
+                  <Check size={12} color="white" />
+                </div>
+                <span style={{
+                  color: '#374151',
+                  fontSize: '0.95rem',
+                  lineHeight: '1.6'
+                }}>
+                  {feature}
+                </span>
               </div>
-            </div>
-          </div>
-
-          <div className="about-content">
-            <div className="about-badge">
-              <Heart className="icon-sm" />
-              About Tutorify
-            </div>
-            <h2 className="about-title">
-              Empowering Students to
-              <span className="about-title-highlight"> Excel in Every Subject</span>
-            </h2>
-            <p className="about-description">
-              At Tutorify, we believe every student has the potential to achieve greatness. Our platform connects you with world-class mentors who provide personalized learning experiences tailored to your unique needs and goals.
-            </p>
-            <div className="about-buttons">
-              <button className="btn-primary">Get Started Today</button>
-              <button className="btn-secondary">
-                <Play className="icon-sm" />
-                Watch Demo
-              </button>
-            </div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Content Side */}
+      <div style={{
+        paddingLeft: '2rem'
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '0.75rem 1.5rem',
+          borderRadius: '50px',
+          fontSize: '0.875rem',
+          fontWeight: '600',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+        }}>
+          <Heart size={16} />
+          About Tutorify
+        </div>
+
+        <h2 style={{
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          color: '#1a202c',
+          marginBottom: '2rem',
+          lineHeight: '1.2'
+        }}>
+          Empowering Students to
+          <span style={{
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'block',
+            marginTop: '0.5rem'
+          }}>
+            Excel in Every Subject
+          </span>
+        </h2>
+
+        <p style={{
+          fontSize: '1.2rem',
+          color: '#64748b',
+          lineHeight: '1.8',
+          marginBottom: '3rem',
+          maxWidth: '500px'
+        }}>
+          At Tutorify, we believe every student has the potential to achieve greatness. Our platform connects you with world-class mentors who provide personalized learning experiences tailored to your unique needs and goals.
+        </p>
+
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          flexWrap: 'wrap'
+        }}>
+          <button style={{
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '1rem 2rem',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+          }}>
+            Get Started Today
+          </button>
+          
+          <button style={{
+            background: 'transparent',
+            color: '#667eea',
+            border: '2px solid #667eea',
+            borderRadius: '12px',
+            padding: '1rem 2rem',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <Play size={16} />
+            Watch Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Mentors Section */}
       <section className="mentors-section">
@@ -346,63 +491,435 @@ const ModernHomepage = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="testimonials-section">
-        <div className="testimonials-container">
-          <div className="section-header">
-            <h2 className="section-title">
-              What Our <span className="testimonials-highlight">Students Say</span>
-            </h2>
-            <p className="section-description">
-              Real stories from students who transformed their academic journey with Tutorify.
-            </p>
+      {/* Enhanced Testimonials Section */}
+<section style={{
+  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '4rem 0',
+  position: 'relative',
+  overflow: 'hidden'
+}}>
+  {/* Decorative Circles */}
+  <div style={{
+    position: 'absolute',
+    top: '15%',
+    left: '8%',
+    width: '120px',
+    height: '120px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+    opacity: 0.1,
+    animation: 'float 8s ease-in-out infinite'
+  }} />
+  
+  <div style={{
+    position: 'absolute',
+    bottom: '20%',
+    right: '10%',
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #ffd89b 0%, #19547b 100%)',
+    opacity: 0.15,
+    animation: 'float 6s ease-in-out infinite reverse'
+  }} />
+
+  <div style={{
+    position: 'absolute',
+    top: '60%',
+    left: '5%',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #a8e6cf 0%, #88d8a3 100%)',
+    opacity: 0.2,
+    animation: 'float 7s ease-in-out infinite'
+  }} />
+
+  <div style={{
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem',
+    width: '100%',
+    position: 'relative',
+    zIndex: 2
+  }}>
+    {/* Section Header */}
+    <div style={{
+      textAlign: 'center',
+      marginBottom: '4rem'
+    }}>
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '0.75rem 1.5rem',
+        borderRadius: '50px',
+        fontSize: '0.875rem',
+        marginBottom: '2rem',
+        boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+      }}>
+        <Heart size={16} />
+        Student Success Stories
+      </div>
+
+      <h2 style={{
+        fontSize: '3.5rem',
+        fontWeight: 'bold',
+        marginBottom: '1.5rem',
+        color: '#1a202c',
+        lineHeight: 1.1
+      }}>
+        What Our{' '}
+        <span style={{
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+          Students Say
+        </span>
+      </h2>
+
+      <p style={{
+        fontSize: '1.25rem',
+        color: '#64748b',
+        maxWidth: '600px',
+        margin: '0 auto',
+        lineHeight: 1.6
+      }}>
+        Real stories from students who transformed their academic journey with Tutorify.
+      </p>
+    </div>
+
+    {/* Main Testimonial Content */}
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '4rem',
+      alignItems: 'center',
+      marginBottom: '4rem'
+    }}>
+      {/* Testimonial Text Side */}
+      <div style={{
+        background: 'white',
+        borderRadius: '24px',
+        padding: '3rem',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+        position: 'relative',
+        border: '1px solid rgba(0,0,0,0.05)'
+      }}>
+        {/* Quote Icon */}
+        <div style={{
+          position: 'absolute',
+          top: '2rem',
+          right: '2rem',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 0.1
+        }}>
+          <Quote size={24} color="white" />
+        </div>
+
+        {/* Subject Badge */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          background: 'linear-gradient(45deg, #a8e6cf 0%, #88d8a3 100%)',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '50px',
+          fontSize: '0.75rem',
+          fontWeight: '600',
+          marginBottom: '1.5rem'
+        }}>
+          <Sparkles size={12} />
+          {testimonials[currentTestimonial].subject || 'Academic Success'}
+        </div>
+
+        {/* Quote Text */}
+        <blockquote style={{
+          fontSize: '1.25rem',
+          lineHeight: 1.7,
+          color: '#1a202c',
+          marginBottom: '2rem',
+          fontStyle: 'italic'
+        }}>
+          "{testimonials[currentTestimonial].text}"
+        </blockquote>
+
+        {/* Author Info */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <div style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            padding: '3px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <img 
+              src={testimonials[currentTestimonial].image} 
+              alt={testimonials[currentTestimonial].author}
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+            />
           </div>
-
-          <div className="testimonials-content">
-            <div className="testimonial-text">
-              <blockquote className="testimonial-quote">
-                "{testimonials[currentTestimonial].text}"
-              </blockquote>
-              <div className="testimonial-author">
-                <img src={testimonials[currentTestimonial].image} alt={testimonials[currentTestimonial].author} className="author-avatar" />
-                <div className="author-info">
-                  <div className="author-name">{testimonials[currentTestimonial].author}</div>
-                  <div className="author-role">{testimonials[currentTestimonial].role}</div>
-                  <div className="author-rating">
-                    {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
-                      <Star key={i} className="star-filled" />
-                    ))}
-                  </div>
-                </div>
-              </div>
+          <div>
+            <div style={{
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              color: '#1a202c',
+              marginBottom: '0.25rem'
+            }}>
+              {testimonials[currentTestimonial].author}
             </div>
-
-            <div className="testimonial-visual">
-              <img src={testimonialImage} alt="Success story" className="testimonial-image" />
-              <div className="testimonial-caption">
-                <div className="caption-title">Success Story</div>
-                <div className="caption-subtitle">From struggling to excelling</div>
-              </div>
+            <div style={{
+              color: '#64748b',
+              fontSize: '0.875rem',
+              marginBottom: '0.5rem'
+            }}>
+              {testimonials[currentTestimonial].role}
             </div>
-          </div>
-
-          <div className="testimonial-navigation">
-            <button onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)} className="nav-btn">
-              <ChevronLeft className="nav-icon" />
-            </button>
-            
-            <div className="nav-dots">
-              {testimonials.map((_, index) => (
-                <button key={index} onClick={() => setCurrentTestimonial(index)} className={`nav-dot ${index === currentTestimonial ? 'active' : ''}`} />
+            <div style={{ display: 'flex', gap: '0.25rem' }}>
+              {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                <Star key={i} size={16} fill="#fbbf24" color="#fbbf24" />
               ))}
             </div>
-
-            <button onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)} className="nav-btn">
-              <ChevronRight className="nav-icon" />
-            </button>
           </div>
         </div>
-      </section>
+      </div>
+
+      {/* Visual Side */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem'
+      }}>
+        {/* Success Metric Card */}
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: '20px',
+          padding: '2rem',
+          color: 'white',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Award size={20} />
+          </div>
+          
+          <div style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            marginBottom: '0.5rem'
+          }}>
+            +40% Grade
+          </div>
+          <div style={{
+            opacity: 0.9,
+            fontSize: '1rem'
+          }}>
+            Average Improvement
+          </div>
+        </div>
+
+        {/* Student Image */}
+        <div style={{
+          background: 'white',
+          borderRadius: '20px',
+          padding: '1.5rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          textAlign: 'center'
+        }}>
+          <img 
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop"
+            alt="Success story" 
+            style={{
+              width: '100%',
+              height: '200px',
+              objectFit: 'cover',
+              borderRadius: '12px',
+              marginBottom: '1rem'
+            }}
+          />
+          <div style={{
+            fontWeight: '600',
+            color: '#1a202c',
+            marginBottom: '0.25rem'
+          }}>
+            Success Story
+          </div>
+          <div style={{
+            color: '#64748b',
+            fontSize: '0.875rem'
+          }}>
+            From struggling to excelling
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* Enhanced Navigation */}
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '2rem'
+    }}>
+      {/* Previous Button */}
+      <button 
+        onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+        style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'white',
+          border: '2px solid #e2e8f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}
+      >
+        <ChevronLeft size={20} color="#64748b" />
+      </button>
+
+      {/* Circular Dots Navigation */}
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
+        alignItems: 'center'
+      }}>
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentTestimonial(index)}
+            style={{
+              width: index === currentTestimonial ? '50px' : '40px',
+              height: index === currentTestimonial ? '50px' : '40px',
+              borderRadius: '50%',
+              background: index === currentTestimonial 
+                ? 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)' 
+                : 'white',
+              border: index === currentTestimonial 
+                ? 'none' 
+                : '2px solid #e2e8f0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: index === currentTestimonial 
+                ? '0 8px 25px rgba(102, 126, 234, 0.4)' 
+                : '0 2px 8px rgba(0,0,0,0.1)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            {index === currentTestimonial && (
+              <div style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)'
+                }} />
+              </div>
+            )}
+            {index !== currentTestimonial && (
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#cbd5e1'
+              }} />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Next Button */}
+      <button 
+        onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
+        style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'white',
+          border: '2px solid #e2e8f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}
+      >
+        <ChevronRight size={20} color="#64748b" />
+      </button>
+    </div>
+  </div>
+
+  {/* CSS Animations */}
+  <style jsx>{`
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(180deg); }
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.15) !important;
+    }
+  `}</style>
+</section>
 
       {/* CTA Section */}
       <section className="cta-section">
