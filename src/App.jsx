@@ -25,6 +25,7 @@ import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
 import Pricing from "./pages/Price";
 import About from "./pages/About";
+import AdminTutorsPage from "./pages/ViewTutorAccount";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -74,6 +75,7 @@ function App() {
           <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/profile-admin" element={<AdminProfile />} />
+          <Route path="/view-tutor" element={<AdminTutorsPage />} />
         </Route>
       </Routes>
     </Router>

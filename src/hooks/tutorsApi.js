@@ -37,3 +37,15 @@ export const useTutorRegisterCertificate = () => {
   });
 };
 
+export const useGetAllTutors = () => {
+  return useQuery({
+    queryKey: ["tutors"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("certifications/all-tutors");
+      return response.data;
+    },
+  });
+};
+
+
+
