@@ -28,6 +28,7 @@ import About from "./pages/About";
 import Profile from "./pages/Profile";
 import Forbidden from "./pages/Forbidden";
 import { AuthGuardProvider } from "./contexts/AuthGuardContext";
+import AdminTutorsPage from "./pages/ViewTutorAccount";
 
 const LayoutWithNavFooter = () => (
   <>

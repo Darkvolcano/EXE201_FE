@@ -1,290 +1,944 @@
-import React from "react";
-import { Input, Button } from "antd";
-import "../style/Home.css";
-import SearchIconGray from "../components/SearchIconGray";
+import React, { useState, useEffect } from 'react';
+import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles } from 'lucide-react';
+import '../style/Home.css';
+import heroImage from '../assets/home-first.png';
+import mentor1Image from '../assets/mentor-first.jpg';
+import mentor2Image from '../assets/mentor-second.png';
+import mentor3Image from '../assets/mentor-third.jpeg';
+import aboutImage from '../assets/home-second.png';
+import testimonialImage from '../assets/home-first.png';
+import testimonial1Image from '../assets/home-second.png';
+import testimonial2Image from '../assets/home-second.png';
+import testimonial3Image from '../assets/home-second.png';
+import testimonial4Image from '../assets/home-second.png';
 
-const Home = () => {
-  return (
-    <div className="homepage-container">
-      <div className="hero-section">
-        <div className="hero-text">
-          <h1 className="hero-title">
-            START BECOME YOUR <span className="highlight">BEST SELF</span>
-          </h1>
-          <p className="hero-description">
-            Unlock your academic potential with personalized tutoring from expert mentors.
-            <br />
-            Transform your learning journey and achieve excellence in every subject
-            <br />
-            with our dedicated one-on-one guidance.
-          </p>
-          <div className="hero-stats">
-            <div className="stat-item">
-              <span className="stat-number">100+</span>
-              <span className="stat-label">EXPERT MENTORS</span>
+const ModernHomepage = () => {
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const testimonials = [
+    { text: "Tutorify completely transformed my academic performance! My mentor helped me understand complex mathematics concepts that I struggled with for months.", author: "Sarah Chen", role: "High School Student", rating: 5, image: testimonial1Image },
+    { text: "The quality of teaching here is exceptional. My physics grades improved dramatically after just a few sessions.", author: "Michael Rodriguez", role: "College Student", rating: 5, image: testimonial2Image },
+    { text: "I was struggling with chemistry until I found Tutorify. My mentor made complex reactions seem simple and fun.", author: "Emma Thompson", role: "High School Senior", rating: 5, image: testimonial3Image },
+    { text: "The best investment I made for my education. The personalized study plans helped me achieve my dream SAT score.", author: "David Kim", role: "High School Junior", rating: 5, image: testimonial4Image }
+  ];
+
+  const mentors = [
+    { name: "Dr. Rizqi Assegaf", role: "Mathematics & Science Expert", experience: "10 years", rating: 4.9, reviews: 200, specialty: "Advanced Calculus, Physics", image: mentor1Image },
+    { name: "Prof. Rifky Surya", role: "English & Literature Master", experience: "7 years", rating: 4.8, reviews: 150, specialty: "Academic Writing, Literature", image: mentor2Image },
+    { name: "Dr. Louis Cahya", role: "Chemistry & Biology Specialist", experience: "5 years", rating: 4.9, reviews: 120, specialty: "Organic Chemistry, Molecular Biology", image: mentor3Image }
+  ];
+
+  const pricingPlans = [
+    { name: "Starter", price: 29, description: "Perfect for students beginning their academic journey", features: ["4 sessions/month", "Basic homework help", "Progress tracking", "Email support"], popular: false },
+    { name: "Growth", price: 59, description: "Ideal for students seeking comprehensive academic support", features: ["8 sessions/month", "Test preparation", "Custom study materials", "Priority support", "Performance analytics"], popular: true },
+    { name: "Excellence", price: 89, description: "For students aiming for top-tier academic performance", features: ["12 sessions/month", "Advanced strategies", "Multiple subjects", "1-on-1 mentoring", "College prep guidance"], popular: false },
+    { name: "Elite", price: 149, description: "Unlimited access for serious academic achievers", features: ["Unlimited sessions", "Competition prep", "Premium mentors", "24/7 support", "Career counseling"], popular: false }
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+   return (
+    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.6, color: '#1a202c' }}>
+      {/* Hero Section - Improved Layout */}
+      <section style={{ 
+        background: 'linear-gradient(135deg,rgb(61, 90, 219) 100%)', 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden'
+      }}>
+        <div style={{ 
+          maxWidth: '1200px', 
+          margin: '0 auto', 
+          padding: '0 2rem',
+          width: '100%'
+        }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '1fr 1fr', 
+            gap: '4rem', 
+            alignItems: 'center',
+            minHeight: '80vh'
+          }}>
+            <div style={{ color: 'white', zIndex: 2 }}>
+              <div style={{ 
+                display: 'inline-flex', 
+                alignItems: 'center', 
+                gap: '0.5rem', 
+                background: 'rgba(255,255,255,0.2)', 
+                padding: '0.5rem 1rem', 
+                borderRadius: '50px', 
+                fontSize: '0.875rem', 
+                marginBottom: '2rem',
+                backdropFilter: 'blur(10px)'
+              }}>
+                <Heart size={16} />
+                Transform Your Learning Journey
+              </div>
+              
+              <h1 style={{ 
+                fontSize: '3.5rem', 
+                fontWeight: 'bold', 
+                marginBottom: '1.5rem',
+                lineHeight: 1.1
+              }}>
+                Unlock Your{' '}
+                <span style={{ 
+                  background: 'linear-gradient(45deg, #ffd89b 0%, #19547b 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  display: 'block'
+                }}>
+                  Academic Potential
+                </span>
+              </h1>
+              
+              <p style={{ 
+                fontSize: '1.25rem', 
+                marginBottom: '3rem',
+                opacity: 0.9,
+                maxWidth: '500px'
+              }}>
+                Connect with world-class mentors who provide personalized, one-on-one tutoring designed to accelerate your learning and achieve excellence in every subject.
+              </p>
+
+              {/* Stats Grid - All in one row */}
+              <div style={{ 
+                display: 'grid', 
+                gridTemplateColumns: 'repeat(3, 1fr)', 
+                gap: '2rem', 
+                marginBottom: '3rem'
+              }}>
+                {[
+                  { number: "500+", label: "Expert Mentors", icon: Users },
+                  { number: "25K+", label: "Success Stories", icon: Award },
+                  { number: "98%", label: "Success Rate", icon: TrendingUp }
+                ].map((stat, index) => (
+                  <div key={index} style={{ textAlign: 'center' }}>
+                    <div style={{ 
+                      background: 'rgba(255,255,255,0.2)', 
+                      borderRadius: '12px', 
+                      padding: '1rem', 
+                      marginBottom: '0.5rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backdropFilter: 'blur(10px)'
+                    }}>
+                      <stat.icon size={24} />
+                    </div>
+                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>
+                      {stat.number}
+                    </div>
+                    <div style={{ opacity: 0.8, fontSize: '0.875rem' }}>
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Enhanced Search Container */}
+              <div style={{ 
+                background: 'rgba(255,255,255,0.15)', 
+                borderRadius: '16px', 
+                padding: '1rem',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.2)'
+              }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    flex: 1,
+                    background: 'rgba(255,255,255,0.9)',
+                    borderRadius: '12px',
+                    padding: '0.75rem 1rem'
+                  }}>
+                    <Search size={20} style={{ color: '#6b7280', marginRight: '0.75rem' }} />
+                    <input
+                      type="text"
+                      placeholder="Search for subjects, mentors, or topics..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      style={{
+                        border: 'none',
+                        outline: 'none',
+                        background: 'transparent',
+                        width: '100%',
+                        color: '#1a202c',
+                        fontSize: '1rem'
+                      }}
+                    />
+                  </div>
+                  <button style={{
+                    background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '12px',
+                    padding: '0.75rem 2rem',
+                    fontSize: '1rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
+                  }}>
+                    Find Mentor
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-number">10K+</span>
-              <span className="stat-label">STUDENTS TRUST US</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-number">95%</span>
-              <span className="stat-label">SUCCESS RATE</span>
+
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div style={{ 
+                background: 'rgba(255,255,255,0.1)', 
+                borderRadius: '24px', 
+                padding: '2rem',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255,255,255,0.2)'
+              }}>
+                <img 
+                  src={heroImage} 
+                  alt="Students learning" 
+                  style={{ 
+                    width: '100%', 
+                    height: '400px', 
+                    objectFit: 'cover', 
+                    borderRadius: '16px'
+                  }} 
+                />
+              </div>
             </div>
           </div>
-          <div
+        </div>
+      </section>
+
+      
+{/* About Section - Fixed */}
+<section style={{
+  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+  padding: '6rem 0',
+  position: 'relative'
+}}>
+  <div style={{
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem',
+    width: '100%'
+  }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '6rem',
+      alignItems: 'center'
+    }}>
+      {/* Image Side */}
+      <div style={{
+        position: 'relative'
+      }}>
+        <div style={{
+          background: 'white',
+          borderRadius: '24px',
+          padding: '2rem',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+          border: '1px solid rgba(0,0,0,0.05)'
+        }}>
+          <img 
+            src={aboutImage} 
+            alt="Learning experience" 
             style={{
-              display: "flex",
-              boxShadow: "0 4px 16px rgba(0, 0, 0, 0.1)",
-              padding: 20,
-              borderRadius: 20,
+              width: '100%',
+              height: '300px 80%',
+              objectFit: 'cover',
+              borderRadius: '16px',
+              marginBottom: '2rem'
             }}
-          >
-            <Input
-              placeholder="Search for a mentor"
-              className="search-input"
-              prefix={<SearchIconGray />}
+          />
+          
+          <h3 style={{
+            fontSize: '1.5rem',
+            fontWeight: 'bold',
+            color: '#1a202c',
+            marginBottom: '1.5rem',
+            textAlign: 'center'
+          }}>
+            Why Students Choose Tutorify
+          </h3>
+          
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem'
+          }}>
+            {[
+              "Personalized 1-on-1 learning experience",
+              "Expert mentors with proven track records", 
+              "Flexible scheduling that fits your lifestyle",
+              "Advanced learning analytics and progress tracking"
+            ].map((feature, index) => (
+              <div key={index} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem',
+                padding: '0.5rem 0'
+              }}>
+                <div style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #10b981 0%, #059669 100%)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  marginTop: '2px'
+                }}>
+                  <Check size={12} color="white" />
+                </div>
+                <span style={{
+                  color: '#374151',
+                  fontSize: '0.95rem',
+                  lineHeight: '1.6'
+                }}>
+                  {feature}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Content Side */}
+      <div style={{
+        paddingLeft: '2rem'
+      }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          color: 'white',
+          padding: '0.75rem 1.5rem',
+          borderRadius: '50px',
+          fontSize: '0.875rem',
+          fontWeight: '600',
+          marginBottom: '2rem',
+          boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+        }}>
+          <Heart size={16} />
+          About Tutorify
+        </div>
+
+        <h2 style={{
+          fontSize: '3rem',
+          fontWeight: 'bold',
+          color: '#1a202c',
+          marginBottom: '2rem',
+          lineHeight: '1.2'
+        }}>
+          Empowering Students to
+          <span style={{
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'block',
+            marginTop: '0.5rem'
+          }}>
+            Excel in Every Subject
+          </span>
+        </h2>
+
+        <p style={{
+          fontSize: '1.2rem',
+          color: '#64748b',
+          lineHeight: '1.8',
+          marginBottom: '3rem',
+          maxWidth: '500px'
+        }}>
+          At Tutorify, we believe every student has the potential to achieve greatness. Our platform connects you with world-class mentors who provide personalized learning experiences tailored to your unique needs and goals.
+        </p>
+
+        <div style={{
+          display: 'flex',
+          gap: '1rem',
+          flexWrap: 'wrap'
+        }}>
+          <button style={{
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '1rem 2rem',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
+          }}>
+            Get Started Today
+          </button>
+          
+          <button style={{
+            background: 'transparent',
+            color: '#667eea',
+            border: '2px solid #667eea',
+            borderRadius: '12px',
+            padding: '1rem 2rem',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
+          }}>
+            <Play size={16} />
+            Watch Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+      {/* Mentors Section */}
+      <section className="mentors-section">
+        <div className="mentors-container">
+          <div className="section-header">
+            <h2 className="section-title">
+              Meet Our <span className="title-highlight">Elite Mentors</span>
+            </h2>
+            <p className="section-description">
+              Learn from the best. Our mentors are carefully selected experts who are passionate about helping students achieve their academic dreams.
+            </p>
+          </div>
+
+          <div className="mentors-grid">
+            {mentors.map((mentor, index) => (
+              <div key={index} className="mentor-card">
+                <img src={mentor.image} alt={mentor.name} className="mentor-avatar" />
+                <div className="mentor-info">
+                  <h3 className="mentor-name">{mentor.name}</h3>
+                  <p className="mentor-role">{mentor.role}</p>
+                  <p className="mentor-specialty">{mentor.specialty}</p>
+                  
+                  <div className="mentor-stats">
+                    <div className="mentor-stat">
+                      <Clock className="icon-sm" />
+                      <span>{mentor.experience}</span>
+                    </div>
+                    <div className="mentor-stat">
+                      <Star className="icon-sm star-icon" />
+                      <span>{mentor.rating} ({mentor.reviews})</span>
+                    </div>
+                  </div>
+
+                  <button className="mentor-btn">Book Session</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section className="pricing-section">
+        <div className="pricing-container">
+          <div className="section-header">
+            <h2 className="section-title">
+              Choose Your <span className="pricing-highlight">Learning Plan</span>
+            </h2>
+            <p className="section-description">
+              Flexible pricing designed to fit every student's budget and learning goals. Start your journey to academic excellence today.
+            </p>
+          </div>
+
+          <div className="pricing-grid">
+            {pricingPlans.map((plan, index) => (
+              <div key={index} className={`pricing-card ${plan.popular ? 'popular' : ''}`}>
+                {plan.popular && <div className="popular-badge">Most Popular</div>}
+                
+                <div className="pricing-header">
+                  <h3 className="plan-name">{plan.name}</h3>
+                  <p className="plan-description">{plan.description}</p>
+                  <div className="plan-price">
+                    ${plan.price}
+                    <span className="price-period">/month</span>
+                  </div>
+                </div>
+
+                <div className="plan-features">
+                  {plan.features.map((feature, featureIndex) => (
+                    <div key={featureIndex} className="feature-item">
+                      <Check className="feature-check-icon" />
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button className={`plan-btn ${plan.popular ? 'btn-primary' : 'btn-outline'}`}>
+                  Get Started
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Testimonials Section */}
+<section style={{
+  background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+  minHeight: '100vh',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '4rem 0',
+  position: 'relative',
+  overflow: 'hidden'
+}}>
+  {/* Decorative Circles */}
+  <div style={{
+    position: 'absolute',
+    top: '15%',
+    left: '8%',
+    width: '120px',
+    height: '120px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+    opacity: 0.1,
+    animation: 'float 8s ease-in-out infinite'
+  }} />
+  
+  <div style={{
+    position: 'absolute',
+    bottom: '20%',
+    right: '10%',
+    width: '80px',
+    height: '80px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #ffd89b 0%, #19547b 100%)',
+    opacity: 0.15,
+    animation: 'float 6s ease-in-out infinite reverse'
+  }} />
+
+  <div style={{
+    position: 'absolute',
+    top: '60%',
+    left: '5%',
+    width: '60px',
+    height: '60px',
+    borderRadius: '50%',
+    background: 'linear-gradient(45deg, #a8e6cf 0%, #88d8a3 100%)',
+    opacity: 0.2,
+    animation: 'float 7s ease-in-out infinite'
+  }} />
+
+  <div style={{
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '0 2rem',
+    width: '100%',
+    position: 'relative',
+    zIndex: 2
+  }}>
+    {/* Section Header */}
+    <div style={{
+      textAlign: 'center',
+      marginBottom: '4rem'
+    }}>
+      <div style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.5rem',
+        background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '0.75rem 1.5rem',
+        borderRadius: '50px',
+        fontSize: '0.875rem',
+        marginBottom: '2rem',
+        boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+      }}>
+        <Heart size={16} />
+        Student Success Stories
+      </div>
+
+      <h2 style={{
+        fontSize: '3.5rem',
+        fontWeight: 'bold',
+        marginBottom: '1.5rem',
+        color: '#1a202c',
+        lineHeight: 1.1
+      }}>
+        What Our{' '}
+        <span style={{
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent'
+        }}>
+          Students Say
+        </span>
+      </h2>
+
+      <p style={{
+        fontSize: '1.25rem',
+        color: '#64748b',
+        maxWidth: '600px',
+        margin: '0 auto',
+        lineHeight: 1.6
+      }}>
+        Real stories from students who transformed their academic journey with Tutorify.
+      </p>
+    </div>
+
+    {/* Main Testimonial Content */}
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: '4rem',
+      alignItems: 'center',
+      marginBottom: '4rem'
+    }}>
+      {/* Testimonial Text Side */}
+      <div style={{
+        background: 'white',
+        borderRadius: '24px',
+        padding: '3rem',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.1)',
+        position: 'relative',
+        border: '1px solid rgba(0,0,0,0.05)'
+      }}>
+        {/* Quote Icon */}
+        <div style={{
+          position: 'absolute',
+          top: '2rem',
+          right: '2rem',
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          opacity: 0.1
+        }}>
+          <Quote size={24} color="white" />
+        </div>
+
+        {/* Subject Badge */}
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          background: 'linear-gradient(45deg, #a8e6cf 0%, #88d8a3 100%)',
+          color: 'white',
+          padding: '0.5rem 1rem',
+          borderRadius: '50px',
+          fontSize: '0.75rem',
+          fontWeight: '600',
+          marginBottom: '1.5rem'
+        }}>
+          <Sparkles size={12} />
+          {testimonials[currentTestimonial].subject || 'Academic Success'}
+        </div>
+
+        {/* Quote Text */}
+        <blockquote style={{
+          fontSize: '1.25rem',
+          lineHeight: 1.7,
+          color: '#1a202c',
+          marginBottom: '2rem',
+          fontStyle: 'italic'
+        }}>
+          "{testimonials[currentTestimonial].text}"
+        </blockquote>
+
+        {/* Author Info */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '1rem'
+        }}>
+          <div style={{
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
+            padding: '3px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <img 
+              src={testimonials[currentTestimonial].image} 
+              alt={testimonials[currentTestimonial].author}
+              style={{
+                width: '54px',
+                height: '54px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
             />
-            <Button type="primary" className="search-button">
-              Search
-            </Button>
           </div>
-        </div>
-        <div className="hero-image">
-          <div className="image-placeholder-top">
-            <img src="/src/assets/home-first.png" />
-          </div>
-        </div>
-      </div>
-
-      <div className="about-section">
-        <div className="about-image">
-          <div className="image-placeholder-bottom">
-            <img src="/src/assets/home-second.png" />
-          </div>
-        </div>
-        <div className="about-text">
-          <span className="about-label">ABOUT US</span>
-          <h2 className="about-title">
-            Ready To Help You
-            <br />
-            Excel In Every Subject
-          </h2>
-          <p className="about-description">
-            At Tutorify, we connect students with qualified mentors
-            <br />
-            who provide personalized learning experiences. Our platform
-            <br />
-            offers flexible scheduling, expert guidance, and proven
-            <br />
-            methods to help you achieve academic success.
-          </p>
-          <div className="about-buttons">
-            <Button type="primary" className="get-started-button">
-              Get Started
-            </Button>
-            <Button type="link" className="watch-video-button">
-              <span className="play-icon">▶</span> Watch Video
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="why-choose-section">
-        <div className="why-choose-text">
-          <span className="why-choose-label">WHY US</span>
-          <h2 className="why-choose-title">Why Choose Tutorify</h2>
-          <ul className="why-choose-list">
-            <li>
-              <span className="check-icon">✔</span> Personalized one-on-one tutoring sessions tailored to your learning style and academic goals.
-            </li>
-            <li>
-              <span className="check-icon">✔</span> Experienced mentors with proven track records in their respective subjects and teaching methods.
-            </li>
-            <li>
-              <span className="check-icon">✔</span> Flexible scheduling that fits your busy lifestyle with both online and offline session options.
-            </li>
-          </ul>
-        </div>
-        <div className="why-choose-image">
-          <div className="image-placeholder-why-choose">
-            <img src="/src/assets/home-third.jpg" />
-          </div>
-        </div>
-      </div>
-
-      <div className="top-mentor-section">
-        <h2 className="top-mentor-title">Our Top Mentors At Tutorify</h2>
-        <p className="top-mentor-description">
-          Meet our exceptional educators who are passionate about helping students achieve their academic dreams.
-        </p>
-        <div className="mentor-list">
-          <div className="mentor-card">
-            <div className="mentor-image-placeholder">
-              <img src="/src/assets/mentor-first.jpg" alt="Mentor" />
+          <div>
+            <div style={{
+              fontWeight: '600',
+              fontSize: '1.1rem',
+              color: '#1a202c',
+              marginBottom: '0.25rem'
+            }}>
+              {testimonials[currentTestimonial].author}
             </div>
-            <h3 className="mentor-name">RIZQI ASSEGAF</h3>
-            <p className="mentor-role">Mathematics & Science Tutor</p>
-            <p className="mentor-experience">
-              <span className="clock-icon">🕒</span> 10 years experience
-            </p>
-            <div className="mentor-rating">
-              <span className="stars">★★★★★</span> (200 reviews)
+            <div style={{
+              color: '#64748b',
+              fontSize: '0.875rem',
+              marginBottom: '0.5rem'
+            }}>
+              {testimonials[currentTestimonial].role}
             </div>
-          </div>
-          <div className="mentor-card">
-            <div className="mentor-image-placeholder">
-              <img src="/src/assets/mentor-second.png" alt="Mentor" />
-            </div>
-            <h3 className="mentor-name">RIFKY SURYA</h3>
-            <p className="mentor-role">English & Literature Expert</p>
-            <p className="mentor-experience">
-              <span className="clock-icon">🕒</span> 7 years experience
-            </p>
-            <div className="mentor-rating">
-              <span className="stars">★★★★☆</span> (150 reviews)
-            </div>
-          </div>
-          <div className="mentor-card">
-            <div className="mentor-image-placeholder">
-              <img src="/src/assets/mentor-third.jpeg" alt="Mentor" />
-            </div>
-            <h3 className="mentor-name">LOUIS CAHYA</h3>
-            <p className="mentor-role">Physics & Chemistry Specialist</p>
-            <p className="mentor-experience">
-              <span className="clock-icon">🕒</span> 5 years experience
-            </p>
-            <div className="mentor-rating">
-              <span className="stars">★★★★☆</span> (120 reviews)
+            <div style={{ display: 'flex', gap: '0.25rem' }}>
+              {[...Array(testimonials[currentTestimonial].rating)].map((_, i) => (
+                <Star key={i} size={16} fill="#fbbf24" color="#fbbf24" />
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      <div className="pricing-section">
-        <span className="pricing-label">PRICING</span>
-        <h2 className="pricing-title">Choose Your Learning Plan</h2>
-        <p className="pricing-description">
-          Flexible pricing options designed to fit every student's budget and learning needs.
-        </p>
-        <div className="pricing-plans">
-          <div className="plan-card">
-            <h3 className="plan-title">Beginner</h3>
-            <p className="plan-description">
-              Perfect for students starting their tutoring journey with basic subject support.
-            </p>
-            <ul className="plan-features">
-              <li>
-                <span className="check-icon">✔</span> 4 sessions per month
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Basic homework assistance
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Progress tracking
-              </li>
-            </ul>
-            <p className="plan-price">
-              $20 <span className="plan-period">/month</span>
-            </p>
-            <Button className="plan-button">Select Plan</Button>
+      {/* Visual Side */}
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '2rem'
+      }}>
+        {/* Success Metric Card */}
+        <div style={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+          borderRadius: '20px',
+          padding: '2rem',
+          color: 'white',
+          textAlign: 'center',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            background: 'rgba(255,255,255,0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}>
+            <Award size={20} />
           </div>
-          <div className="plan-card highlighted">
-            <h3 className="plan-title">Intermediate</h3>
-            <p className="plan-description">
-              For students who want comprehensive support and accelerated learning progress.
-            </p>
-            <ul className="plan-features">
-              <li>
-                <span className="check-icon">✔</span> 8 sessions per month
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Test preparation support
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Custom study materials
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Priority mentor matching
-              </li>
-            </ul>
-            <p className="plan-price">
-              $35 <span className="plan-period">/month</span>
-            </p>
-            <Button className="plan-button">Select Plan</Button>
+          
+          <div style={{
+            fontSize: '2.5rem',
+            fontWeight: 'bold',
+            marginBottom: '0.5rem'
+          }}>
+            +40% Grade
           </div>
-          <div className="plan-card">
-            <h3 className="plan-title">Pro</h3>
-            <p className="plan-description">
-              Advanced tutoring for students aiming for top grades and exam excellence.
-            </p>
-            <ul className="plan-features">
-              <li>
-                <span className="check-icon">✔</span> 12 sessions per month
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Advanced exam strategies
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Multiple subject support
-              </li>
-            </ul>
-            <p className="plan-price">
-              $50 <span className="plan-period">/month</span>
-            </p>
-            <Button className="plan-button">Select Plan</Button>
-          </div>
-          <div className="plan-card">
-            <h3 className="plan-title">Expert</h3>
-            <p className="plan-description">
-              Unlimited access for serious students preparing for major exams and competitions.
-            </p>
-            <ul className="plan-features">
-              <li>
-                <span className="check-icon">✔</span> Unlimited sessions
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Competition preparation
-              </li>
-              <li>
-                <span className="check-icon">✔</span> Premium mentor access
-              </li>
-            </ul>
-            <p className="plan-price">
-              $80 <span className="plan-period">/month</span>
-            </p>
-            <Button className="plan-button">Select Plan</Button>
+          <div style={{
+            opacity: 0.9,
+            fontSize: '1rem'
+          }}>
+            Average Improvement
           </div>
         </div>
-      </div>
 
-      <div className="testimonial-section">
-        <span className="testimonial-label">TESTIMONIALS</span>
-        <h2 className="testimonial-title">What Our Students Say About Us</h2>
-        <div className="testimonial-content">
-          <div className="testimonial-text">
-            <p className="testimonial-quote">
-              "Tutorify completely transformed my academic performance! My mentor helped me understand complex mathematics concepts that I struggled with for months. The personalized approach and flexible scheduling made it easy to fit tutoring into my busy schedule. I went from failing grades to consistently scoring A's in just one semester. I highly recommend Tutorify to any student looking to excel academically!"
-            </p>
-            <p className="testimonial-author">Sarah Chen</p>
-            <p className="testimonial-role">High School Student</p>
+        {/* Student Image */}
+        <div style={{
+          background: 'white',
+          borderRadius: '20px',
+          padding: '1.5rem',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+          textAlign: 'center'
+        }}>
+          <img 
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop"
+            alt="Success story" 
+            style={{
+              width: '100%',
+              height: '200px',
+              objectFit: 'cover',
+              borderRadius: '12px',
+              marginBottom: '1rem'
+            }}
+          />
+          <div style={{
+            fontWeight: '600',
+            color: '#1a202c',
+            marginBottom: '0.25rem'
+          }}>
+            Success Story
           </div>
-          <div className="testimonial-image">
-            <div className="image-placeholder-testimonial">
-              <img src="/src/assets/home-final.jpg" alt="Testimonial" />
-            </div>
-          </div>
-        </div>
-        <div className="testimonial-navigation">
-          <span className="testimonial-counter">01/04</span>
-          <div className="testimonial-arrows">
-            <Button className="arrow-button left-arrow">←</Button>
-            <Button className="arrow-button right-arrow">→</Button>
+          <div style={{
+            color: '#64748b',
+            fontSize: '0.875rem'
+          }}>
+            From struggling to excelling
           </div>
         </div>
       </div>
     </div>
+
+    {/* Enhanced Navigation */}
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: '2rem'
+    }}>
+      {/* Previous Button */}
+      <button 
+        onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+        style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'white',
+          border: '2px solid #e2e8f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}
+      >
+        <ChevronLeft size={20} color="#64748b" />
+      </button>
+
+      {/* Circular Dots Navigation */}
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
+        alignItems: 'center'
+      }}>
+        {testimonials.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentTestimonial(index)}
+            style={{
+              width: index === currentTestimonial ? '50px' : '40px',
+              height: index === currentTestimonial ? '50px' : '40px',
+              borderRadius: '50%',
+              background: index === currentTestimonial 
+                ? 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)' 
+                : 'white',
+              border: index === currentTestimonial 
+                ? 'none' 
+                : '2px solid #e2e8f0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: index === currentTestimonial 
+                ? '0 8px 25px rgba(102, 126, 234, 0.4)' 
+                : '0 2px 8px rgba(0,0,0,0.1)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            {index === currentTestimonial && (
+              <div style={{
+                width: '20px',
+                height: '20px',
+                borderRadius: '50%',
+                background: 'white',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  borderRadius: '50%',
+                  background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)'
+                }} />
+              </div>
+            )}
+            {index !== currentTestimonial && (
+              <div style={{
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                background: '#cbd5e1'
+              }} />
+            )}
+          </button>
+        ))}
+      </div>
+
+      {/* Next Button */}
+      <button 
+        onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
+        style={{
+          width: '50px',
+          height: '50px',
+          borderRadius: '50%',
+          background: 'white',
+          border: '2px solid #e2e8f0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+        }}
+      >
+        <ChevronRight size={20} color="#64748b" />
+      </button>
+    </div>
+  </div>
+
+  {/* CSS Animations */}
+  <style jsx>{`
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(180deg); }
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+    }
+    
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 70px rgba(0,0,0,0.15) !important;
+    }
+  `}</style>
+</section>
+
+      {/* CTA Section */}
+      <section className="cta-section">
+        <div className="cta-container">
+          <h2 className="cta-title">
+            Ready to Transform Your
+            <span className="cta-title-gradient">Academic Journey?</span>
+          </h2>
+          <p className="cta-description">
+            Join thousands of students who have already discovered the power of personalized learning. Your success story starts here.
+          </p>
+          <div className="cta-buttons">
+            <button className="cta-btn-primary">Start Free Trial</button>
+            <button className="cta-btn-secondary">Schedule Consultation</button>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 };
 
-export default Home;
+export default ModernHomepage;

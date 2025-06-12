@@ -4,34 +4,14 @@ import {
   TrendingUp, Eye, Phone, Users
 } from 'lucide-react';
 import SidebarAdmin from '../components/SidebarAdmin';
+import { useProfileUser, useEditProfileAdmin} from '../hooks/ProfileApi'; // Import actual hooks
+import { useQueryClient } from '@tanstack/react-query';
 import '../style/ProfileAdmin.css';
 
-// Mock ProfileApi hooks (replace with your actual imports)
-const useProfileUser = () => ({
-  data: {
-    fullName: "John Anderson",
-    email: "john.admin@tutorify.com",
-    phone: "+1 (555) 123-4567",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    role: "Admin",
-    joinDate: "January 2023",
-    lastLogin: "2 hours ago"
-  },
-  isLoading: false,
-  error: null
-});
-
-const useEditProfileUser = () => ({
-  mutate: (data) => {
-    console.log("Updating profile:", data);
-    // Your actual API call logic here
-  },
-  isLoading: false
-});
-
 export default function AdminProfile() {
+  const queryClient = useQueryClient();
   const { data: userData, isLoading, error } = useProfileUser();
-  const { mutate: updateProfile, isLoading: isUpdating } = useEditProfileUser();
+  const { mutate: updateProfile, isLoading: isUpdating } = useEditProfileAdmin();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -62,8 +42,13 @@ export default function AdminProfile() {
   };
 
   const handleSave = () => {
-    updateProfile(formData);
-    setIsEditing(false);
+    updateProfile(formData, {
+      onSuccess: () => {
+        setIsEditing(false);
+        // Invalidate and refetch the profile data
+        queryClient.invalidateQueries(['userProfile']);
+      }
+    });
   };
 
   const handleInputChange = (field, value) => {
@@ -89,18 +74,22 @@ export default function AdminProfile() {
       <div className="admin-layout">
         <SidebarAdmin />
         <div className="admin-main-content">
-          <div className="error-message">Error loading profile</div>
+          <div className="error-message">
+            Error loading profile: {error.response?.data?.message || error.message}
+          </div>
         </div>
       </div>
     );
   }
 
+  // Mock admin stats - these would typically come from separate API calls
   const adminStats = [
     { label: "Total Users", value: "2,847", icon: <Users size={24} />, trend: "+12%" },
     { label: "Active Tutors", value: "156", icon: <Award size={24} />, trend: "+8%" },
     { label: "Monthly Revenue", value: "$24,593", icon: <DollarSign size={24} />, trend: "+15%" }
   ];
 
+  // Mock recent activities - these would typically come from separate API calls
   const recentActivities = [
     { action: "User Registration", count: "23 new users", time: "2 hours ago" },
     { action: "Tutor Verification", count: "5 verified", time: "4 hours ago" },
@@ -186,19 +175,23 @@ export default function AdminProfile() {
                 ) : (
                   <div className="profile-details">
                     <h2 className="profile-name">{userData?.fullName}</h2>
-                    <p className="profile-role">{userData?.role} • Member since {userData?.joinDate}</p>
+                    <p className="profile-role">
+                      {userData?.role || 'Admin'} • Member since {userData?.joinDate || 'N/A'}
+                    </p>
                     <div className="profile-contact">
                       <div className="contact-item">
                         <Mail size={16} />
                         <span>{userData?.email}</span>
                       </div>
-                      <div className="contact-item">
-                        <Phone size={16} />
-                        <span>{userData?.phone}</span>
-                      </div>
+                      {userData?.phone && (
+                        <div className="contact-item">
+                          <Phone size={16} />
+                          <span>{userData?.phone}</span>
+                        </div>
+                      )}
                       <div className="contact-item">
                         <Clock size={16} />
-                        <span>Last login: {userData?.lastLogin}</span>
+                        <span>Last login: {userData?.lastLogin || 'N/A'}</span>
                       </div>
                     </div>
                   </div>
