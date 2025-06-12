@@ -1,11 +1,28 @@
-import { 
-  Home, Package, Heart, List, Layers, FileText, Calendar, 
-  CheckSquare, Phone, File, Grid, Users, Table, Settings, 
-  LogOut 
-} from 'lucide-react';
-import { NavItem } from './NavItemAdmin';
+import {
+  Home,
+  Package,
+  Heart,
+  List,
+  Layers,
+  FileText,
+  Calendar,
+  CheckSquare,
+  Phone,
+  File,
+  Grid,
+  Users,
+  Table,
+  Settings,
+  LogOut,
+} from "lucide-react";
+import { NavItem } from "./NavItemAdmin";
+import useAuthStore from "../hooks/authenStoreApi";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
 export default function Sidebar({ title = "Tutorify" }) {
+  const { logout } = useAuthStore();
+  const navigate = useNavigate();
   const mainNavItems = [
     { icon: <Home size={18} />, label: "Dashboard", active: true },
     { icon: <Package size={18} />, label: "Products" },
@@ -27,7 +44,15 @@ export default function Sidebar({ title = "Tutorify" }) {
 
   const settingsLogoutItems = [
     { icon: <Settings size={18} />, label: "Settings" },
-    { icon: <LogOut size={18} />, label: "Logout" },
+    {
+      icon: <LogOut size={18} />,
+      label: "Logout",
+      onClick: () => {
+        logout();
+        navigate("/login");
+        message.success("Logout successfully");
+      },
+    },
   ];
 
   return (
@@ -53,21 +78,13 @@ export default function Sidebar({ title = "Tutorify" }) {
             <p className="sidebar-nav-section-title">Pages</p>
           </div>
           {pagesNavItems.map((item, index) => (
-            <NavItem
-              key={index}
-              icon={item.icon}
-              label={item.label}
-            />
+            <NavItem key={index} icon={item.icon} label={item.label} />
           ))}
         </div>
 
         <div className="settings-logout-section">
           {settingsLogoutItems.map((item, index) => (
-            <NavItem
-              key={index}
-              icon={item.icon}
-              label={item.label}
-            />
+            <NavItem key={index} icon={item.icon} label={item.label} />
           ))}
         </div>
       </div>

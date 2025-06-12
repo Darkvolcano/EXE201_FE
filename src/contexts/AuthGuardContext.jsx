@@ -6,7 +6,7 @@ import useAuthStore from "../hooks/authenStoreApi";
 
 const AuthGuardContext = createContext({});
 
-function AuthGuardProvider(props) {
+export function AuthGuardProvider(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const { children } = props;
