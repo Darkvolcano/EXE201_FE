@@ -25,6 +25,9 @@ import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
 import Pricing from "./pages/Price";
 import About from "./pages/About";
+import Profile from "./pages/Profile";
+import Forbidden from "./pages/Forbidden";
+import { AuthGuardProvider } from "./contexts/AuthGuardContext";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -39,32 +42,36 @@ const LayoutWithoutNavFooter = () => <Outlet />;
 function App() {
   return (
     <Router>
-      <Routes>
-        <Route element={<LayoutWithNavFooter />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/tutor" element={<Tutor />} />
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/upload-certificate" element={<UploadCertificate />} />
-          <Route path="/profile-user" element={<ProfileUser />} />
-          <Route path="/edit-profile-user" element={<EditProfileUser />} />
-          <Route path="/profile-tutor" element={<TutorProfile />} />
-          <Route path="/ai-chat" element={<AIChat />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/course-detail" element={<CoursePlayer />} />
-          <Route path="/courses/:id" element={<CoursePlayer />} />
-        </Route>
+      <AuthGuardProvider>
+        <Routes>
+          <Route path="/forbidden" element={<Forbidden />} />
+          <Route element={<LayoutWithNavFooter />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/tutor" element={<Tutor />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/upload-certificate" element={<UploadCertificate />} />
+            <Route path="/profile-user" element={<ProfileUser />} />
+            <Route path="/edit-profile-user" element={<EditProfileUser />} />
+            <Route path="/profile-tutor" element={<TutorProfile />} />
+            <Route path="/ai-chat" element={<AIChat />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/course-detail" element={<CoursePlayer />} />
+            <Route path="/courses/:id" element={<CoursePlayer />} />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
 
-        <Route element={<LayoutWithoutNavFooter />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/verify-otp" element={<VerifyOTP />} />
-          <Route path="/register-user" element={<RegisterUser />} />
-          <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile-admin" element={<AdminProfile />} />
-        </Route>
-      </Routes>
+          <Route element={<LayoutWithoutNavFooter />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verify-otp" element={<VerifyOTP />} />
+            <Route path="/register-user" element={<RegisterUser />} />
+            <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/profile-admin" element={<AdminProfile />} />
+          </Route>
+        </Routes>
+      </AuthGuardProvider>
     </Router>
   );
 }

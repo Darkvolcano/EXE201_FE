@@ -7,7 +7,8 @@ import { useNavigate } from "react-router-dom";
 export const useProfileUser = () => {
   return useQuery({
     queryKey: ["userProfile"],
-    queryFn: () => axiosInstance.get("/account/profile").then((response) => response.data),
+    queryFn: () =>
+      axiosInstance.get("/account/profile").then((response) => response.data),
     onError: (error) => {
       message.error(error.response?.data?.message || "Failed to load profile");
     },
@@ -17,13 +18,35 @@ export const useProfileUser = () => {
 export const useEditProfileUser = () => {
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (updatedData) => axiosInstance.put("/account/profile", updatedData).then((response) => response.data),
+    mutationFn: (updatedData) =>
+      axiosInstance
+        .put("/account/profile", updatedData)
+        .then((response) => response.data),
     onSuccess: (data) => {
       message.success(data.message || "Profile updated successfully!");
       navigate("/profile-user");
     },
     onError: (error) => {
-      message.error(error.response?.data?.message || "Failed to update profile");
+      message.error(
+        error.response?.data?.message || "Failed to update profile"
+      );
+    },
+  });
+};
+
+export const useEditProfile = () => {
+  return useMutation({
+    mutationFn: (updatedData) =>
+      axiosInstance
+        .put("/account/profile", updatedData)
+        .then((response) => response.data),
+    onSuccess: (data) => {
+      message.success(data.message || "Profile updated successfully!");
+    },
+    onError: (error) => {
+      message.error(
+        error.response?.data?.message || "Failed to update profile"
+      );
     },
   });
 };
