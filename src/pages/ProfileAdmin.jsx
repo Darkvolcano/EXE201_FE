@@ -8,38 +8,6 @@ import { useProfileUser, useEditProfileAdmin} from '../hooks/ProfileApi'; // Imp
 import { useQueryClient } from '@tanstack/react-query';
 import '../style/ProfileAdmin.css';
 
-import {
-  Mail,
-  Edit3,
-  Save,
-  X,
-  Shield,
-  Award,
-  Clock,
-  DollarSign,
-  TrendingUp,
-  Eye,
-  Phone,
-  Users,
-} from "lucide-react";
-import SidebarAdmin from "../components/SidebarAdmin";
-import "../style/ProfileAdmin.css";
-
-// Mock ProfileApi hooks (replace with your actual imports)
-const useProfileUser = () => ({
-  data: {
-    fullName: "John Anderson",
-    email: "john.admin@tutorify.com",
-    phone: "+1 (555) 123-4567",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    role: "Admin",
-    joinDate: "January 2023",
-    lastLogin: "2 hours ago",
-  },
-  isLoading: false,
-  error: null,
-});
 
 const useEditProfileUser = () => ({
   mutate: (data) => {
