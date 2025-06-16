@@ -29,12 +29,20 @@ import Profile from "./pages/Profile";
 import Forbidden from "./pages/Forbidden";
 import { AuthGuardProvider } from "./contexts/AuthGuardContext";
 import AdminTutorsPage from "./pages/ViewTutorAccount";
+import CertificateManagement from "./pages/CertificateManagement";
+import SidebarAdmin from "./components/SidebarAdmin";
 
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
     <Outlet />
     <Footer />
+  </>
+);
+
+const LayoutWithSidebarAdmin = () => (
+  <>
+    <SidebarAdmin />
   </>
 );
 
@@ -69,7 +77,12 @@ function App() {
             <Route path="/register-user" element={<RegisterUser />} />
             <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/certificate" element={<CertificateManagement />} />
             <Route path="/profile-admin" element={<AdminProfile />} />
+          </Route>
+
+          <Route element={<LayoutWithSidebarAdmin />}>
+            <Route path="/certificate" element={<CertificateManagement />} />
           </Route>
         </Routes>
       </AuthGuardProvider>
