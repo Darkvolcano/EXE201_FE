@@ -18,14 +18,6 @@ import { useProfileUser, useEditProfileAdmin } from "../hooks/ProfileApi"; // Im
 import { useQueryClient } from "@tanstack/react-query";
 import "../style/ProfileAdmin.css";
 
-const useEditProfileUser = () => ({
-  mutate: (data) => {
-    console.log("Updating profile:", data);
-    // Your actual API call logic here
-  },
-  isLoading: false,
-});
-
 export default function AdminProfile() {
   const queryClient = useQueryClient();
   const { data: userData, isLoading, error } = useProfileUser();
