@@ -1,13 +1,4 @@
-import React, { useState } from 'react';
-import { 
-  Mail, Edit3, Save, X, Shield, Award, Clock, DollarSign, 
-  TrendingUp, Eye, Phone, Users
-} from 'lucide-react';
-import SidebarAdmin from '../components/SidebarAdmin';
-import { useProfileUser, useEditProfileAdmin} from '../hooks/ProfileApi'; // Import actual hooks
-import { useQueryClient } from '@tanstack/react-query';
-import '../style/ProfileAdmin.css';
-
+import React, { useState, useEffect } from "react";
 import {
   Mail,
   Edit3,
@@ -23,23 +14,9 @@ import {
   Users,
 } from "lucide-react";
 import SidebarAdmin from "../components/SidebarAdmin";
+import { useProfileUser, useEditProfileAdmin } from "../hooks/ProfileApi"; // Import actual hooks
+import { useQueryClient } from "@tanstack/react-query";
 import "../style/ProfileAdmin.css";
-
-// Mock ProfileApi hooks (replace with your actual imports)
-const useProfileUser = () => ({
-  data: {
-    fullName: "John Anderson",
-    email: "john.admin@tutorify.com",
-    phone: "+1 (555) 123-4567",
-    avatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
-    role: "Admin",
-    joinDate: "January 2023",
-    lastLogin: "2 hours ago",
-  },
-  isLoading: false,
-  error: null,
-});
 
 const useEditProfileUser = () => ({
   mutate: (data) => {
@@ -52,7 +29,8 @@ const useEditProfileUser = () => ({
 export default function AdminProfile() {
   const queryClient = useQueryClient();
   const { data: userData, isLoading, error } = useProfileUser();
-  const { mutate: updateProfile, isLoading: isUpdating } = useEditProfileAdmin();
+  const { mutate: updateProfile, isLoading: isUpdating } =
+    useEditProfileAdmin();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -87,8 +65,8 @@ export default function AdminProfile() {
       onSuccess: () => {
         setIsEditing(false);
         // Invalidate and refetch the profile data
-        queryClient.invalidateQueries(['userProfile']);
-      }
+        queryClient.invalidateQueries(["userProfile"]);
+      },
     });
   };
 
@@ -116,7 +94,8 @@ export default function AdminProfile() {
         <SidebarAdmin />
         <div className="admin-main-content">
           <div className="error-message">
-            Error loading profile: {error.response?.data?.message || error.message}
+            Error loading profile:{" "}
+            {error.response?.data?.message || error.message}
           </div>
         </div>
       </div>
@@ -254,7 +233,7 @@ export default function AdminProfile() {
                       )}
                       <div className="contact-item">
                         <Clock size={16} />
-                        <span>Last login: {userData?.lastLogin || 'N/A'}</span>
+                        <span>Last login: {userData?.lastLogin || "N/A"}</span>
                       </div>
                     </div>
                   </div>
