@@ -47,5 +47,26 @@ export const useGetAllTutors = () => {
   });
 };
 
+export const useUpdateIsChecked = () => {
+  return useMutation({
+    mutationFn: async ({ certificationId }) => {
+      const response = await axiosInstance.patch(
+        `certifications/${certificationId}/is-checked`,
+        { isChecked: true }
+      );
+      return response.data;
+    },
+  });
+};
 
-
+export const useUpdateIsCanTeach = () => {
+  return useMutation({
+    mutationFn: async ({ certificationId }) => {
+      const response = await axiosInstance.patch(
+        `certifications/${certificationId}/is-can-teach`,
+        { isCanTeach: true }
+      );
+      return response.data;
+    },
+  });
+};

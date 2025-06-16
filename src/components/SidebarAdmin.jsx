@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { NavItem } from "./NavItemAdmin";
 import useAuthStore from "../hooks/authenStoreApi";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { message } from "antd";
 
 export default function Sidebar({ title = "Tutorify" }) {
@@ -25,7 +25,13 @@ export default function Sidebar({ title = "Tutorify" }) {
   const navigate = useNavigate();
   const mainNavItems = [
     { icon: <Home size={18} />, label: "Dashboard", active: true },
-    { icon: <Package size={18} />, label: "Products" },
+    {
+      icon: <Package size={18} />,
+      label: "Certificate",
+      onClick: () => {
+        navigate("/certificate");
+      },
+    },
     { icon: <Heart size={18} />, label: "Favorites" },
     { icon: <List size={18} />, label: "Order Lists" },
     { icon: <Layers size={18} />, label: "Product Stock" },
@@ -56,43 +62,47 @@ export default function Sidebar({ title = "Tutorify" }) {
   ];
 
   return (
-    <div className="sidebar">
-      <div className="sidebar-header">
-        <h1 className="sidebar-title">{title}</h1>
-      </div>
-
-      <div className="sidebar-nav">
-        <div className="main-nav-section">
-          {mainNavItems.map((item, index) => (
-            <NavItem
-              key={index}
-              icon={item.icon}
-              label={item.label}
-              active={item.active}
-            />
-          ))}
+    <div style={{ display: "flex" }}>
+      <div className="sidebar">
+        <div className="sidebar-header">
+          <h1 className="sidebar-title">{title}</h1>
         </div>
 
-        <div className="pages-nav-section">
-          <div className="sidebar-nav-section">
-            <p className="sidebar-nav-section-title">Pages</p>
+        <div className="sidebar-nav">
+          <div className="main-nav-section">
+            {mainNavItems.map((item, index) => (
+              <NavItem
+                key={index}
+                icon={item.icon}
+                label={item.label}
+                active={item.active}
+                onClick={item.onClick}
+              />
+            ))}
           </div>
-          {pagesNavItems.map((item, index) => (
-            <NavItem key={index} icon={item.icon} label={item.label} />
-          ))}
-        </div>
 
-        <div className="settings-logout-section">
-          {settingsLogoutItems.map((item, index) => (
-            <NavItem
-              key={index}
-              icon={item.icon}
-              label={item.label}
-              onClick={item.onClick}
-            />
-          ))}
+          <div className="pages-nav-section">
+            <div className="sidebar-nav-section">
+              <p className="sidebar-nav-section-title">Pages</p>
+            </div>
+            {pagesNavItems.map((item, index) => (
+              <NavItem key={index} icon={item.icon} label={item.label} />
+            ))}
+          </div>
+
+          <div className="settings-logout-section">
+            {settingsLogoutItems.map((item, index) => (
+              <NavItem
+                key={index}
+                icon={item.icon}
+                label={item.label}
+                onClick={item.onClick}
+              />
+            ))}
+          </div>
         </div>
       </div>
+      <Outlet />
     </div>
   );
 }

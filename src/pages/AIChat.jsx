@@ -166,7 +166,7 @@ const AIChat = () => {
         </div>
       </div>
       <div style={{ display: "flex" }}>
-        <div className="sidebar">
+        <div className="sidebar-chat">
           <div className="sidebar-section">
             <Tabs defaultActiveKey="1" className="header-tabs">
               <TabPane tab="Main" key="1" />
