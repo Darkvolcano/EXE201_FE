@@ -1,26 +1,28 @@
-import React, { useState } from 'react';
-import { 
-  Mail, Edit3, Save, X, Shield, Award, Clock, DollarSign, 
-  TrendingUp, Eye, Phone, Users
-} from 'lucide-react';
-import SidebarAdmin from '../components/SidebarAdmin';
-import { useProfileUser, useEditProfileAdmin} from '../hooks/ProfileApi'; // Import actual hooks
-import { useQueryClient } from '@tanstack/react-query';
-import '../style/ProfileAdmin.css';
-
-
-const useEditProfileUser = () => ({
-  mutate: (data) => {
-    console.log("Updating profile:", data);
-    // Your actual API call logic here
-  },
-  isLoading: false,
-});
+import React, { useState, useEffect } from "react";
+import {
+  Mail,
+  Edit3,
+  Save,
+  X,
+  Shield,
+  Award,
+  Clock,
+  DollarSign,
+  TrendingUp,
+  Eye,
+  Phone,
+  Users,
+} from "lucide-react";
+import SidebarAdmin from "../components/SidebarAdmin";
+import { useProfileUser, useEditProfileAdmin } from "../hooks/ProfileApi"; // Import actual hooks
+import { useQueryClient } from "@tanstack/react-query";
+import "../style/ProfileAdmin.css";
 
 export default function AdminProfile() {
   const queryClient = useQueryClient();
   const { data: userData, isLoading, error } = useProfileUser();
-  const { mutate: updateProfile, isLoading: isUpdating } = useEditProfileAdmin();
+  const { mutate: updateProfile, isLoading: isUpdating } =
+    useEditProfileAdmin();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -55,8 +57,8 @@ export default function AdminProfile() {
       onSuccess: () => {
         setIsEditing(false);
         // Invalidate and refetch the profile data
-        queryClient.invalidateQueries(['userProfile']);
-      }
+        queryClient.invalidateQueries(["userProfile"]);
+      },
     });
   };
 
@@ -84,7 +86,8 @@ export default function AdminProfile() {
         <SidebarAdmin />
         <div className="admin-main-content">
           <div className="error-message">
-            Error loading profile: {error.response?.data?.message || error.message}
+            Error loading profile:{" "}
+            {error.response?.data?.message || error.message}
           </div>
         </div>
       </div>
@@ -222,7 +225,7 @@ export default function AdminProfile() {
                       )}
                       <div className="contact-item">
                         <Clock size={16} />
-                        <span>Last login: {userData?.lastLogin || 'N/A'}</span>
+                        <span>Last login: {userData?.lastLogin || "N/A"}</span>
                       </div>
                     </div>
                   </div>

@@ -84,7 +84,12 @@ export default function Sidebar({ title = "Tutorify" }) {
 
         <div className="settings-logout-section">
           {settingsLogoutItems.map((item, index) => (
-            <NavItem key={index} icon={item.icon} label={item.label} />
+            <NavItem
+              key={index}
+              icon={item.icon}
+              label={item.label}
+              onClick={item.onClick}
+            />
           ))}
         </div>
       </div>
