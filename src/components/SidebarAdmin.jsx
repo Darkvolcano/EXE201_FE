@@ -1,7 +1,7 @@
 import {
   Home,
   Package,
-  Heart,
+  NotebookText,
   List,
   Layers,
   FileText,
@@ -26,21 +26,24 @@ export default function Sidebar({ title = "Tutorify" }) {
   const mainNavItems = [
     { icon: <Home size={18} />, label: "Dashboard", active: true },
     {
-      icon: <Package size={18} />,
+      icon: <Layers size={18} />,
       label: "Certificate",
       onClick: () => {
         navigate("/certificate");
       },
     },
-    { icon: <Heart size={18} />, label: "Favorites" },
-    { icon: <List size={18} />, label: "Order Lists" },
-    { icon: <Layers size={18} />, label: "Product Stock" },
+    {
+      icon: <NotebookText size={18} />,
+      label: "Course",
+      onClick: () => {
+        navigate("/course-management");
+      },
+    },
   ];
 
   const pagesNavItems = [
     { icon: <FileText size={18} />, label: "Pricing" },
     { icon: <Calendar size={18} />, label: "Calendar" },
-    { icon: <CheckSquare size={18} />, label: "To-Do" },
     { icon: <Phone size={18} />, label: "Contact" },
     { icon: <File size={18} />, label: "Invoice" },
     { icon: <Grid size={18} />, label: "UI Elements" },

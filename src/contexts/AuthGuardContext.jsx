@@ -75,7 +75,12 @@ export function AuthGuardProvider(props) {
     const restrictedPages = {
       User: ["/profile", "/courses/:id", "/tutor", "/ai-chat"],
       Tutor: ["/profile-tutor", "/upload-certificate"],
-      Admin: ["/profile-admin", "/dashboard", "/certificate"],
+      Admin: [
+        "/profile-admin",
+        "/dashboard",
+        "/certificate",
+        "/course-management",
+      ],
     };
 
     const matchDynamicRoute = (route, path) => {

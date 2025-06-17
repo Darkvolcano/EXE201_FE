@@ -31,6 +31,7 @@ import { AuthGuardProvider } from "./contexts/AuthGuardContext";
 import AdminTutorsPage from "./pages/ViewTutorAccount";
 import CertificateManagement from "./pages/CertificateManagement";
 import SidebarAdmin from "./components/SidebarAdmin";
+import CourseManagement from "./pages/CourseManagement";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -77,12 +78,12 @@ function App() {
             <Route path="/register-user" element={<RegisterUser />} />
             <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/certificate" element={<CertificateManagement />} />
             <Route path="/profile-admin" element={<AdminProfile />} />
           </Route>
 
           <Route element={<LayoutWithSidebarAdmin />}>
             <Route path="/certificate" element={<CertificateManagement />} />
+            <Route path="/course-management" element={<CourseManagement />} />
           </Route>
         </Routes>
       </AuthGuardProvider>
