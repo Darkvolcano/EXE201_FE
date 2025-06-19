@@ -9,6 +9,7 @@ import {
   Modal,
   message,
   Form,
+  Rate,
 } from "antd";
 import "../style/Courses.css";
 import SearchIconWhite from "../components/SearchIconWhite";
@@ -163,13 +164,17 @@ const Courses = () => {
                     24 hours - 1 hour a day
                   </div>
                   <div className="course-rating">
-                    <span className="stars">
+                    {/* <span className="stars">
                       <span>★</span>
                       <span>★</span>
                       <span>★</span>
                       <span>★</span>
                       <span style={{ color: "#e0e0e0" }}>★</span>
-                    </span>
+                    </span> */}
+                    <Rate
+                      value={course.rating || 4} // Default to 4 if no rating
+                      disabled // Make it read-only
+                    />
                     <span>(200)</span>
                   </div>
                 </div>

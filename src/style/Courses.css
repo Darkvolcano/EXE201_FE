@@ -165,7 +165,7 @@
 
 .course-card:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .course-image {
@@ -203,7 +203,7 @@
 
 .course-rating span:last-child {
   color: #999;
-  font-size: 12px;
+  font-size: 16px;
   margin-left: 5px;
 }
 

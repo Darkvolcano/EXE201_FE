@@ -46,9 +46,7 @@ export default function Sidebar({ title = "Tutorify" }) {
     { icon: <Calendar size={18} />, label: "Calendar" },
     { icon: <Phone size={18} />, label: "Contact" },
     { icon: <File size={18} />, label: "Invoice" },
-    { icon: <Grid size={18} />, label: "UI Elements" },
     { icon: <Users size={18} />, label: "Team" },
-    { icon: <Table size={18} />, label: "Table" },
   ];
 
   const settingsLogoutItems = [
