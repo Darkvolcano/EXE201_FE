@@ -84,7 +84,7 @@ export function AuthGuardProvider(props) {
     };
 
     const matchDynamicRoute = (route, path) => {
-      const dynamicRoutePattern = route.replace(/:id/, "[0-9]+");
+      const dynamicRoutePattern = route.replace(/:id/, "[^/]+");
       const regex = new RegExp(`^${dynamicRoutePattern}$`);
       return regex.test(path);
     };
