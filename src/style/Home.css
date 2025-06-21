@@ -1,18 +1,14 @@
-/* Base Styles */
-.homepage {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #eff6ff 0%, #faf5ff 50%, #fdf2f8 100%);
+/* ===== GLOBAL STYLES ===== */
+/* Thiết lập font và màu sắc chung cho toàn bộ trang */
+.homepage-container {
   font-family: 'Inter, system-ui, sans-serif';
   line-height: 1.6;
   color: #1a202c;
 }
 
-.icon-sm { width: 1rem; height: 1rem; }
-.icon-lg { width: 2rem; height: 2rem; }
-
-/* Hero Section */
+/* ===== HERO SECTION ===== */
+/* Phần banner chính với background gradient và layout 2 cột */
 .hero-section {
-  padding: 5rem 1.5rem;
   background: linear-gradient(135deg, rgb(61, 90, 219) 100%);
   min-height: 100vh;
   display: flex;
@@ -30,26 +26,18 @@
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 4rem;
   align-items: center;
   min-height: 80vh;
 }
 
-@media (min-width: 1024px) {
-  .hero-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 .hero-content {
-  color: #FFFFFF;
+  color: white;
   z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
 }
 
+/* Badge/Tag phía trên tiêu đề */
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -62,6 +50,7 @@
   backdrop-filter: blur(10px);
 }
 
+/* Tiêu đề chính */
 .hero-title {
   font-size: 3.5rem;
   font-weight: bold;
@@ -69,20 +58,14 @@
   line-height: 1.1;
 }
 
-@media (min-width: 1024px) {
-  .hero-title {
-    font-size: 3.75rem;
-  }
-}
-
 .hero-title-gradient {
   background: linear-gradient(45deg, #ffd89b 0%, #19547b 100%);
   -webkit-background-clip: text;
-  background-clip: text;
   -webkit-text-fill-color: transparent;
   display: block;
 }
 
+/* Mô tả hero */
 .hero-description {
   font-size: 1.25rem;
   margin-bottom: 3rem;
@@ -90,6 +73,8 @@
   max-width: 500px;
 }
 
+/* ===== STATS SECTION ===== */
+/* Phần thống kê với 3 cột: số lượng mentor, câu chuyện thành công, tỷ lệ thành công */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -123,6 +108,8 @@
   font-size: 0.875rem;
 }
 
+/* ===== SEARCH SECTION ===== */
+/* Phần tìm kiếm mentor với input và button */
 .search-container {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 16px;
@@ -131,43 +118,35 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.search-wrapper {
+.search-form {
   display: flex;
   gap: 1rem;
   align-items: center;
 }
 
-.search-input-wrapper {
-  flex: 1;
+.search-input-container {
   display: flex;
   align-items: center;
+  flex: 1;
   background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
   padding: 0.75rem 1rem;
 }
 
-.search-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: #6b7280;
-  margin-right: 0.75rem;
-}
-
 .search-input {
-  width: 100%;
-  padding: 0.75rem 0;
-  color: #1a202c;
-  background: transparent;
   border: none;
   outline: none;
+  background: transparent;
+  width: 100%;
+  color: #1a202c;
   font-size: 1rem;
 }
 
 .search-input::placeholder {
-  color: #9ca3af;
+  color: #6b7280;
 }
 
-.search-btn {
+.search-button {
   background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
@@ -180,16 +159,19 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.search-btn:hover {
-  background: #667eea;
+.search-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
-.hero-visual {
+/* ===== HERO IMAGE ===== */
+/* Phần hình ảnh bên phải của hero section */
+.hero-image-container {
   position: relative;
   z-index: 1;
 }
 
-.hero-image-container {
+.hero-image-wrapper {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   padding: 2rem;
@@ -204,108 +186,129 @@
   border-radius: 16px;
 }
 
-/* About Section */
+/* ===== ABOUT SECTION ===== */
+/* Phần giới thiệu về Tutorify với layout 2 cột */
 .about-section {
-  padding: 3.5rem 1.5rem;
-  background: white;
-}
-
-.about-container {
-  max-width: 1500px;
-  min-width: none;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: center;
-}
-
-@media (min-width: 1024px) {
-  .about-container {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.about-image-wrapper {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 6rem 0;
   position: relative;
 }
 
-.about-image-container {
-  background: linear-gradient(135deg, #e9d5ff, #fce7f3);
-  border-radius: 1.5rem;
-  padding: 4rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+/* Phần hình ảnh và features */
+.about-image-side {
+  position: relative;
+}
+
+.about-card {
+  background: white;
+  border-radius: 24px;
+  padding: 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .about-image {
   width: 100%;
-  height: 16rem;
+  height: 300px;
   object-fit: cover;
-  border-radius: 1rem;
-  margin-bottom: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
 }
 
 .about-card-title {
   font-size: 1.5rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-weight: bold;
+  color: #1a202c;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.about-features {
+.features-list {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .feature-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
 }
 
-.feature-check {
-  width: 1.5rem;
-  height: 1.5rem;
-  background-color: #10b981;
+.feature-icon {
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
+  background: linear-gradient(45deg, #10b981 0%, #059669 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 0.75rem;
-  color: white;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
-.about-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+.feature-text {
+  color: #374151;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* Phần nội dung text */
+.about-content-side {
+  padding-left: 2rem;
 }
 
 .about-badge {
   display: inline-flex;
   align-items: center;
-  padding: 0.5rem 1rem;
-  background-color: #e9d5ff;
-  border-radius: 9999px;
-  color: #7c3aed;
-  font-size: 0.875rem;
-  font-weight: 500;
-  width: fit-content;
   gap: 0.5rem;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .about-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #111827;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #1a202c;
+  margin-bottom: 2rem;
+  line-height: 1.2;
 }
 
-.about-title-highlight {
-  color: #7c3aed;
+.about-title-gradient {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+  margin-top: 0.5rem;
 }
 
 .about-description {
-  font-size: 1.125rem;
-  color: #4b5563;
+  font-size: 1.2rem;
+  color: #64748b;
+  line-height: 1.8;
+  margin-bottom: 3rem;
+  max-width: 500px;
 }
 
 .about-buttons {
@@ -314,37 +317,102 @@
   flex-wrap: wrap;
 }
 
-.btn-primary {
-  background-color: #7c3aed;
+.primary-button {
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 0.75rem 2rem;
-  border-radius: 0.75rem;
-  font-weight: 600;
   border: none;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.btn-primary:hover {
-  background-color: #6d28d9;
-}
-
-.btn-secondary {
-  border: 2px solid #7c3aed;
-  color: #7c3aed;
-  background: transparent;
-  padding: 0.75rem 2rem;
-  border-radius: 0.75rem;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.primary-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.secondary-button {
+  background: transparent;
+  color: #667eea;
+  border: 2px solid #667eea;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.btn-secondary:hover {
-  background-color: #f3e8ff;
+.secondary-button:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+/* Thiết kế responsive cho mobile và tablet */
+@media (max-width: 1024px) {
+  .hero-grid,
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .about-title {
+    font-size: 2.5rem;
+  }
+  
+  .about-content-side {
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .search-form {
+    flex-direction: column;
+  }
+  
+  .search-input-container {
+    width: 100%;
+  }
+  
+  .search-button {
+    width: 100%;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .about-title {
+    font-size: 2rem;
+  }
+  
+  .about-buttons {
+    flex-direction: column;
+  }
+  
+  .primary-button,
+  .secondary-button {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* Mentors Section */

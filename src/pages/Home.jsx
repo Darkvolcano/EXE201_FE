@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles } from 'lucide-react';
+import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles, Loader2, AlertCircle } from 'lucide-react';
 import '../style/Home.css';
 import heroImage from '../assets/home-first.png';
 import mentor1Image from '../assets/mentor-first.jpg';
@@ -11,10 +11,16 @@ import testimonial1Image from '../assets/home-second.png';
 import testimonial2Image from '../assets/home-second.png';
 import testimonial3Image from '../assets/home-second.png';
 import testimonial4Image from '../assets/home-second.png';
-
+import { useMentors } from '../hooks/useMentors';
 const ModernHomepage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Use the custom hook
+  const { mentors, loading, error, searchMentors, getTopMentors, refreshMentors } = useMentors();
+  
+  // Get filtered mentors based on search query
+  const filteredMentors = searchQuery ? searchMentors(searchQuery) : getTopMentors(3);
 
   const testimonials = [
     { text: "Tutorify completely transformed my academic performance! My mentor helped me understand complex mathematics concepts that I struggled with for months.", author: "Sarah Chen", role: "High School Student", rating: 5, image: testimonial1Image },
@@ -23,11 +29,6 @@ const ModernHomepage = () => {
     { text: "The best investment I made for my education. The personalized study plans helped me achieve my dream SAT score.", author: "David Kim", role: "High School Junior", rating: 5, image: testimonial4Image }
   ];
 
-  const mentors = [
-    { name: "Dr. Rizqi Assegaf", role: "Mathematics & Science Expert", experience: "10 years", rating: 4.9, reviews: 200, specialty: "Advanced Calculus, Physics", image: mentor1Image },
-    { name: "Prof. Rifky Surya", role: "English & Literature Master", experience: "7 years", rating: 4.8, reviews: 150, specialty: "Academic Writing, Literature", image: mentor2Image },
-    { name: "Dr. Louis Cahya", role: "Chemistry & Biology Specialist", experience: "5 years", rating: 4.9, reviews: 120, specialty: "Organic Chemistry, Molecular Biology", image: mentor3Image }
-  ];
 
   const pricingPlans = [
     { name: "Starter", price: 29, description: "Perfect for students beginning their academic journey", features: ["4 sessions/month", "Basic homework help", "Progress tracking", "Email support"], popular: false },
@@ -42,6 +43,87 @@ const ModernHomepage = () => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
+
+ // Handle booking session
+  const handleBookSession = (mentor) => {
+    // You can implement navigation to booking page or open modal
+    console.log('Booking session with:', mentor);
+    // Example: navigate to booking page
+    // navigate(`/booking/${mentor.courseId}`);
+  };
+
+  // Handle search
+  const handleSearch = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Render mentor card with loading state
+  const renderMentorCard = (mentor, index) => (
+    <div key={mentor.id || index} className="mentor-card">
+      <img 
+        src={mentor.image || '/default-avatar.png'} 
+        alt={mentor.name} 
+        className="mentor-avatar"
+        onError={(e) => {
+          e.target.src = '/default-avatar.png';
+        }}
+      />
+      <div className="mentor-info">
+        <h3 className="mentor-name">{mentor.name}</h3>
+        <p className="mentor-role">{mentor.role}</p>
+        <p className="mentor-specialty">{mentor.specialty}</p>
+
+        <div className="mentor-stats">
+          <div className="mentor-stat">
+            <Clock className="icon-sm" />
+            <span>{mentor.experience}</span>
+          </div>
+          <div className="mentor-stat">
+            <Star className="icon-sm star-icon" />
+            <span>
+              {mentor.rating > 0 ? `${mentor.rating} (${mentor.reviews})` : 'New Tutor'}
+            </span>
+          </div>
+        </div>
+
+        {mentor.price && (
+          <div className="mentor-price">
+            <span>${mentor.price}/session</span>
+          </div>
+        )}
+
+        <button 
+          className="mentor-btn"
+          onClick={() => handleBookSession(mentor)}
+        >
+          Book Session
+        </button>
+      </div>
+    </div>
+  );
+
+  // Render loading state
+  const renderLoadingState = () => (
+    <div className="mentors-loading">
+      <Loader2 className="icon-lg animate-spin" />
+      <p>Loading our amazing mentors...</p>
+    </div>
+  );
+
+  // Render error state
+  const renderErrorState = () => (
+    <div className="mentors-error">
+      <AlertCircle className="icon-lg text-red-500" />
+      <p>Failed to load mentors. Please try again.</p>
+      <button 
+        className="retry-btn"
+        onClick={refreshMentors}
+      >
+        Retry
+      </button>
+    </div>
+  );
+
 
    return (
     <div style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.6, color: '#1a202c' }}>
@@ -407,7 +489,7 @@ const ModernHomepage = () => {
   </div>
 </section>
 
-      {/* Mentors Section */}
+{/* Mentors Section */}
       <section className="mentors-section">
         <div className="mentors-container">
           <div className="section-header">
@@ -417,33 +499,38 @@ const ModernHomepage = () => {
             <p className="section-description">
               Learn from the best. Our mentors are carefully selected experts who are passionate about helping students achieve their academic dreams.
             </p>
+            
+            {/* Search bar for mentors */}
+            <div className="mentor-search">
+              <div className="search-input-container">
+                <Search className="search-icon" />
+                <input
+                  type="text"
+                  placeholder="Search mentors by name or subject..."
+                  value={searchQuery}
+                  onChange={handleSearch}
+                  className="search-input"
+                />
+              </div>
+            </div>
           </div>
 
           <div className="mentors-grid">
-            {mentors.map((mentor, index) => (
-              <div key={index} className="mentor-card">
-                <img src={mentor.image} alt={mentor.name} className="mentor-avatar" />
-                <div className="mentor-info">
-                  <h3 className="mentor-name">{mentor.name}</h3>
-                  <p className="mentor-role">{mentor.role}</p>
-                  <p className="mentor-specialty">{mentor.specialty}</p>
-                  
-                  <div className="mentor-stats">
-                    <div className="mentor-stat">
-                      <Clock className="icon-sm" />
-                      <span>{mentor.experience}</span>
-                    </div>
-                    <div className="mentor-stat">
-                      <Star className="icon-sm star-icon" />
-                      <span>{mentor.rating} ({mentor.reviews})</span>
-                    </div>
-                  </div>
-
-                  <button className="mentor-btn">Book Session</button>
-                </div>
+            {loading && renderLoadingState()}
+            
+            {error && renderErrorState()}
+            
+            {!loading && !error && filteredMentors.length === 0 && (
+              <div className="no-mentors">
+                <p>No mentors found matching your search.</p>
               </div>
-            ))}
+            )}
+            
+            {!loading && !error && filteredMentors.length > 0 && 
+              filteredMentors.map((mentor, index) => renderMentorCard(mentor, index))
+            }
           </div>
+
         </div>
       </section>
 
