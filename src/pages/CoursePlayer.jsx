@@ -28,6 +28,7 @@ import {
   useGetCourseFeedback,
   useGetCourseChapters,
   useGetChapterContents,
+  useGetCourse,
 } from "../hooks/coursesApi";
 import { useQueries } from "@tanstack/react-query";
 
@@ -36,6 +37,17 @@ const { Panel } = Collapse;
 
 const CoursePlayer = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
+  // Lấy danh sách courses từ API
+  const { data: allCoursesData, isLoading: isLoadingCourses, isError: isErrorCourses } = useGetCourse();
+
+  // Tìm course theo id
+  const courseObj = allCoursesData?.data?.courses?.find(
+    (item) => item.course._id === id
+  )?.course;
+
+  // Các hook khác giữ nguyên
   const {
     data: feedbackData,
     isLoading: isLoadingFeedback,
@@ -52,7 +64,7 @@ const CoursePlayer = () => {
     queries:
       chaptersData?.map((chapter) => ({
         queryKey: ["chapter-contents", chapter._id],
-        queryFn: () => useGetChapterContents._fn(chapter._id), // use the axiosInstance-based hook function
+        queryFn: () => useGetChapterContents._fn(chapter._id),
         enabled: !!chaptersData,
       })) || [],
   });
@@ -73,10 +85,25 @@ const CoursePlayer = () => {
 
   const [activeChapterKey, setActiveChapterKey] = useState(null);
 
-  const navigate = useNavigate();
+  // Loading & error UI cho course
+  if (isLoadingCourses) {
+    return <div style={{ padding: 32 }}>Loading course...</div>;
+  }
+  if (isErrorCourses || !courseObj) {
+    return (
+      <div style={{ padding: 32, color: "red" }}>
+        Course not found.
+        <Button style={{ marginLeft: 16 }} onClick={() => navigate("/courses")}>
+          Back to Courses
+        </Button>
+      </div>
+    );
+  }
 
+  // Các dữ liệu khác giữ nguyên, chỉ thay title và description
   const courseData = {
-    title: "Complete ASP.NET Core Razor Pages Web Development [.NET 8 Updated]",
+    ...courseObj,
+    // Các trường khác nếu cần giữ lại
     sections: 6,
     lectures: 202,
     duration: "19h 37m",
@@ -85,10 +112,7 @@ const CoursePlayer = () => {
     comments: 154,
     progress: 15,
     currentLecture: "2. Sign up in Visual Studio Code",
-    videoUrl: "https://via.placeholder.com/800x400?text=Video+Player",
-    description: `Learn everything you need to build your first website! From structuring your first page to uploading your website online. We'll use the world's most popular text editor, Visual Studio Code.
-This course includes hands-on exercises for you to practice and download. By the end of the course, you'll have your own custom web project. We'll also cover debugging, troubleshooting, and adding cool features like Bootstrap, JavaScript, and jQuery.
-This course is beginner-friendly and perfect for those who have never coded before. Start from scratch and progress step by step.`,
+    videoUrl: courseObj.image || "https://via.placeholder.com/800x400?text=Video+Player",
     lectureNotes: [
       "• Install & Set up Visual Studio Code",
       "• Basic HTML & CSS structure",
@@ -172,8 +196,8 @@ This course is beginner-friendly and perfect for those who have never coded befo
     <div className="course-player-container">
       <div className="top-bar">
         <div className="course-title">
-          <span className="back-arrow">←</span>
-          <span>{courseData.title}</span>
+          <span className="back-arrow" onClick={() => navigate("/courses")}>←</span>
+          <span>{courseData.name}</span>
           <div className="metadata">
             <span>
               <FolderOutlined /> {courseData.sections} Sections
