@@ -126,16 +126,53 @@ const ModernHomepage = () => {
 
 
    return (
-    <div style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.6, color: '#1a202c' }}>
+       <div style={{ fontFamily: 'Inter, system-ui, sans-serif', lineHeight: 1.6, color: '#1a202c' }}>
+      <style>
+        {`
+          @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+          }
+          @keyframes slideRight {
+            0% { left: -100%; }
+            100% { left: 100%; }
+          }
+          @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+          }
+        `}
+      </style>
       {/* Hero Section - Improved Layout */}
       <section style={{ 
-        background: 'linear-gradient(135deg,rgb(61, 90, 219) 100%)', 
+        background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
         minHeight: '100vh', 
         display: 'flex', 
         alignItems: 'center',
         position: 'relative',
         overflow: 'hidden'
       }}>
+        {/* Animated Background Elements */}
+        <div style={{
+          position: 'absolute',
+          top: '10%',
+          right: '10%',
+          width: '100px',
+          height: '100px',
+          background: 'rgba(61, 90, 219, 0.1)',
+          borderRadius: '50%',
+          animation: 'float 6s ease-in-out infinite'
+        }}></div>
+        <div style={{
+          position: 'absolute',
+          bottom: '20%',
+          left: '5%',
+          width: '60px',
+          height: '60px',
+          background: 'rgba(61, 90, 219, 0.05)',
+          borderRadius: '50%',
+          animation: 'float 4s ease-in-out infinite reverse'
+        }}></div>
         <div style={{ 
           maxWidth: '1200px', 
           margin: '0 auto', 
@@ -149,17 +186,18 @@ const ModernHomepage = () => {
             alignItems: 'center',
             minHeight: '80vh'
           }}>
-            <div style={{ color: 'white', zIndex: 2 }}>
+            <div style={{ color: '#1a202c', zIndex: 2 }}>
               <div style={{ 
                 display: 'inline-flex', 
                 alignItems: 'center', 
                 gap: '0.5rem', 
-                background: 'rgba(255,255,255,0.2)', 
+                background: 'rgba(61, 90, 219, 0.1)', 
+                color: 'rgb(61, 90, 219)',
                 padding: '0.5rem 1rem', 
                 borderRadius: '50px', 
                 fontSize: '0.875rem', 
                 marginBottom: '2rem',
-                backdropFilter: 'blur(10px)'
+                border: '1px solid rgba(61, 90, 219, 0.2)'
               }}>
                 <Heart size={16} />
                 Transform Your Learning Journey
@@ -169,11 +207,12 @@ const ModernHomepage = () => {
                 fontSize: '3.5rem', 
                 fontWeight: 'bold', 
                 marginBottom: '1.5rem',
-                lineHeight: 1.1
+                lineHeight: 1.1,
+                color: '#1a202c'
               }}>
                 Unlock Your{' '}
                 <span style={{ 
-                  background: 'linear-gradient(45deg, #ffd89b 0%, #19547b 100%)',
+                  background: 'linear-gradient(45deg, rgb(61, 90, 219) 0%, rgb(45, 70, 180) 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   display: 'block'
@@ -185,13 +224,13 @@ const ModernHomepage = () => {
               <p style={{ 
                 fontSize: '1.25rem', 
                 marginBottom: '3rem',
-                opacity: 0.9,
+                color: '#64748b',
                 maxWidth: '500px'
               }}>
                 Connect with world-class mentors who provide personalized, one-on-one tutoring designed to accelerate your learning and achieve excellence in every subject.
               </p>
 
-              {/* Stats Grid - All in one row */}
+              {/* Stats Grid - Enhanced with Gradients and Animations */}
               <div style={{ 
                 display: 'grid', 
                 gridTemplateColumns: 'repeat(3, 1fr)', 
@@ -203,47 +242,110 @@ const ModernHomepage = () => {
                   { number: "25K+", label: "Success Stories", icon: Award },
                   { number: "98%", label: "Success Rate", icon: TrendingUp }
                 ].map((stat, index) => (
-                  <div key={index} style={{ textAlign: 'center' }}>
+                  <div 
+                    key={index} 
+                    style={{ 
+                      textAlign: 'center',
+                      transform: 'translateY(0)',
+                      transition: 'all 0.3s ease',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-8px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
                     <div style={{ 
-                      background: 'rgba(255,255,255,0.2)', 
-                      borderRadius: '12px', 
-                      padding: '1rem', 
-                      marginBottom: '0.5rem',
+                      background: 'linear-gradient(135deg, rgb(61, 90, 219) 0%, rgb(45, 70, 180) 100%)', 
+                      borderRadius: '16px', 
+                      padding: '1.5rem', 
+                      marginBottom: '1rem',
                       display: 'inline-flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      backdropFilter: 'blur(10px)'
+                      color: 'white',
+                      boxShadow: '0 8px 25px rgba(61, 90, 219, 0.3)',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      transition: 'all 0.3s ease'
                     }}>
-                      <stat.icon size={24} />
+                      <div style={{
+                        position: 'absolute',
+                        top: '-50%',
+                        left: '-50%',
+                        width: '200%',
+                        height: '200%',
+                        background: 'linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent)',
+                        transform: 'rotate(45deg)',
+                        animation: 'shimmer 3s infinite'
+                      }}></div>
+                      <stat.icon size={28} style={{ position: 'relative', zIndex: 1 }} />
                     </div>
-                    <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>
+                    <div style={{ 
+                      fontSize: '2.5rem', 
+                      fontWeight: 'bold', 
+                      marginBottom: '0.5rem', 
+                      background: 'linear-gradient(135deg, rgb(61, 90, 219) 0%, rgb(45, 70, 180) 100%)',
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      transition: 'all 0.3s ease'
+                    }}>
                       {stat.number}
                     </div>
-                    <div style={{ opacity: 0.8, fontSize: '0.875rem' }}>
+                    <div style={{ 
+                      color: '#64748b', 
+                      fontSize: '0.9rem',
+                      fontWeight: '500',
+                      letterSpacing: '0.5px'
+                    }}>
                       {stat.label}
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Enhanced Search Container */}
+              {/* Enhanced Search Container with Modern Effects */}
               <div style={{ 
-                background: 'rgba(255,255,255,0.15)', 
-                borderRadius: '16px', 
-                padding: '1rem',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.2)'
+                background: 'white', 
+                borderRadius: '20px', 
+                padding: '1.5rem',
+                boxShadow: '0 20px 40px rgba(61, 90, 219, 0.15), 0 0 0 1px rgba(61, 90, 219, 0.1)',
+                position: 'relative',
+                overflow: 'hidden'
               }}>
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: '-100%',
+                  width: '100%',
+                  height: '2px',
+                  background: 'linear-gradient(90deg, transparent, rgb(61, 90, 219), transparent)',
+                  animation: 'slideRight 2s infinite'
+                }}></div>
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                   <div style={{ 
                     display: 'flex', 
                     alignItems: 'center', 
                     flex: 1,
-                    background: 'rgba(255,255,255,0.9)',
-                    borderRadius: '12px',
-                    padding: '0.75rem 1rem'
-                  }}>
-                    <Search size={20} style={{ color: '#6b7280', marginRight: '0.75rem' }} />
+                    background: '#f8fafc',
+                    borderRadius: '16px',
+                    padding: '1rem 1.25rem',
+                    border: '2px solid transparent',
+                    transition: 'all 0.3s ease',
+                    position: 'relative'
+                  }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.border = '2px solid rgb(61, 90, 219)';
+                    e.currentTarget.style.boxShadow = '0 0 0 4px rgba(61, 90, 219, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.border = '2px solid transparent';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                  >
+                    <Search size={22} style={{ color: '#6b7280', marginRight: '1rem' }} />
                     <input
                       type="text"
                       placeholder="Search for subjects, mentors, or topics..."
@@ -255,23 +357,47 @@ const ModernHomepage = () => {
                         background: 'transparent',
                         width: '100%',
                         color: '#1a202c',
-                        fontSize: '1rem'
+                        fontSize: '1.05rem',
+                        fontWeight: '400'
                       }}
                     />
                   </div>
-                  <button style={{
-                    background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '12px',
-                    padding: '0.75rem 2rem',
-                    fontSize: '1rem',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
-                  }}>
-                    Find Mentor
+                  <button 
+                    style={{
+                      background: 'linear-gradient(135deg, rgb(61, 90, 219) 0%, rgb(45, 70, 180) 100%)',
+                      color: 'white',
+                      border: 'none',
+                      borderRadius: '16px',
+                      padding: '1rem 2.5rem',
+                      fontSize: '1.05rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      boxShadow: '0 8px 25px rgba(61, 90, 219, 0.4)',
+                      position: 'relative',
+                      overflow: 'hidden'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                      e.currentTarget.style.boxShadow = '0 12px 35px rgba(61, 90, 219, 0.5)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = '0 8px 25px rgba(61, 90, 219, 0.4)';
+                    }}
+                  >
+                    <span style={{ position: 'relative', zIndex: 1 }}>Find Mentor</span>
+                    <div style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      width: '0',
+                      height: '0',
+                      background: 'rgba(255,255,255,0.2)',
+                      borderRadius: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      transition: 'all 0.6s ease'
+                    }}></div>
                   </button>
                 </div>
               </div>
@@ -279,12 +405,33 @@ const ModernHomepage = () => {
 
             <div style={{ position: 'relative', zIndex: 1 }}>
               <div style={{ 
-                background: 'rgba(255,255,255,0.1)', 
+                background: 'white', 
                 borderRadius: '24px', 
                 padding: '2rem',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255,255,255,0.2)'
-              }}>
+                boxShadow: '0 25px 50px rgba(61, 90, 219, 0.15)',
+                border: '1px solid rgba(61, 90, 219, 0.1)',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-5px)';
+                e.currentTarget.style.boxShadow = '0 35px 60px rgba(61, 90, 219, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 25px 50px rgba(61, 90, 219, 0.15)';
+              }}
+              >
+                <div style={{
+                  position: 'absolute',
+                  top: '-2px',
+                  left: '-2px',
+                  right: '-2px',
+                  height: '4px',
+                  background: 'linear-gradient(90deg, rgb(61, 90, 219), rgb(45, 70, 180), rgb(61, 90, 219))',
+                  borderRadius: '24px 24px 0 0'
+                }}></div>
                 <img 
                   src={heroImage} 
                   alt="Students learning" 
@@ -292,7 +439,8 @@ const ModernHomepage = () => {
                     width: '100%', 
                     height: '400px', 
                     objectFit: 'cover', 
-                    borderRadius: '16px'
+                    borderRadius: '16px',
+                    transition: 'all 0.3s ease'
                   }} 
                 />
               </div>
