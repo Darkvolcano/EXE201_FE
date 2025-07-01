@@ -24,7 +24,7 @@ const Navbar = () => {
       <Menu.Item
         key="profile"
         onClick={() => {
-          navigate("/profile");
+          navigate(user?.role === "Tutor" ? "/profile-tutor" : "/profile");
         }}
       >
         Profile

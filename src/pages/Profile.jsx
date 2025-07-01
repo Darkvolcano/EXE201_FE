@@ -120,7 +120,7 @@ const Profile = () => {
     navigate("/login");
   };
 
-  const handleChangePassword = (values) => {
+  const handleChangePassword = () => {
     message.success("Password changed successfully!");
     setShowChangePassword(false);
   };
@@ -283,7 +283,10 @@ const Profile = () => {
                       },
                     ]}
                   >
-                    <Input prefix={<MailOutlined />} placeholder="Enter email" />
+                    <Input
+                      prefix={<MailOutlined />}
+                      placeholder="Enter email"
+                    />
                   </Form.Item>
                   <Form.Item
                     name="phone"
@@ -347,7 +350,9 @@ const Profile = () => {
                       <Col xs={24} sm={8} style={{ textAlign: "center" }}>
                         <Avatar
                           size={100}
-                          src={profile.avatar || "https://via.placeholder.com/150"}
+                          src={
+                            profile.avatar || "https://via.placeholder.com/150"
+                          }
                           icon={!profile.avatar && <UserOutlined />}
                           className="profile-avatars"
                           style={{ border: "3px solid #e6f7ff" }}
@@ -471,7 +476,8 @@ const Profile = () => {
                             className="order-detail"
                             style={{ display: "block" }}
                           >
-                            Amount: {order.totalAmount.toLocaleString("vi-VN")} VNĐ
+                            Amount: {order.totalAmount.toLocaleString("vi-VN")}{" "}
+                            VNĐ
                           </Text>
                           <Tag
                             color={getStatusColor(order.status)}
@@ -484,14 +490,18 @@ const Profile = () => {
                             style={{ display: "block" }}
                           >
                             Date:{" "}
-                            {new Date(order.createdAt).toLocaleDateString("vi-VN")}
+                            {new Date(order.createdAt).toLocaleDateString(
+                              "vi-VN"
+                            )}
                           </Text>
                           <Text
                             className="order-detail"
                             style={{ display: "block" }}
                           >
                             Completed:{" "}
-                            {order.orderDetails[0]?.isFinishCourse ? "Yes" : "No"}
+                            {order.orderDetails[0]?.isFinishCourse
+                              ? "Yes"
+                              : "No"}
                           </Text>
                         </Col>
                       </Row>
