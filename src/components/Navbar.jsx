@@ -122,7 +122,7 @@ const Navbar = () => {
                       user.image ||
                       "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-183042379.jpg"
                     }
-                    className="user-avatar"
+                    className="user-avatar-nav"
                     alt="User Avatar"
                   />
                 </Badge>
