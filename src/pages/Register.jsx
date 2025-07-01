@@ -154,7 +154,8 @@ const Register = () => {
         </Form>
         <div className="auth-footer">
           <Text className="auth-link">
-            Already have an account? <a onClick={() => navigate("/login")}>Log in here</a>
+            Already have an account?{" "}
+            <a onClick={() => navigate("/login")}>Login here</a>
           </Text>
           <Button
             type="primary"
