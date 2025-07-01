@@ -1,12 +1,24 @@
 import React, { useState } from "react";
-import { Table, Tag, Modal, Button, Tooltip, Popconfirm, message } from "antd";
-import { EyeOutlined, CheckOutlined } from "@ant-design/icons";
+import {
+  Table,
+  Tag,
+  Modal,
+  Button,
+  Tooltip,
+  Popconfirm,
+  message,
+  Card,
+  Descriptions,
+  Input,
+  Slider,
+  Select,
+} from "antd";
+import { EyeOutlined, CheckOutlined, FilterOutlined } from "@ant-design/icons";
 import {
   useGetAllTutors,
   useUpdateIsChecked,
   useUpdateIsCanTeach,
 } from "../hooks/tutorsApi";
-import SidebarAdmin from "../components/SidebarAdmin";
 
 const CertificateManagement = () => {
   const { data, isLoading, error, refetch } = useGetAllTutors();
@@ -14,10 +26,14 @@ const CertificateManagement = () => {
   const updateIsCanTeachMutation = useUpdateIsCanTeach();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCertificate, setSelectedCertificate] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
+  const [experienceRange, setExperienceRange] = useState([0, 10]); // Default range: 0 to 10 years
+  const [canTeachFilter, setCanTeachFilter] = useState("all"); // "all", "yes", "no"
 
   const tutorsData = data?.data?.tutors || [];
 
-  // Flatten the data to create a row for each certificate
+  // Flatten and filter the data
   const certificateData = tutorsData
     .filter((tutor) => tutor.certifications && tutor.certifications.length > 0)
     .flatMap((tutor) =>
@@ -26,7 +42,20 @@ const CertificateManagement = () => {
         tutorName: tutor.account.fullName,
         tutorId: tutor.account._id,
       }))
-    );
+    )
+    .filter((cert) => {
+      const matchesSearch =
+        cert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cert.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesExperience =
+        cert.experience >= experienceRange[0] &&
+        cert.experience <= experienceRange[1];
+      const matchesCanTeach =
+        canTeachFilter === "all" ||
+        (canTeachFilter === "yes" && cert.isCanTeach) ||
+        (canTeachFilter === "no" && !cert.isCanTeach);
+      return matchesSearch && matchesExperience && matchesCanTeach;
+    });
 
   const columns = [
     {
@@ -41,7 +70,7 @@ const CertificateManagement = () => {
         clearFilters,
       }) => (
         <div style={{ padding: 8 }}>
-          <input
+          <Input
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -83,10 +112,24 @@ const CertificateManagement = () => {
       render: (experience) => `${experience} years`,
     },
     {
-      title: "Can Teach",
+      title: "Checked",
+      dataIndex: "isChecked",
+      key: "isChecked",
+      render: (isChecked) => (
+        <Tag color={isChecked ? "success" : "error"}>
+          {isChecked ? "Yes" : "No"}
+        </Tag>
+      ),
+    },
+    {
+      title: "Teach",
       dataIndex: "isCanTeach",
       key: "isCanTeach",
-      render: (isCanTeach) => (isCanTeach ? "Yes" : "No"),
+      render: (isCanTeach) => (
+        <Tag color={isCanTeach ? "success" : "error"}>
+          {isCanTeach ? "Yes" : "No"}
+        </Tag>
+      ),
     },
     {
       title: "Image",
@@ -178,6 +221,22 @@ const CertificateManagement = () => {
       <div style={{ width: "-webkit-fill-available", padding: 24 }}>
         <h2>Certificate Management</h2>
         {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+        <div
+          style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
+        >
+          <Input
+            placeholder="Search certificate name, description"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: 500 }}
+          />
+          <Button
+            icon={<FilterOutlined />}
+            onClick={() => setIsFilterModalVisible(true)}
+          >
+            Filter
+          </Button>
+        </div>
         <Table
           columns={columns}
           dataSource={certificateData}
@@ -194,38 +253,104 @@ const CertificateManagement = () => {
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={null}
+          width={1000}
+          style={{ top: 20 }}
         >
           {selectedCertificate ? (
-            <div>
-              <p>
-                <strong>Tutor Name:</strong> {selectedCertificate.tutorName}
-              </p>
-              <p>
-                <strong>Certificate Name:</strong> {selectedCertificate.name}
-              </p>
-              <p>
-                <strong>Description:</strong> {selectedCertificate.description}
-              </p>
-              <p>
-                <strong>Experience:</strong> {selectedCertificate.experience}{" "}
-                years
-              </p>
-              <p>
-                <strong>Can Teach:</strong>{" "}
-                {selectedCertificate.isCanTeach ? "Yes" : "No"}
-              </p>
-              <p>
-                <strong>Image:</strong>{" "}
-                <img
-                  src={selectedCertificate.image[0]}
-                  alt="Certificate"
-                  style={{ maxWidth: "100%" }}
-                />
-              </p>
-            </div>
+            <Card>
+              <Descriptions column={2} bordered>
+                <Descriptions.Item label="Tutor Name">
+                  {selectedCertificate.tutorName}
+                </Descriptions.Item>
+                <Descriptions.Item label="Certificate Name">
+                  {selectedCertificate.name}
+                </Descriptions.Item>
+                <Descriptions.Item
+                  label="Description"
+                  style={{ maxWidth: "280px" }}
+                >
+                  <div>{selectedCertificate.description}</div>
+                </Descriptions.Item>
+                <Descriptions.Item label="Experience">
+                  {selectedCertificate.experience} years
+                </Descriptions.Item>
+                <Descriptions.Item label="Checked">
+                  <Tag
+                    color={selectedCertificate.isChecked ? "success" : "error"}
+                  >
+                    {selectedCertificate.isChecked ? "Yes" : "No"}
+                  </Tag>
+                </Descriptions.Item>
+                <Descriptions.Item label="Can Teach">
+                  <Tag
+                    color={selectedCertificate.isCanTeach ? "success" : "error"}
+                  >
+                    {selectedCertificate.isCanTeach ? "Yes" : "No"}
+                  </Tag>
+                </Descriptions.Item>
+                <Descriptions.Item label="Image" span={2}>
+                  <img
+                    src={selectedCertificate.image[0]}
+                    alt="Certificate"
+                    style={{ maxWidth: "500px" }}
+                  />
+                </Descriptions.Item>
+              </Descriptions>
+            </Card>
           ) : (
             <p>No details available.</p>
           )}
+        </Modal>
+        <Modal
+          title="Filter Certificates"
+          open={isFilterModalVisible}
+          onCancel={() => setIsFilterModalVisible(false)}
+          footer={[
+            <Button
+              key="apply"
+              type="primary"
+              onClick={() => setIsFilterModalVisible(false)}
+            >
+              Apply
+            </Button>,
+            <Button
+              key="reset"
+              onClick={() => {
+                setExperienceRange([0, 10]);
+                setCanTeachFilter("all");
+                setIsFilterModalVisible(false);
+              }}
+            >
+              Reset
+            </Button>,
+          ]}
+        >
+          <div style={{ marginBottom: 16 }}>
+            <h3>Experience Range (years)</h3>
+            <Slider
+              range
+              min={0}
+              max={10}
+              value={experienceRange}
+              onChange={setExperienceRange}
+              tipFormatter={(value) => `${value} years`}
+            />
+            <p>
+              Range: {experienceRange[0]} - {experienceRange[1]} years
+            </p>
+          </div>
+          <div>
+            <h3>Can Teach</h3>
+            <Select
+              value={canTeachFilter}
+              onChange={setCanTeachFilter}
+              style={{ width: 200 }}
+            >
+              <Select.Option value="all">All</Select.Option>
+              <Select.Option value="yes">Yes</Select.Option>
+              <Select.Option value="no">No</Select.Option>
+            </Select>
+          </div>
         </Modal>
       </div>
     </div>

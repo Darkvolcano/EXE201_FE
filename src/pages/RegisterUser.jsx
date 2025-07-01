@@ -27,7 +27,10 @@ const RegisterUser = () => {
       },
       {
         onSuccess: (data) => {
-          message.success(data.message || "Account created successfully! Please check your email for OTP.");
+          message.success(
+            data.message ||
+              "Account created successfully! Please check your email for OTP."
+          );
           navigate("/verify-otp-user", { state: { email: values.email } });
         },
         onError: (error) => {
@@ -47,14 +50,25 @@ const RegisterUser = () => {
         <Text className="auth-subtitle">
           Create your account to start your learning journey with us.
         </Text>
-        <Form name="register-user" layout="vertical" onFinish={onFinish} className="auth-form">
+        <Form
+          name="register-user"
+          layout="vertical"
+          onFinish={onFinish}
+          className="auth-form"
+        >
           <Form.Item
             label="Full Name"
             name="fullName"
-            rules={[{ required: true, message: "Please input your full name!" }]}
+            rules={[
+              { required: true, message: "Please input your full name!" },
+            ]}
             style={{ marginBottom: 10 }}
           >
-            <Input placeholder="Enter your full name" className="auth-input" size="large" />
+            <Input
+              placeholder="Enter your full name"
+              className="auth-input"
+              size="large"
+            />
           </Form.Item>
           <Form.Item
             label="Email"
@@ -65,18 +79,29 @@ const RegisterUser = () => {
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input placeholder="Enter your email" className="auth-input" size="large" />
+            <Input
+              placeholder="Enter your email"
+              className="auth-input"
+              size="large"
+            />
           </Form.Item>
           <Form.Item
             label="Phone Number"
             name="phone"
             rules={[
               { required: true, message: "Please input your phone number!" },
-              { pattern: /^[0-9]{10,15}$/, message: "Please enter a valid phone number!" },
+              {
+                pattern: /^[0-9]{10,15}$/,
+                message: "Please enter a valid phone number!",
+              },
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input placeholder="Enter your phone number" className="auth-input" size="large" />
+            <Input
+              placeholder="Enter your phone number"
+              className="auth-input"
+              size="large"
+            />
           </Form.Item>
           <Form.Item
             label="Password"
@@ -87,7 +112,11 @@ const RegisterUser = () => {
             ]}
             style={{ marginBottom: 10 }}
           >
-            <Input.Password placeholder="Enter your password" className="auth-input" size="large" />
+            <Input.Password
+              placeholder="Enter your password"
+              className="auth-input"
+              size="large"
+            />
           </Form.Item>
           <Form.Item
             label="Confirm Password"
@@ -106,7 +135,11 @@ const RegisterUser = () => {
             ]}
             style={{ marginBottom: 20 }}
           >
-            <Input.Password placeholder="Confirm your password" className="auth-input" size="large" />
+            <Input.Password
+              placeholder="Confirm your password"
+              className="auth-input"
+              size="large"
+            />
           </Form.Item>
           <Form.Item>
             <Button
@@ -123,7 +156,8 @@ const RegisterUser = () => {
         </Form>
         <div className="auth-footer">
           <Text className="auth-link">
-            Already have an account? <a onClick={() => navigate("/login")}>Log in here</a>
+            Already have an account?{" "}
+            <a onClick={() => navigate("/login")}>Login here</a>
           </Text>
           <Button
             type="primary"

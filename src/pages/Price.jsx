@@ -28,7 +28,7 @@ const Pricing = () => {
                 className="course-image"
                 style={{ height: 200 }}
               />
-              <Title level={4} className="course-name">
+              <Title level={4} className="course-name-price">
                 {courseData.course.name}
               </Title>
               <Text className="course-price">

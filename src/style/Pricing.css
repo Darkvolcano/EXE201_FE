@@ -29,7 +29,7 @@
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
-.course-name {
+.course-name-price {
   font-size: 18px;
   color: #333;
   margin-bottom: 16px;
@@ -90,7 +90,7 @@
     font-size: 24px;
   }
 
-  .course-name {
+  .course-name-price {
     font-size: 16px;
     height: 48px;
   }
