@@ -39,10 +39,16 @@ export default function Sidebar({ title = "Tutorify" }) {
         navigate("/course-management");
       },
     },
+    { 
+      icon: <FileText size={18} />, 
+      label: "Tutor Accounts",
+      onClick: () => {
+        navigate("/view-tutor");
+      }, 
+    },
   ];
 
   const pagesNavItems = [
-    { icon: <FileText size={18} />, label: "Pricing" },
     { icon: <Calendar size={18} />, label: "Calendar" },
     { icon: <Phone size={18} />, label: "Contact" },
     { icon: <File size={18} />, label: "Invoice" },
