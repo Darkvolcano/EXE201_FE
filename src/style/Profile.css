@@ -1,9 +1,15 @@
 .sidebar {
-  background: transparent;
-  /* border-right: 1px solid #d9d9d9; */
+  background: #fff;
   padding: 0;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  min-width: 220px;
+  max-width: 270px;
+  margin-right: 32px;
+  margin-left: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .sidebar .ant-menu-item {
@@ -22,14 +28,16 @@
 }
 
 .main-content {
-  padding: 0 24px;
-  background: #f0f2f5;
+  padding: 0 40px 0 0;
+  background: #f5f7fa;
+  width: 100%;
+  max-width: 100vw;
 }
 
 .profile-card {
-  max-width: -webkit-fill-available;
   border-radius: 12px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  width: 100%;
 }
 
 .profile-card,
@@ -50,19 +58,35 @@
   padding: 12px;
 }
 
+@media (max-width: 1200px) {
+  .main-content {
+    padding: 0 16px;
+  }
+  .sidebar {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-content {
+    padding: 0 4px;
+  }
+  .sidebar {
+    min-width: 120px;
+    max-width: 180px;
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
-    width: 200px !important;
-    min-width: 200px !important;
+    width: 100% !important;
+    min-width: unset !important;
+    max-width: unset !important;
+    margin: 0 0 24px 0;
   }
-
   .main-content {
-    padding: 16px;
-  }
-
-  .profile-card .ant-descriptions-item-content,
-  .order-card .ant-table-tbody > tr > td {
-    padding: 8px;
+    padding: 0 4px;
   }
 }
 
