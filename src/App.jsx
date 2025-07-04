@@ -32,6 +32,7 @@ import AdminTutorsPage from "./pages/ViewTutorAccount";
 import CertificateManagement from "./pages/CertificateManagement";
 import SidebarAdmin from "./components/SidebarAdmin";
 import CourseManagement from "./pages/CourseManagement";
+import Forum from "./pages/Forum";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -69,6 +70,7 @@ function App() {
             <Route path="/course-detail" element={<CoursePlayer />} />
             <Route path="/courses/:id" element={<CoursePlayer />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/forum" element={<Forum />} />
           </Route>
 
           <Route element={<LayoutWithoutNavFooter />}>
@@ -78,7 +80,9 @@ function App() {
             <Route path="/register-user" element={<RegisterUser />} />
             <Route path="/verify-otp-user" element={<VerifyOTPUser />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/view-tutor" element={<AdminTutorsPage />} />
             <Route path="/profile-admin" element={<AdminProfile />} />
+            
           </Route>
 
           <Route element={<LayoutWithSidebarAdmin />}>

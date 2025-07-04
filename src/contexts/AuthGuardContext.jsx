@@ -51,6 +51,7 @@ export function AuthGuardProvider(props) {
       "/courses",
       "/about",
       "/pricing",
+      "/forum",
     ];
 
     if (!user || !user.role) {
