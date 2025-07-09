@@ -62,6 +62,9 @@ const Navbar = () => {
         <Menu.Item key="ai-chat" className="navbar-menu-item">
           <Link to="/ai-chat">AI Chat</Link>
         </Menu.Item>
+        <Menu.Item key="forum" className="navbar-menu-item">
+          <Link to="/forum">Forum</Link>
+        </Menu.Item>
       </Menu>
 
       <div className="navbar-user-section">
