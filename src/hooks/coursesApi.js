@@ -52,3 +52,14 @@ export const useGetChapterContents = (chapterId, enabled = true) => {
     enabled: !!chapterId && enabled,
   });
 };
+
+export const useGetCoursesByAccountId = (accountId) => {
+  return useQuery({
+    queryKey: ["courses-by-account", accountId],
+    queryFn: async () => {
+      const res = await axiosInstance.get(`courses/account/${accountId}`);
+      return res.data;
+    },
+    enabled: !!accountId,
+  });
+};
