@@ -87,6 +87,8 @@ const TutorProfile = () => {
       setActiveSection("Dashboard");
     } else if (location.pathname === "/profile-tutor/tutor-certifications") {
       setActiveSection("Certificate");
+    } else if (location.pathname === "/profile-tutor/tutor-orders") {
+      setActiveSection("Orders");
     }
   }, [location.pathname]);
 
@@ -166,6 +168,15 @@ const TutorProfile = () => {
             onClick={() => setActiveSection("Certificate")}
           >
             Certificate
+          </Link>
+          <Link
+            to="tutor-orders"
+            className={`menu-item ${
+              activeSection === "Orders" ? "active" : ""
+            }`}
+            onClick={() => setActiveSection("Orders")}
+          >
+            Orders
           </Link>
         </div>
         <h2 className="sidebar-title">STUDENTS</h2>

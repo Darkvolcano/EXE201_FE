@@ -33,7 +33,9 @@ export function AuthGuardProvider(props) {
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (decoded.exp < currentTime) {
-          message.warning("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
+          message.warning(
+            "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại."
+          );
           logout();
           return;
         }
@@ -62,7 +64,9 @@ export function AuthGuardProvider(props) {
     const matchDynamicRoute = (route, path) => {
       const dynamicRoutePattern = route.replace(/:[^/]+/, "[^/]+");
       const regex = new RegExp(`^${dynamicRoutePattern}$`);
-      console.log(`Matching route: ${route} against ${path} -> ${regex.test(path)}`);
+      console.log(
+        `Matching route: ${route} against ${path} -> ${regex.test(path)}`
+      );
       return regex.test(path);
     };
 
@@ -95,7 +99,13 @@ export function AuthGuardProvider(props) {
 
     const restrictedPages = {
       User: ["/profile", "/courses/:id", "/tutor", "/ai-chat", "/forum"],
-      Tutor: ["/profile-tutor", "/upload-certificate", "tutor-certifications", "/forum"],
+      Tutor: [
+        "/profile-tutor",
+        "/upload-certificate",
+        "tutor-certifications",
+        "tutor-orders",
+        "/forum",
+      ],
       Admin: [
         "/profile-admin",
         "/dashboard",
@@ -107,7 +117,8 @@ export function AuthGuardProvider(props) {
 
     const userRole = user.role;
     const allowedPages = restrictedPages[userRole] || [];
-    const isAllowed = isPublicPage ||
+    const isAllowed =
+      isPublicPage ||
       allowedPages.some((route) => {
         if (route.includes(":id")) {
           return matchDynamicRoute(route, location.pathname);

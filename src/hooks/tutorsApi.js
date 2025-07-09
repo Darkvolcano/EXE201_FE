@@ -80,3 +80,13 @@ export const useGetAllTutorCertifications = () => {
     },
   });
 };
+
+export const useGetAllTutorOrder = () => {
+  return useQuery({
+    queryKey: ["tutor"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("tutor/order-details");
+      return response.data;
+    },
+  });
+};
