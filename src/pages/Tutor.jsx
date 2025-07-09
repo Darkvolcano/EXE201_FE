@@ -3,25 +3,31 @@ import { Button, Checkbox, Input, Radio, Slider, Select } from "antd";
 import "../style/Tutor.css";
 import SearchIconWhite from "../components/SearchIconWhite";
 import { useGetCourse } from "../hooks/coursesApi";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 
 const Tutor = () => {
-  // Use the hook from coursesApi.js
+  const navigate = useNavigate();
   const { data, isLoading, isError } = useGetCourse();
-  // Extract tutors from courses data
-  const tutors =
-    data?.data?.courses?.map((item) => ({
-      account: item.account,
-      certifications: item.certifications,
-    })) || [];
 
-  // Log để kiểm tra dữ liệu trả về từ API
-  console.log("Tutors data:", tutors);
+  // Loại bỏ các gia sư trùng lặp dựa trên account._id
+  const uniqueTutors = Array.from(
+    new Map(
+      data?.data?.courses?.map((item) => [
+        item.account._id,
+        {
+          account: item.account,
+          certifications: item.certifications,
+        },
+      ])
+    ).values()
+  );
+
+  console.log("Unique tutors:", uniqueTutors);
 
   return (
     <div className="mentor-search-container">
-      {/* Header Section */}
       <div className="mentor-search-header">
         <h1 className="header-title">Find The Right Mentor For You</h1>
         <p className="header-subtitle">
@@ -53,9 +59,7 @@ const Tutor = () => {
         </Select>
       </div>
 
-      {/* Main Content */}
       <div className="mentor-search-content">
-        {/* Filter Sidebar */}
         <div className="filter-sidebar">
           <h3 className="filter-title">Categories</h3>
           <Checkbox>SD</Checkbox>
@@ -82,18 +86,22 @@ const Tutor = () => {
           </Button>
         </div>
 
-        {/* Mentor List */}
         <div className="mentor-list-container">
           <div className="mentor-grid-friendly">
             {isLoading && <div>Loading...</div>}
             {isError && <div>Failed to load tutors.</div>}
-            {!isLoading && !isError && tutors.length === 0 && (
+            {!isLoading && !isError && uniqueTutors.length === 0 && (
               <div>No tutors found.</div>
             )}
             {!isLoading &&
               !isError &&
-              tutors.map((tutor) => (
-                <div className="mentor-card-friendly" key={tutor.account._id}>
+              uniqueTutors.map((tutor) => (
+                <div
+                  className="mentor-card-friendly"
+                  key={tutor.account._id}
+                  onClick={() => navigate(`/tutors/${tutor.account._id}`)}
+                  style={{ cursor: "pointer" }}
+                >
                   <div className="mentor-img-wrap">
                     <img
                       className="mentor-img"
@@ -132,7 +140,7 @@ const Tutor = () => {
               ))}
           </div>
           <div className="pagination">
-            <span>Showing {tutors.length} Mentors</span>
+            <span>Showing {uniqueTutors.length} Mentors</span>
           </div>
         </div>
       </div>

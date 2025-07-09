@@ -13,9 +13,13 @@ export function AuthGuardProvider(props) {
   const { user, logout, token, setUser, setToken } = useAuthStore();
 
   useEffect(() => {
+    console.log("User:", user);
+    console.log("Token:", token);
     if (!user || !token) {
       const storedUser = localStorage.getItem("user");
       const storedToken = localStorage.getItem("token");
+      console.log("Stored User:", storedUser);
+      console.log("Stored Token:", storedToken);
 
       if (storedUser && storedToken) {
         setUser(JSON.parse(storedUser));
@@ -29,12 +33,12 @@ export function AuthGuardProvider(props) {
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (decoded.exp < currentTime) {
-          message.warning("Login session has expired. Please login again.");
+          message.warning("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
           logout();
           return;
         }
       } catch (error) {
-        console.error("Error decoding token:", error);
+        console.error("Lỗi giải mã token:", error);
         logout();
       }
     }
@@ -51,12 +55,29 @@ export function AuthGuardProvider(props) {
       "/courses",
       "/about",
       "/pricing",
+      "/courses/:id",
+      "/tutors/:accountId",
     ];
 
+    const matchDynamicRoute = (route, path) => {
+      const dynamicRoutePattern = route.replace(/:[^/]+/, "[^/]+");
+      const regex = new RegExp(`^${dynamicRoutePattern}$`);
+      console.log(`Matching route: ${route} against ${path} -> ${regex.test(path)}`);
+      return regex.test(path);
+    };
+
+    const isPublicPage = publicPages.some((route) => {
+      if (route.includes(":")) {
+        return matchDynamicRoute(route, location.pathname);
+      }
+      return route === location.pathname;
+    });
+
+    console.log("Is public page:", isPublicPage, "Path:", location.pathname);
+
     if (!user || !user.role) {
-      if (!publicPages.includes(location.pathname)) {
+      if (!isPublicPage) {
         navigate("/login", { replace: true });
-        // message.error("Bạn phải đăng nhập để chuyển tới trang này");
       }
       return;
     }
@@ -84,16 +105,9 @@ export function AuthGuardProvider(props) {
       ],
     };
 
-    const matchDynamicRoute = (route, path) => {
-      const dynamicRoutePattern = route.replace(/:id/, "[^/]+");
-      const regex = new RegExp(`^${dynamicRoutePattern}$`);
-      return regex.test(path);
-    };
-
     const userRole = user.role;
     const allowedPages = restrictedPages[userRole] || [];
-    const isAllowed =
-      publicPages.includes(location.pathname) ||
+    const isAllowed = isPublicPage ||
       allowedPages.some((route) => {
         if (route.includes(":id")) {
           return matchDynamicRoute(route, location.pathname);
@@ -101,10 +115,12 @@ export function AuthGuardProvider(props) {
         return route === location.pathname;
       });
 
+    console.log("Is allowed:", isAllowed);
+
     if (!isAllowed) {
       navigate("/forbidden", { replace: true });
     }
-  }, [user, location, navigate]);
+  }, [user, location.pathname, navigate]);
 
   return (
     <AuthGuardContext.Provider value={{}}>{children}</AuthGuardContext.Provider>
