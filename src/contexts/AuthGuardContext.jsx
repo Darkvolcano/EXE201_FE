@@ -74,7 +74,7 @@ export function AuthGuardProvider(props) {
 
     const restrictedPages = {
       User: ["/profile", "/courses/:id", "/tutor", "/ai-chat"],
-      Tutor: ["/profile-tutor", "/upload-certificate"],
+      Tutor: ["/profile-tutor", "/upload-certificate", "tutor-certifications"],
       Admin: [
         "/profile-admin",
         "/dashboard",
@@ -97,7 +97,9 @@ export function AuthGuardProvider(props) {
         if (route.includes(":id")) {
           return matchDynamicRoute(route, location.pathname);
         }
-        return route === location.pathname;
+        return (
+          location.pathname.startsWith(route) || route === location.pathname
+        );
       });
 
     if (!isAllowed) {
