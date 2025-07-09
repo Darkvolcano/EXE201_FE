@@ -34,6 +34,7 @@ import CertificateManagement from "./pages/CertificateManagement";
 import SidebarAdmin from "./components/SidebarAdmin";
 import CourseManagement from "./pages/CourseManagement";
 import Forum from "./pages/Forum";
+import TutorCertifications from "./pages/TutorCertification";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -65,7 +66,12 @@ function App() {
             <Route path="/upload-certificate" element={<UploadCertificate />} />
             <Route path="/profile-user" element={<ProfileUser />} />
             <Route path="/edit-profile-user" element={<EditProfileUser />} />
-            <Route path="/profile-tutor" element={<TutorProfile />} />
+            <Route path="/profile-tutor" element={<TutorProfile />}>
+              <Route
+                path="tutor-certifications" // Changed from "/tutor-certifications" to "tutor-certifications"
+                element={<TutorCertifications />}
+              />
+            </Route>
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/course-detail" element={<CoursePlayer />} />

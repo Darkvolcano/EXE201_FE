@@ -70,3 +70,13 @@ export const useUpdateIsCanTeach = () => {
     },
   });
 };
+
+export const useGetAllTutorCertifications = () => {
+  return useQuery({
+    queryKey: ["tutor"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("tutor/certifications");
+      return response.data;
+    },
+  });
+};

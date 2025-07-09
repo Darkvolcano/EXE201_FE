@@ -42,9 +42,11 @@
   font-size: 14px;
 }
 
-.menu-list {
+.menu-list-profile-tutor {
   flex-grow: 1;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-item {
