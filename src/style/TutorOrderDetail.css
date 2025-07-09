@@ -1,0 +1,54 @@
+.tutor-order-container {
+  padding: 20px;
+}
+
+.tutor-order-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #1890ff;
+}
+
+.tutor-order-card {
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tutor-order-details {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.tutor-order-avatar {
+  background-color: #f0f0f0;
+}
+
+.tutor-order-info {
+  flex: 1;
+}
+
+.tutor-order-info p {
+  margin: 5px 0;
+  color: #333;
+}
+
+.tutor-order-status {
+  font-weight: bold;
+}
+
+.tutor-order-status.pending {
+  color: #faad14;
+}
+
+.loading {
+  text-align: center;
+  padding: 20px;
+  color: #1890ff;
+}
+
+.error {
+  text-align: center;
+  padding: 20px;
+  color: #ff4d4f;
+}

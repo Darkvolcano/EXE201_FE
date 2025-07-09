@@ -110,7 +110,11 @@ const TutorCertifications = () => {
             cover={
               <Image
                 alt={certificate.name}
-                src={certificate.image[0]}
+                src={
+                  certificate.image && certificate.image.length > 0
+                    ? certificate.image[0]
+                    : "https://via.placeholder.com/150"
+                }
                 className="certification-image"
               />
             }
