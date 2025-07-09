@@ -1,125 +1,98 @@
-import { useState, useEffect, useCallback } from 'react';
-import axiosInstance from '../configs/axios.js';
+import { useState, useEffect } from 'react';
+import axiosInstance from '../configs/axios.js'; // Đường dẫn đến file axios của bạn
 
 const useForumAPI = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const fetchPosts = useCallback(async () => {
+  // Lấy tất cả posts
+  const fetchPosts = async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await axiosInstance.get('/forum');
-      // Sắp xếp bài viết theo thời gian mới nhất khi tải
-      const sortedPosts = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      setPosts(sortedPosts);
+      setPosts(response.data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi tải bài viết');
+      setError(err.response?.data?.message || 'Có lỗi khi tải posts');
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
+  // Lấy chi tiết một post
   const fetchPostById = async (id) => {
     try {
       setLoading(true);
       setError(null);
       const response = await axiosInstance.get(`/forum/${id}`);
-      return response.data.data; // API trả về trong { message, data }
+      return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi tải chi tiết bài viết');
+      setError(err.response?.data?.message || 'Có lỗi khi tải post');
       return null;
     } finally {
       setLoading(false);
     }
   };
 
+  // Tạo post mới
   const createPost = async (postData) => {
     try {
       setLoading(true);
       setError(null);
-      await axiosInstance.post('/forum', postData);
-      await fetchPosts(); // Tải lại danh sách sau khi tạo
-      return true;
+      const response = await axiosInstance.post('/forum', postData);
+      
+      // Cập nhật danh sách posts
+      await fetchPosts();
+      return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi tạo bài viết');
-      return false;
+      setError(err.response?.data?.message || 'Có lỗi khi tạo post');
+      return null;
     } finally {
       setLoading(false);
     }
   };
 
-  // ==========================================================
-  // ADDED: Hàm cập nhật bài viết
-  // ==========================================================
-  const updatePost = async (postId, postData) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await axiosInstance.put(`/forum/${postId}`, postData);
-      await fetchPosts(); // Tải lại danh sách sau khi cập nhật
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi cập nhật bài viết');
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ==========================================================
-  // ADDED: Hàm xóa bài viết
-  // ==========================================================
-  const deletePost = async (postId) => {
-    try {
-      setLoading(true);
-      setError(null);
-      await axiosInstance.delete(`/forum/${postId}`);
-      await fetchPosts(); // Tải lại danh sách sau khi xóa
-      return true;
-    } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi xóa bài viết');
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Thêm feedback
   const addFeedback = async (postId, feedbackData) => {
     try {
       setLoading(true);
       setError(null);
-      await axiosInstance.post(`/forum/${postId}/feedback`, feedbackData);
+      const response = await axiosInstance.post(`/forum/${postId}/feedback`, feedbackData);
+      
+      // Cập nhật danh sách posts để reflect thay đổi
       await fetchPosts();
-      return true;
+      return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi thêm phản hồi');
-      return false;
+      setError(err.response?.data?.message || 'Có lỗi khi thêm feedback');
+      return null;
     } finally {
       setLoading(false);
     }
   };
 
+  // Like post
   const likePost = async (postId) => {
     try {
-      // Không bật loading cho like để trải nghiệm mượt hơn
-      await axiosInstance.put(`/forum/${postId}/like`);
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.put(`/forum/${postId}/like`);
+      
+      // Cập nhật danh sách posts để reflect thay đổi
       await fetchPosts();
-      return true;
+      return response.data;
     } catch (err) {
-      setError(err.response?.data?.message || 'Có lỗi khi thích bài viết');
-      return false;
+      setError(err.response?.data?.message || 'Có lỗi khi like post');
+      return null;
     } finally {
-      // setLoading(false);
+      setLoading(false);
     }
   };
-  
-  const clearError = () => setError(null);
 
+  // Load posts khi component mount
   useEffect(() => {
     fetchPosts();
-  }, [fetchPosts]);
+  }, []);
 
   return {
     posts,
@@ -128,11 +101,9 @@ const useForumAPI = () => {
     fetchPosts,
     fetchPostById,
     createPost,
-    updatePost, // ADDED
-    deletePost, // ADDED
     addFeedback,
     likePost,
-    clearError,
+    clearError: () => setError(null)
   };
 };
 
