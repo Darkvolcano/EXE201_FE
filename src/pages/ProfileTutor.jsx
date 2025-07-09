@@ -1,5 +1,10 @@
 import React from "react";
-import { UserOutlined, MailOutlined, PhoneOutlined, DollarOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  DollarOutlined,
+} from "@ant-design/icons";
 import { Avatar } from "antd";
 import { useProfileUser } from "../hooks/ProfileApi";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -13,14 +18,54 @@ const TutorProfile = () => {
   const tutorData = {
     fullName: "Prashant",
     schedule: [
-      { studentName: "Prashant Kumar Singh", date: "25/2/2023", subject: "CODING", content: "Understanding Concept of React" },
-      { studentName: "John Doe", date: "26/2/2023", subject: "MATH", content: "Algebra Basics" },
-      { studentName: "Jane Smith", date: "27/2/2023", subject: "CHEMISTRY", content: "Chemical Reactions" },
-      { studentName: "Alice Brown", date: "28/2/2023", subject: "BIOLOGY", content: "Cell Structure" },
-      { studentName: "Bob Wilson", date: "1/3/2023", subject: "LITERATURE", content: "Shakespeare Analysis" },
-      { studentName: "Emma Davis", date: "2/3/2023", subject: "ENGLISH", content: "Grammar Rules" },
-      { studentName: "Emma Davis", date: "2/3/2023", subject: "ENGLISH", content: "Grammar Rules" },
-      { studentName: "Emma Davis", date: "2/3/2023", subject: "ENGLISH", content: "Grammar Rules" }
+      {
+        studentName: "Prashant Kumar Singh",
+        date: "25/2/2023",
+        subject: "CODING",
+        content: "Understanding Concept of React",
+      },
+      {
+        studentName: "John Doe",
+        date: "26/2/2023",
+        subject: "MATH",
+        content: "Algebra Basics",
+      },
+      {
+        studentName: "Jane Smith",
+        date: "27/2/2023",
+        subject: "CHEMISTRY",
+        content: "Chemical Reactions",
+      },
+      {
+        studentName: "Alice Brown",
+        date: "28/2/2023",
+        subject: "BIOLOGY",
+        content: "Cell Structure",
+      },
+      {
+        studentName: "Bob Wilson",
+        date: "1/3/2023",
+        subject: "LITERATURE",
+        content: "Shakespeare Analysis",
+      },
+      {
+        studentName: "Emma Davis",
+        date: "2/3/2023",
+        subject: "ENGLISH",
+        content: "Grammar Rules",
+      },
+      {
+        studentName: "Emma Davis",
+        date: "2/3/2023",
+        subject: "ENGLISH",
+        content: "Grammar Rules",
+      },
+      {
+        studentName: "Emma Davis",
+        date: "2/3/2023",
+        subject: "ENGLISH",
+        content: "Grammar Rules",
+      },
     ],
     support: [
       { name: "Prashant Kumar Singh", role: "IT Support" },
@@ -34,21 +79,23 @@ const TutorProfile = () => {
     },
   };
 
-  if (isLoading) return (
-    <div className="profile-container">
-      <LoadingSpinner />
-    </div>
-  );
-  if (error) return (
-    <div className="profile-container">
-      <ErrorMessage message="Error loading profile" />
-    </div>
-  );
-  
+  if (isLoading)
+    return (
+      <div className="profile-container">
+        <LoadingSpinner />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="profile-container">
+        <ErrorMessage message="Error loading profile" />
+      </div>
+    );
+
   return (
     <div className="tutor-profile-wrapper">
       {/* Sidebar (Menu bên trái) */}
-      <div className="sidebar">
+      <div className="sidebar-profile-tutor">
         <div className="menu-list">
           <div className="menu-item">OVERVIEW</div>
           <div className="menu-item active">Dashboard</div>
@@ -56,9 +103,11 @@ const TutorProfile = () => {
           <div className="menu-item">Lesson</div>
           <div className="menu-item">Schedule</div>
           <div className="menu-item">Group</div>
+          <div className="menu-item">Certificate</div>
         </div>
-                <h2 className="sidebar-title">STUDENTS</h2>
-        <div className="student-list">``````````````````````````
+        <h2 className="sidebar-title">STUDENTS</h2>
+        <div className="student-list">
+          ``````````````````````````
           <div className="student-item">
             <Avatar size={40} src="https://via.placeholder.com/40" />
             <div className="student-info">
@@ -88,7 +137,9 @@ const TutorProfile = () => {
         <div className="welcome-section">
           <h1>TUTOR PAGE {userData?.fullName || tutorData.fullName}</h1>
           <p>
-            Welcome {userData?.fullName || tutorData.fullName}, Empower Students with Your Knowledge. Manage your schedule, track bookings, and grow your tutoring career.
+            Welcome {userData?.fullName || tutorData.fullName}, Empower Students
+            with Your Knowledge. Manage your schedule, track bookings, and grow
+            your tutoring career.
           </p>
           <div className="course-status">
             <span>218 Watched</span>
@@ -99,19 +150,30 @@ const TutorProfile = () => {
         {/* Courses Section */}
         <div className="courses-section">
           <div className="course-card">
-            <img src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png" alt="Course 1" />
-            <h3>Beginner's Guide to Becoming a Professional Frontend Developer</h3>
+            <img
+              src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png"
+              alt="Course 1"
+            />
+            <h3>
+              Beginner's Guide to Becoming a Professional Frontend Developer
+            </h3>
             <span>218 Watched</span>
             <button className="continue-button">Continue Teaching</button>
           </div>
           <div className="course-card">
-            <img src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png" alt="Course 2" />
+            <img
+              src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png"
+              alt="Course 2"
+            />
             <h3>Create Your Course and Rise</h3>
             <span>218 Watched</span>
             <button className="continue-button">Continue Teaching</button>
           </div>
           <div className="course-card">
-            <img src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png" alt="Course 3" />
+            <img
+              src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png"
+              alt="Course 3"
+            />
             <h3>Learn Software Development with Us!</h3>
             <span>218 Watched</span>
             <button className="continue-button">Continue Teaching</button>
@@ -133,7 +195,9 @@ const TutorProfile = () => {
               <div key={index} className="schedule-row">
                 <span>{item.studentName}</span>
                 <span>{item.date}</span>
-                <span className={`subject ${item.subject.toLowerCase()}`}>{item.subject}</span>
+                <span className={`subject ${item.subject.toLowerCase()}`}>
+                  {item.subject}
+                </span>
                 <span>{item.content}</span>
                 <button className="show-details">Show Details</button>
               </div>
@@ -153,11 +217,19 @@ const TutorProfile = () => {
             className="profile-avatar"
           />
           <div className="profile-details">
-            <h3><UserOutlined /> Good Morning {userData?.fullName || "User"}</h3>
+            <h3>
+              <UserOutlined /> Good Morning {userData?.fullName || "User"}
+            </h3>
             <p>Continue Your Journey And Achieve Your Target</p>
-            <p><MailOutlined /> Email: {userData?.email || "N/A"}</p>
-            <p><PhoneOutlined /> Phone: {userData?.phone || "N/A"}</p>
-            <p><DollarOutlined /> Balance: {userData?.balance || 0} VND</p>
+            <p>
+              <MailOutlined /> Email: {userData?.email || "N/A"}
+            </p>
+            <p>
+              <PhoneOutlined /> Phone: {userData?.phone || "N/A"}
+            </p>
+            <p>
+              <DollarOutlined /> Balance: {userData?.balance || 0} VND
+            </p>
           </div>
         </div>
 
@@ -176,7 +248,9 @@ const TutorProfile = () => {
           </div>
           <div className="stat-item">
             <span>Earnings This Month</span>
-            <span className="stat-value">{tutorData.stats.earnings.toLocaleString()} VND</span>
+            <span className="stat-value">
+              {tutorData.stats.earnings.toLocaleString()} VND
+            </span>
             <button className="see-more">See More</button>
           </div>
         </div>

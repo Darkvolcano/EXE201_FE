@@ -29,7 +29,7 @@ export function AuthGuardProvider(props) {
         const currentTime = Math.floor(Date.now() / 1000);
 
         if (decoded.exp < currentTime) {
-          message.warning("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại.");
+          message.warning("Login session has expired. Please login again.");
           logout();
           return;
         }
