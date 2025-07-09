@@ -23,6 +23,7 @@ import Dashboard from "./pages/Dashboard";
 import AdminProfile from "./pages/ProfileAdmin";
 import AIChat from "./pages/AIChat";
 import CoursePlayer from "./pages/CoursePlayer";
+import TutorDetail from "./pages/TutorDetail";
 import Pricing from "./pages/Price";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
@@ -74,6 +75,7 @@ function App() {
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/course-detail" element={<CoursePlayer />} />
             <Route path="/courses/:id" element={<CoursePlayer />} />
+            <Route path="/tutors/:accountId" element={<TutorDetail />} />
             <Route path="/profile" element={<Profile />} />
           </Route>
 
