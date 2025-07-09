@@ -53,6 +53,42 @@ const useForumAPI = () => {
     }
   };
 
+  // Cập nhật post
+  const updatePost = async (postId, postData) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.put(`/forum/${postId}`, postData);
+      
+      // Cập nhật danh sách posts để reflect thay đổi
+      await fetchPosts();
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Có lỗi khi cập nhật post');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Xóa post
+  const deletePost = async (postId) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await axiosInstance.delete(`/forum/${postId}`);
+      
+      // Cập nhật danh sách posts để reflect thay đổi
+      await fetchPosts();
+      return response.data;
+    } catch (err) {
+      setError(err.response?.data?.message || 'Có lỗi khi xóa post');
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Thêm feedback
   const addFeedback = async (postId, feedbackData) => {
     try {
@@ -101,6 +137,8 @@ const useForumAPI = () => {
     fetchPosts,
     fetchPostById,
     createPost,
+    updatePost,
+    deletePost,
     addFeedback,
     likePost,
     clearError: () => setError(null)

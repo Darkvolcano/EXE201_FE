@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Heart, MessageCircle, Filter, ChevronLeft, ChevronRight, Send, User, Clock, Bookmark } from 'lucide-react';
+import { Search, Plus, Heart, MessageCircle, Filter, ChevronLeft, ChevronRight, Send, User, Clock, Bookmark, Edit, Trash2, MoreVertical } from 'lucide-react';
 import useForumAPI from '../hooks/useForumAPI'; // Adjust path as needed
+import useAuthStore from '../hooks/authenStoreApi'; // Import authentication store
 
 const TutorifyForum = () => {
   const { 
@@ -11,23 +11,44 @@ const TutorifyForum = () => {
     fetchPosts, 
     fetchPostById, 
     createPost, 
+    updatePost,
+    deletePost,
     addFeedback, 
     likePost, 
     clearError 
   } = useForumAPI();
 
+  // Authentication store
+  const { user, token } = useAuthStore();
+
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showEditPost, setShowEditPost] = useState(false);
+  const [editingPost, setEditingPost] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('newest');
   const [newPost, setNewPost] = useState({ title: '', content: '' });
+  const [editPost, setEditPost] = useState({ title: '', content: '' });
   const [newFeedback, setNewFeedback] = useState('');
   const [selectedPostDetails, setSelectedPostDetails] = useState(null);
   const [loadingPostDetails, setLoadingPostDetails] = useState(false);
+  const [showPostMenu, setShowPostMenu] = useState(null);
   
   const postsPerPage = 6;
+  
+  // Check if current user is the owner of the post
+  const isPostOwner = (post) => {
+    return user && post.accountId === user.id;
+  };
+
+  // Check if user is authenticated
+  const isAuthenticated = () => {
+    return user && token;
+  };
 
   // Update filtered posts when posts change
   useEffect(() => {
@@ -69,6 +90,11 @@ const TutorifyForum = () => {
   };
 
   const handleCreatePost = async () => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để tạo bài viết');
+      return;
+    }
+
     if (newPost.title && newPost.content) {
       const success = await createPost({
         title: newPost.title,
@@ -82,11 +108,81 @@ const TutorifyForum = () => {
     }
   };
 
+  const handleEditPost = async () => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để chỉnh sửa bài viết');
+      return;
+    }
+
+    if (!isPostOwner(editingPost)) {
+      alert('Bạn chỉ có thể chỉnh sửa bài viết của mình');
+      return;
+    }
+
+    if (editPost.title && editPost.content && editingPost) {
+      const success = await updatePost(editingPost._id, {
+        title: editPost.title,
+        content: editPost.content
+      });
+      
+      if (success) {
+        setEditPost({ title: '', content: '' });
+        setShowEditPost(false);
+        setEditingPost(null);
+        
+        // If we're viewing the post details, refresh them
+        if (selectedPost && selectedPost._id === editingPost._id) {
+          const updatedPost = await fetchPostById(editingPost._id);
+          if (updatedPost) {
+            setSelectedPost(updatedPost);
+            setSelectedPostDetails(updatedPost);
+          }
+        }
+      }
+    }
+  };
+
+  const handleDeletePost = async () => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để xóa bài viết');
+      return;
+    }
+
+    if (!isPostOwner(postToDelete)) {
+      alert('Bạn chỉ có thể xóa bài viết của mình');
+      return;
+    }
+
+    if (postToDelete) {
+      const success = await deletePost(postToDelete._id);
+      
+      if (success) {
+        setShowDeleteConfirm(false);
+        setPostToDelete(null);
+        
+        // If we're viewing the deleted post, close the modal
+        if (selectedPost && selectedPost._id === postToDelete._id) {
+          setSelectedPost(null);
+          setSelectedPostDetails(null);
+        }
+      }
+    }
+  };
+
   const handleLike = async (postId) => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để thích bài viết');
+      return;
+    }
     await likePost(postId);
   };
 
   const handleAddFeedback = async (postId) => {
+    if (!isAuthenticated()) {
+      alert('Vui lòng đăng nhập để phản hồi');
+      return;
+    }
+
     if (newFeedback.trim()) {
       const success = await addFeedback(postId, {
         reply: newFeedback
@@ -122,6 +218,31 @@ const TutorifyForum = () => {
     setSelectedPostDetails(null);
   };
 
+  const handleShowEditModal = (post) => {
+    if (!isPostOwner(post)) {
+      alert('Bạn chỉ có thể chỉnh sửa bài viết của mình');
+      return;
+    }
+    setEditingPost(post);
+    setEditPost({ title: post.title, content: post.content });
+    setShowEditPost(true);
+    setShowPostMenu(null);
+  };
+
+  const handleShowDeleteConfirm = (post) => {
+    if (!isPostOwner(post)) {
+      alert('Bạn chỉ có thể xóa bài viết của mình');
+      return;
+    }
+    setPostToDelete(post);
+    setShowDeleteConfirm(true);
+    setShowPostMenu(null);
+  };
+
+  const handlePostMenuToggle = (postId) => {
+    setShowPostMenu(showPostMenu === postId ? null : postId);
+  };
+
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
@@ -138,6 +259,540 @@ const TutorifyForum = () => {
       return () => clearTimeout(timer);
     }
   }, [error, clearError]);
+
+  // CSS Styles
+  const styles = {
+    container: {
+      maxWidth: '1200px',
+      margin: '0 auto',
+      padding: '20px',
+      fontFamily: 'Arial, sans-serif',
+      backgroundColor: '#f8f9fa',
+      minHeight: '100vh'
+    },
+    errorBanner: {
+      backgroundColor: '#dc3545',
+      color: 'white',
+      padding: '12px 20px',
+      borderRadius: '8px',
+      marginBottom: '20px',
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    errorClose: {
+      background: 'none',
+      border: 'none',
+      color: 'white',
+      fontSize: '20px',
+      cursor: 'pointer'
+    },
+    header: {
+      marginBottom: '30px',
+      backgroundColor: 'white',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    },
+    headerContent: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    title: {
+      fontSize: '28px',
+      fontWeight: 'bold',
+      color: '#333',
+      margin: '0'
+    },
+    subtitle: {
+      display: 'block',
+      fontSize: '14px',
+      color: '#666',
+      fontWeight: 'normal',
+      marginTop: '4px'
+    },
+    createButton: {
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '12px 24px',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      fontSize: '16px',
+      fontWeight: '500',
+      transition: 'background-color 0.3s'
+    },
+    searchContainer: {
+      display: 'flex',
+      gap: '20px',
+      marginBottom: '30px',
+      backgroundColor: 'white',
+      padding: '20px',
+      borderRadius: '12px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    },
+    searchBox: {
+      flex: 1,
+      position: 'relative'
+    },
+    searchIcon: {
+      position: 'absolute',
+      left: '12px',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      color: '#666'
+    },
+    searchInput: {
+      width: '100%',
+      padding: '12px 12px 12px 40px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      fontSize: '16px',
+      outline: 'none'
+    },
+    filterContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px'
+    },
+    filterIcon: {
+      color: '#666'
+    },
+    filterSelect: {
+      padding: '12px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      fontSize: '16px',
+      outline: 'none',
+      backgroundColor: 'white'
+    },
+    loadingContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '12px',
+      padding: '40px',
+      color: '#666'
+    },
+    spinner: {
+      width: '20px',
+      height: '20px',
+      border: '2px solid #f3f3f3',
+      borderTop: '2px solid #007bff',
+      borderRadius: '50%',
+      animation: 'spin 1s linear infinite'
+    },
+    postsGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
+      gap: '20px',
+      marginBottom: '30px'
+    },
+    postCard: {
+      backgroundColor: 'white',
+      borderRadius: '12px',
+      padding: '20px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      transition: 'box-shadow 0.3s'
+    },
+    postHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '15px'
+    },
+    authorInfo: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '12px'
+    },
+    avatar: {
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      backgroundColor: '#007bff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontSize: '14px',
+      fontWeight: 'bold'
+    },
+    authorDetails: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '2px'
+    },
+    authorName: {
+      fontSize: '14px',
+      fontWeight: '600',
+      color: '#333',
+      margin: '0'
+    },
+    postTime: {
+      fontSize: '12px',
+      color: '#666',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '4px'
+    },
+    postActions: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px'
+    },
+    bookmarkBtn: {
+      background: 'none',
+      border: 'none',
+      color: '#666',
+      cursor: 'pointer',
+      padding: '8px',
+      borderRadius: '6px',
+      transition: 'background-color 0.3s'
+    },
+    postMenuContainer: {
+      position: 'relative'
+    },
+    postMenuBtn: {
+      background: 'none',
+      border: 'none',
+      color: '#666',
+      cursor: 'pointer',
+      padding: '8px',
+      borderRadius: '6px',
+      transition: 'background-color 0.3s'
+    },
+    postMenu: {
+      position: 'absolute',
+      top: '100%',
+      right: '0',
+      backgroundColor: 'white',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+      zIndex: 1000,
+      minWidth: '120px',
+      overflow: 'hidden'
+    },
+    postMenuItem: {
+      width: '100%',
+      padding: '12px 16px',
+      border: 'none',
+      background: 'none',
+      textAlign: 'left',
+      cursor: 'pointer',
+      fontSize: '14px',
+      color: '#333',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+      transition: 'background-color 0.3s'
+    },
+    postContent: {
+      marginBottom: '15px'
+    },
+    postTitle: {
+      fontSize: '18px',
+      fontWeight: '600',
+      color: '#333',
+      marginBottom: '8px',
+      lineHeight: '1.4'
+    },
+    postText: {
+      fontSize: '14px',
+      color: '#666',
+      lineHeight: '1.5',
+      margin: '0'
+    },
+    postFooter: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      paddingTop: '15px',
+      borderTop: '1px solid #eee'
+    },
+    postStats: {
+      display: 'flex',
+      gap: '16px'
+    },
+    statButton: {
+      background: 'none',
+      border: 'none',
+      color: '#666',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      fontSize: '14px',
+      padding: '6px 8px',
+      borderRadius: '6px',
+      transition: 'background-color 0.3s'
+    },
+    readMoreBtn: {
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '8px 16px',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500',
+      transition: 'background-color 0.3s'
+    },
+    emptyState: {
+      textAlign: 'center',
+      padding: '60px 20px',
+      color: '#666'
+    },
+    emptyIcon: {
+      marginBottom: '16px',
+      opacity: 0.5
+    },
+    pagination: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '8px',
+      marginTop: '30px'
+    },
+    paginationBtn: {
+      padding: '8px 12px',
+      border: '1px solid #ddd',
+      backgroundColor: 'white',
+      color: '#333',
+      cursor: 'pointer',
+      borderRadius: '6px',
+      transition: 'all 0.3s'
+    },
+    activePage: {
+      backgroundColor: '#007bff',
+      color: 'white',
+      borderColor: '#007bff'
+    },
+    disabled: {
+      opacity: 0.5,
+      cursor: 'not-allowed'
+    },
+    modal: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      borderRadius: '12px',
+      width: '90%',
+      maxWidth: '600px',
+      maxHeight: '80vh',
+      overflow: 'auto',
+      boxShadow: '0 8px 32px rgba(0,0,0,0.3)'
+    },
+    modalHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '20px 24px',
+      borderBottom: '1px solid #eee'
+    },
+    modalTitle: {
+      fontSize: '20px',
+      fontWeight: '600',
+      color: '#333',
+      margin: '0'
+    },
+    closeBtn: {
+      background: 'none',
+      border: 'none',
+      fontSize: '24px',
+      color: '#666',
+      cursor: 'pointer',
+      padding: '4px'
+    },
+    modalBody: {
+      padding: '24px'
+    },
+    modalInput: {
+      width: '100%',
+      padding: '12px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      fontSize: '16px',
+      marginBottom: '16px',
+      outline: 'none'
+    },
+    modalTextarea: {
+      width: '100%',
+      padding: '12px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      fontSize: '16px',
+      resize: 'vertical',
+      outline: 'none'
+    },
+    modalFooter: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      gap: '12px',
+      marginTop: '20px'
+    },
+    cancelBtn: {
+      padding: '10px 20px',
+      border: '1px solid #ddd',
+      backgroundColor: 'white',
+      color: '#666',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      fontSize: '14px'
+    },
+    submitBtn: {
+      padding: '10px 20px',
+      border: 'none',
+      backgroundColor: '#007bff',
+      color: 'white',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500'
+    },
+    deleteBtn: {
+      padding: '10px 20px',
+      border: 'none',
+      backgroundColor: '#dc3545',
+      color: 'white',
+      borderRadius: '6px',
+      cursor: 'pointer',
+      fontSize: '14px',
+      fontWeight: '500'
+    },
+    warningText: {
+      color: '#dc3545',
+      fontSize: '14px',
+      marginTop: '8px'
+    },
+    postDetailHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '20px',
+      paddingBottom: '15px',
+      borderBottom: '1px solid #eee'
+    },
+    postDetailContent: {
+      marginBottom: '30px'
+    },
+    postDetailText: {
+      fontSize: '16px',
+      lineHeight: '1.6',
+      color: '#333'
+    },
+    likeBtn: {
+      background: 'none',
+      border: 'none',
+      color: '#666',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '6px',
+      fontSize: '14px',
+      padding: '6px 12px',
+      borderRadius: '6px',
+      transition: 'background-color 0.3s'
+    },
+    feedbackSection: {
+      borderTop: '1px solid #eee',
+      paddingTop: '20px'
+    },
+    feedbackTitle: {
+      fontSize: '18px',
+      fontWeight: '600',
+      color: '#333',
+      marginBottom: '16px'
+    },
+    feedbackInput: {
+      display: 'flex',
+      gap: '12px',
+      marginBottom: '20px'
+    },
+    feedbackTextInput: {
+      flex: 1,
+      padding: '12px',
+      border: '1px solid #ddd',
+      borderRadius: '8px',
+      fontSize: '14px',
+      outline: 'none'
+    },
+    sendBtn: {
+      backgroundColor: '#007bff',
+      color: 'white',
+      border: 'none',
+      padding: '12px 16px',
+      borderRadius: '8px',
+      cursor: 'pointer',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    feedbackList: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '16px'
+    },
+    feedbackItem: {
+      display: 'flex',
+      gap: '12px',
+      padding: '12px',
+      backgroundColor: '#f8f9fa',
+      borderRadius: '8px'
+    },
+    feedbackAvatar: {
+      width: '32px',
+      height: '32px',
+      borderRadius: '50%',
+      backgroundColor: '#007bff',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: 'white',
+      fontSize: '12px',
+      fontWeight: 'bold',
+      flexShrink: 0
+    },
+    feedbackContent: {
+      flex: 1
+    },
+    feedbackHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '6px'
+    },
+    feedbackAuthor: {
+      fontSize: '14px',
+      fontWeight: '600',
+      color: '#333'
+    },
+    feedbackTime: {
+      fontSize: '12px',
+      color: '#666'
+    },
+    feedbackText: {
+      fontSize: '14px',
+      color: '#333',
+      lineHeight: '1.4',
+      margin: '0'
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -217,9 +872,39 @@ const TutorifyForum = () => {
                   </span>
                 </div>
               </div>
-              <button style={styles.bookmarkBtn}>
-                <Bookmark size={16} />
-              </button>
+              <div style={styles.postActions}>
+                <button style={styles.bookmarkBtn}>
+                  <Bookmark size={16} />
+                </button>
+                {isAuthenticated() && isPostOwner(post) && (
+                  <div style={styles.postMenuContainer}>
+                    <button 
+                      style={styles.postMenuBtn}
+                      onClick={() => handlePostMenuToggle(post._id)}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {showPostMenu === post._id && (
+                      <div style={styles.postMenu}>
+                        <button 
+                          style={styles.postMenuItem}
+                          onClick={() => handleShowEditModal(post)}
+                        >
+                          <Edit size={14} />
+                          Chỉnh sửa
+                        </button>
+                        <button 
+                          style={styles.postMenuItem}
+                          onClick={() => handleShowDeleteConfirm(post)}
+                        >
+                          <Trash2 size={14} />
+                          Xóa
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
             
             <div style={styles.postContent}>
@@ -265,38 +950,38 @@ const TutorifyForum = () => {
         <div style={styles.emptyState}>
           <MessageCircle size={48} style={styles.emptyIcon} />
           <h3>Không có bài viết nào</h3>
-          <p>Hãy tạo bài viết đầu tiên để bắt đầu thảo luận!</p>
+          <p>Hãy tạo bài viết đầu tiên của bạn!</p>
         </div>
       )}
 
       {/* Pagination */}
-      {totalPages > 1 && (
+      {filteredPosts.length > 0 && (
         <div style={styles.pagination}>
           <button 
+            style={{...styles.paginationBtn, ...(currentPage === 1 ? styles.disabled : {})}}
             onClick={() => paginate(currentPage - 1)}
             disabled={currentPage === 1}
-            style={{...styles.paginationBtn, ...(currentPage === 1 ? styles.disabled : {})}}
           >
             <ChevronLeft size={16} />
           </button>
           
-          {Array.from({ length: totalPages }, (_, i) => (
+          {Array.from({ length: totalPages }, (_, index) => (
             <button
-              key={i + 1}
-              onClick={() => paginate(i + 1)}
+              key={index + 1}
               style={{
                 ...styles.paginationBtn,
-                ...(currentPage === i + 1 ? styles.activePage : {})
+                ...(currentPage === index + 1 ? styles.activePage : {})
               }}
+              onClick={() => paginate(index + 1)}
             >
-              {i + 1}
+              {index + 1}
             </button>
           ))}
           
           <button 
+            style={{...styles.paginationBtn, ...(currentPage === totalPages ? styles.disabled : {})}}
             onClick={() => paginate(currentPage + 1)}
             disabled={currentPage === totalPages}
-            style={{...styles.paginationBtn, ...(currentPage === totalPages ? styles.disabled : {})}}
           >
             <ChevronRight size={16} />
           </button>
@@ -328,8 +1013,8 @@ const TutorifyForum = () => {
                 placeholder="Nội dung bài viết..."
                 value={newPost.content}
                 onChange={(e) => setNewPost({...newPost, content: e.target.value})}
-                style={styles.modalTextarea}
                 rows="6"
+                style={styles.modalTextarea}
               />
               <div style={styles.modalFooter}>
                 <button 
@@ -341,9 +1026,94 @@ const TutorifyForum = () => {
                 <button 
                   style={styles.submitBtn}
                   onClick={handleCreatePost}
-                  disabled={!newPost.title || !newPost.content || loading}
+                  disabled={!newPost.title || !newPost.content}
                 >
-                  {loading ? 'Đang đăng...' : 'Đăng bài'}
+                  Tạo bài viết
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Post Modal */}
+      {showEditPost && (
+        <div style={styles.modal}>
+          <div style={styles.modalContent}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>Chỉnh sửa bài viết</h2>
+              <button 
+                style={styles.closeBtn}
+                onClick={() => setShowEditPost(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div style={styles.modalBody}>
+              <input
+                type="text"
+                placeholder="Tiêu đề bài viết..."
+                value={editPost.title}
+                onChange={(e) => setEditPost({...editPost, title: e.target.value})}
+                style={styles.modalInput}
+              />
+              <textarea
+                placeholder="Nội dung bài viết..."
+                value={editPost.content}
+                onChange={(e) => setEditPost({...editPost, content: e.target.value})}
+                rows="6"
+                style={styles.modalTextarea}
+              />
+              <div style={styles.modalFooter}>
+                <button 
+                  style={styles.cancelBtn}
+                  onClick={() => setShowEditPost(false)}
+                >
+                  Hủy
+                </button>
+                <button 
+                  style={styles.submitBtn}
+                  onClick={handleEditPost}
+                  disabled={!editPost.title || !editPost.content}
+                >
+                  Cập nhật
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div style={styles.modal}>
+          <div style={styles.modalContent}>
+            <div style={styles.modalHeader}>
+              <h2 style={styles.modalTitle}>Xác nhận xóa</h2>
+              <button 
+                style={styles.closeBtn}
+                onClick={() => setShowDeleteConfirm(false)}
+              >
+                ×
+              </button>
+            </div>
+            <div style={styles.modalBody}>
+              <p>Bạn có chắc chắn muốn xóa bài viết này?</p>
+              <p style={styles.warningText}>
+                Hành động này không thể hoàn tác!
+              </p>
+              <div style={styles.modalFooter}>
+                <button 
+                  style={styles.cancelBtn}
+                  onClick={() => setShowDeleteConfirm(false)}
+                >
+                  Hủy
+                </button>
+                <button 
+                  style={styles.deleteBtn}
+                  onClick={handleDeletePost}
+                >
+                  Xóa bài viết
                 </button>
               </div>
             </div>
@@ -356,7 +1126,7 @@ const TutorifyForum = () => {
         <div style={styles.modal}>
           <div style={styles.modalContent}>
             <div style={styles.modalHeader}>
-              <h2 style={styles.modalTitle}>{selectedPost.title}</h2>
+              <h2 style={styles.modalTitle}>Chi tiết bài viết</h2>
               <button 
                 style={styles.closeBtn}
                 onClick={handleClosePostDetail}
@@ -368,64 +1138,76 @@ const TutorifyForum = () => {
               {loadingPostDetails ? (
                 <div style={styles.loadingContainer}>
                   <div style={styles.spinner}></div>
-                  <span>Đang tải chi tiết...</span>
+                  <span>Đang tải...</span>
                 </div>
-              ) : (
+              ) : selectedPostDetails ? (
                 <>
                   <div style={styles.postDetailHeader}>
                     <div style={styles.authorInfo}>
                       <div style={styles.avatar}>
-                        {getInitials(selectedPost.fullName)}
+                        {getInitials(selectedPostDetails.fullName)}
                       </div>
                       <div style={styles.authorDetails}>
-                        <h4 style={styles.authorName}>{selectedPost.fullName}</h4>
+                        <h4 style={styles.authorName}>{selectedPostDetails.fullName}</h4>
                         <span style={styles.postTime}>
                           <Clock size={14} />
-                          {formatTime(selectedPost.createdAt)}
+                          {formatTime(selectedPostDetails.createdAt)}
                         </span>
                       </div>
                     </div>
-                    <div style={styles.postActions}>
-                      <button 
-                        style={styles.likeBtn}
-                        onClick={() => handleLike(selectedPost._id)}
-                        disabled={loading}
-                      >
-                        <Heart size={16} />
-                        {selectedPostDetails ? selectedPostDetails.numberOfLikes : selectedPost.numberOfLikes}
-                      </button>
-                    </div>
+                    <button 
+                      style={styles.likeBtn}
+                      onClick={() => handleLike(selectedPostDetails._id)}
+                      disabled={loading}
+                    >
+                      <Heart size={16} />
+                      <span>{selectedPostDetails.numberOfLikes}</span>
+                    </button>
                   </div>
-                  
+
                   <div style={styles.postDetailContent}>
-                    <p style={styles.postDetailText}>{selectedPost.content}</p>
+                    <h3 style={styles.postTitle}>{selectedPostDetails.title}</h3>
+                    <div style={styles.postDetailText}>
+                      {selectedPostDetails.content.split('\n').map((paragraph, index) => (
+                        <p key={index} style={{marginBottom: '12px'}}>
+                          {paragraph}
+                        </p>
+                      ))}
+                    </div>
                   </div>
 
                   <div style={styles.feedbackSection}>
-                    <h3 style={styles.feedbackTitle}>
-                      Phản hồi ({selectedPostDetails ? selectedPostDetails.feedback.length : selectedPost.feedback?.length || 0})
-                    </h3>
+                    <h4 style={styles.feedbackTitle}>
+                      Phản hồi ({selectedPostDetails.feedback ? selectedPostDetails.feedback.length : 0})
+                    </h4>
                     
-                    <div style={styles.feedbackInput}>
-                      <input
-                        type="text"
-                        placeholder="Thêm phản hồi..."
-                        value={newFeedback}
-                        onChange={(e) => setNewFeedback(e.target.value)}
-                        style={styles.feedbackTextInput}
-                      />
-                      <button 
-                        style={styles.sendBtn}
-                        onClick={() => handleAddFeedback(selectedPost._id)}
-                        disabled={loading || !newFeedback.trim()}
-                      >
-                        <Send size={16} />
-                      </button>
-                    </div>
+                    {isAuthenticated() && (
+                      <div style={styles.feedbackInput}>
+                        <input
+                          type="text"
+                          placeholder="Viết phản hồi..."
+                          value={newFeedback}
+                          onChange={(e) => setNewFeedback(e.target.value)}
+                          style={styles.feedbackTextInput}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              handleAddFeedback(selectedPostDetails._id);
+                            }
+                          }}
+                        />
+                        <button 
+                          style={styles.sendBtn}
+                          onClick={() => handleAddFeedback(selectedPostDetails._id)}
+                          disabled={!newFeedback.trim() || loading}
+                        >
+                          <Send size={16} />
+                        </button>
+                      </div>
+                    )}
 
                     <div style={styles.feedbackList}>
-                      {(selectedPostDetails ? selectedPostDetails.feedback : selectedPost.feedback || []).map(feedback => (
-                        <div key={feedback._id} style={styles.feedbackItem}>
+                      {selectedPostDetails.feedback && selectedPostDetails.feedback.map((feedback, index) => (
+                        <div key={index} style={styles.feedbackItem}>
                           <div style={styles.feedbackAvatar}>
                             {getInitials(feedback.fullName)}
                           </div>
@@ -443,542 +1225,102 @@ const TutorifyForum = () => {
                     </div>
                   </div>
                 </>
+              ) : (
+                <div style={styles.emptyState}>
+                  <p>Không thể tải chi tiết bài viết</p>
+                </div>
               )}
             </div>
           </div>
         </div>
       )}
+
+      {/* CSS Animation */}
+      <style jsx>{`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        .post-card:hover {
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .create-button:hover {
+          background-color: #0056b3;
+        }
+        
+        .read-more-btn:hover {
+          background-color: #0056b3;
+        }
+        
+        .stat-button:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .bookmark-btn:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .post-menu-btn:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .post-menu-item:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .pagination-btn:hover:not(.disabled) {
+          background-color: #f8f9fa;
+        }
+        
+        .like-btn:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .send-btn:hover {
+          background-color: #0056b3;
+        }
+        
+        .submit-btn:hover {
+          background-color: #0056b3;
+        }
+        
+        .delete-btn:hover {
+          background-color: #c82333;
+        }
+        
+        .cancel-btn:hover {
+          background-color: #f8f9fa;
+        }
+        
+        .search-input:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .filter-select:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .modal-input:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .modal-textarea:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+        
+        .feedback-text-input:focus {
+          border-color: #007bff;
+          box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+        }
+      `}</style>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    minHeight: '100vh',
-    background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif"
-  },
-  header: {
-    background: 'linear-gradient(135deg, rgb(0,119,255) 0%, rgba(0,119,255,0.8) 100%)',
-    color: 'white',
-    padding: '2rem 0',
-    boxShadow: '0 4px 20px rgba(0,119,255,0.3)'
-  },
-  headerContent: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 2rem',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  title: {
-    fontSize: '2.5rem',
-    fontWeight: '700',
-    margin: '0',
-    textShadow: '2px 2px 4px rgba(0,0,0,0.1)'
-  },
-  subtitle: {
-    display: 'block',
-    fontSize: '1rem',
-    fontWeight: '300',
-    opacity: '0.9',
-    marginTop: '0.5rem'
-  },
-  createButton: {
-    background: 'white',
-    color: 'rgb(0,119,255)',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '25px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    boxShadow: '0 4px 15px rgba(255,255,255,0.3)',
-    ':hover': {
-      transform: 'translateY(-2px)',
-      boxShadow: '0 6px 20px rgba(255,255,255,0.4)'
-    }
-  },
-  searchContainer: {
-    maxWidth: '1200px',
-    margin: '2rem auto',
-    padding: '0 2rem',
-    display: 'flex',
-    gap: '1rem',
-    alignItems: 'center'
-  },
-  searchBox: {
-    flex: 1,
-    position: 'relative'
-  },
-  searchIcon: {
-    position: 'absolute',
-    left: '1rem',
-    top: '50%',
-    transform: 'translateY(-50%)',
-    color: '#666'
-  },
-  searchInput: {
-    width: '100%',
-    padding: '0.75rem 1rem 0.75rem 3rem',
-    border: '2px solid #e0e0e0',
-    borderRadius: '25px',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    background: 'white',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    ':focus': {
-      outline: 'none',
-      borderColor: 'rgb(0,119,255)',
-      boxShadow: '0 4px 20px rgba(0,119,255,0.2)'
-    }
-  },
-  filterContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    background: 'white',
-    padding: '0.75rem 1rem',
-    borderRadius: '25px',
-    border: '2px solid #e0e0e0',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-  },
-  filterIcon: {
-    color: '#666'
-  },
-  filterSelect: {
-    border: 'none',
-    background: 'transparent',
-    fontSize: '1rem',
-    cursor: 'pointer',
-    outline: 'none',
-    color: '#333'
-  },
-  postsGrid: {
-    maxWidth: '1200px',
-    margin: '0 auto',
-    padding: '0 2rem',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(380px, 1fr))',
-    gap: '2rem'
-  },
-  postCard: {
-    background: 'white',
-    borderRadius: '20px',
-    padding: '1.5rem',
-    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-    transition: 'all 0.3s ease',
-    border: '1px solid #f0f0f0',
-    cursor: 'pointer',
-    ':hover': {
-      transform: 'translateY(-5px)',
-      boxShadow: '0 8px 30px rgba(0,119,255,0.2)'
-    }
-  },
-  postHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '1rem'
-  },
-  authorInfo: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.75rem'
-  },
-  avatar: {
-    width: '50px',
-    height: '50px',
-    borderRadius: '50%',
-    background: 'linear-gradient(135deg, rgb(0,119,255), rgba(0,119,255,0.7))',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'white',
-    fontWeight: '600',
-    fontSize: '1.1rem'
-  },
-  authorDetails: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.25rem'
-  },
-  authorName: {
-    margin: '0',
-    fontSize: '1rem',
-    fontWeight: '600',
-    color: '#333'
-  },
-  postTime: {
-    fontSize: '0.8rem',
-    color: '#666',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.3rem'
-  },
-  bookmarkBtn: {
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    color: '#666',
-    padding: '0.5rem',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: '#f0f0f0',
-      color: 'rgb(0,119,255)'
-    }
-  },
-  postContent: {
-    marginBottom: '1.5rem'
-  },
-  postTitle: {
-    fontSize: '1.2rem',
-    fontWeight: '600',
-    color: '#333',
-    margin: '0 0 0.75rem 0',
-    lineHeight: '1.4'
-  },
-  postText: {
-    fontSize: '0.95rem',
-    color: '#666',
-    lineHeight: '1.6',
-    margin: '0'
-  },
-  postFooter: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingTop: '1rem',
-    borderTop: '1px solid #f0f0f0'
-  },
-  postStats: {
-    display: 'flex',
-    gap: '1rem'
-  },
-  statButton: {
-    background: 'none',
-    border: 'none',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    color: '#666',
-    fontSize: '0.9rem',
-    padding: '0.5rem',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: '#f0f0f0',
-      color: 'rgb(0,119,255)'
-    }
-  },
-  readMoreBtn: {
-    background: 'rgb(0,119,255)',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '15px',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    fontWeight: '500',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: 'rgba(0,119,255,0.8)',
-      transform: 'scale(1.05)'
-    }
-  },
-  pagination: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: '0.5rem',
-    margin: '3rem 0 2rem 0'
-  },
-  paginationBtn: {
-    background: 'white',
-    border: '2px solid #e0e0e0',
-    padding: '0.5rem 0.75rem',
-    borderRadius: '8px',
-    cursor: 'pointer',
-    transition: 'all 0.3s ease',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: '40px',
-    height: '40px',
-    ':hover': {
-      borderColor: 'rgb(0,119,255)',
-      color: 'rgb(0,119,255)'
-    }
-  },
-  activePage: {
-    background: 'rgb(0,119,255)',
-    color: 'white',
-    borderColor: 'rgb(0,119,255)'
-  },
-  disabled: {
-    opacity: '0.5',
-    cursor: 'not-allowed'
-  },
-  modal: {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    right: '0',
-    bottom: '0',
-    background: 'rgba(0,0,0,0.5)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 1000,
-    padding: '2rem'
-  },
-  modalContent: {
-    background: 'white',
-    borderRadius: '20px',
-    width: '100%',
-    maxWidth: '800px',
-    maxHeight: '90vh',
-    overflow: 'auto',
-    boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
-  },
-  modalHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '1.5rem 2rem',
-    borderBottom: '1px solid #f0f0f0'
-  },
-  modalTitle: {
-    fontSize: '1.5rem',
-    fontWeight: '600',
-    color: '#333',
-    margin: '0'
-  },
-  closeBtn: {
-    background: 'none',
-    border: 'none',
-    fontSize: '2rem',
-    cursor: 'pointer',
-    color: '#666',
-    padding: '0',
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: '#f0f0f0'
-    }
-  },
-  modalBody: {
-    padding: '2rem'
-  },
-  modalInput: {
-    width: '100%',
-    padding: '0.75rem',
-    border: '2px solid #e0e0e0',
-    borderRadius: '10px',
-    fontSize: '1rem',
-    marginBottom: '1rem',
-    boxSizing: 'border-box',
-    transition: 'all 0.3s ease',
-    ':focus': {
-      outline: 'none',
-      borderColor: 'rgb(0,119,255)'
-    }
-  },
-  modalTextarea: {
-    width: '100%',
-    padding: '0.75rem',
-    border: '2px solid #e0e0e0',
-    borderRadius: '10px',
-    fontSize: '1rem',
-    resize: 'vertical',
-    boxSizing: 'border-box',
-    transition: 'all 0.3s ease',
-    ':focus': {
-      outline: 'none',
-      borderColor: 'rgb(0,119,255)'
-    }
-  },
-  modalFooter: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    gap: '1rem',
-    marginTop: '1.5rem'
-  },
-  cancelBtn: {
-    background: '#f0f0f0',
-    color: '#666',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: '#e0e0e0'
-    }
-  },
-  submitBtn: {
-    background: 'rgb(0,119,255)',
-    color: 'white',
-    border: 'none',
-    padding: '0.75rem 1.5rem',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      background: 'rgba(0,119,255,0.8)'
-    },
-    ':disabled': {
-      opacity: '0.5',
-      cursor: 'not-allowed'
-    }
-  },
-  postDetailHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '1.5rem'
-  },
-  postActions: {
-    display: 'flex',
-    gap: '1rem'
-  },
-  likeBtn: {
-    background: 'none',
-    border: '2px solid #e0e0e0',
-    padding: '0.5rem 1rem',
-    borderRadius: '15px',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '0.5rem',
-    color: '#666',
-    fontSize: '0.9rem',
-    transition: 'all 0.3s ease',
-    ':hover': {
-      borderColor: 'rgb(0,119,255)',
-      color: 'rgb(0,119,255)',
-      background: 'rgba(0,119,255,0.1)'
-    }
-  },
-  postDetailContent: {
-    marginBottom: '2rem'
-  },
-  postDetailText: {
-    fontSize: '1.1rem',
-    lineHeight: '1.7',
-    color: '#333',
-    margin: '0'
-  },
-  feedbackSection: {
-    borderTop: '1px solid #f0f0f0',
-    paddingTop: '1.5rem'
-  },
-  feedbackTitle: {
-    fontSize: '1.2rem',
-    fontWeight: '600',
-    color: '#333',
-    margin: '0 0 1rem 0'
-  },
-  feedbackInput: {
-    display: 'flex',
-    gap: '0.75rem',
-    marginBottom: '1.5rem',
-    alignItems: 'center'
-  },
-  feedbackTextInput: {
-    flex: 1,
-    padding: '0.75rem',
-    border: '2px solid #e0e0e0',
-    borderRadius: '25px',
-    fontSize: '1rem',
-    transition: 'all 0.3s ease',
-    ':focus': {
-      outline: 'none',
-      borderColor: 'rgb(0,119,255)'
-    }
-  },
-  sendBtn: {
-    background: 'rgb(0,119,255)',
-    color: 'white',
-    border: 'none',
-    padding: '0.75rem',
-    borderRadius: '50%',
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    transition: 'all 0.3s ease',
-    width: '45px',
-    height: '45px',
-    ':hover': {
-      background: 'rgba(0,119,255,0.8)',
-      transform: 'scale(1.05)'
-    }
-  },
-  feedbackList: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem'
-  },
-  feedbackItem: {
-    display: 'flex',
-    gap: '0.75rem',
-    padding: '1rem',
-    background: '#f9f9f9',
-    borderRadius: '15px',
-    border: '1px solid #f0f0f0'
-  },
-  feedbackAvatar: {
-    width: '40px',
-    height: '40px',
-    borderRadius: '50%',
-    background: 'linear-gradient(135deg, rgb(0,119,255), rgba(0,119,255,0.7))',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'white',
-    fontWeight: '600',
-    fontSize: '0.9rem',
-    flexShrink: 0
-  },
-  feedbackContent: {
-    flex: 1
-  },
-  feedbackHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '0.5rem'
-  },
-  feedbackAuthor: {
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    color: '#333'
-  },
-  feedbackTime: {
-    fontSize: '0.8rem',
-    color: '#666'
-  },
-  feedbackText: {
-    fontSize: '0.95rem',
-    color: '#555',
-    lineHeight: '1.5',
-    margin: '0'
-  }
 };
 
 export default TutorifyForum;
