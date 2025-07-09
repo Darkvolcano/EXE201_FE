@@ -15,22 +15,34 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { useEffect, useState } from "react";
 import { NavItem } from "./NavItemAdmin";
 import useAuthStore from "../hooks/authenStoreApi";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { message } from "antd";
 
 export default function Sidebar({ title = "Tutorify" }) {
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
   const navigate = useNavigate();
-  const mainNavItems = [
-    { icon: <Home size={18} />, label: "Dashboard", active: true },
+  const location = useLocation();
+
+  const [mainNavItems, setMainNavItems] = useState([
+    {
+      icon: <Home size={18} />,
+      label: "Dashboard",
+      active: true,
+      path: "/dashboard",
+      onClick: () => {
+        navigate("/dashboard");
+      },
+    },
     {
       icon: <Layers size={18} />,
       label: "Certificate",
       onClick: () => {
         navigate("/certificate");
       },
+      path: "/certificate",
     },
     {
       icon: <NotebookText size={18} />,
@@ -38,19 +50,26 @@ export default function Sidebar({ title = "Tutorify" }) {
       onClick: () => {
         navigate("/course-management");
       },
+      path: "/course-management",
     },
-  ];
+  ]);
 
-  const pagesNavItems = [
-    { icon: <FileText size={18} />, label: "Pricing" },
-    { icon: <Calendar size={18} />, label: "Calendar" },
-    { icon: <Phone size={18} />, label: "Contact" },
-    { icon: <File size={18} />, label: "Invoice" },
-    { icon: <Users size={18} />, label: "Team" },
-  ];
+  // const pagesNavItems = [
+  //   { icon: <FileText size={18} />, label: "Pricing" },
+  //   { icon: <Calendar size={18} />, label: "Calendar" },
+  //   { icon: <Phone size={18} />, label: "Contact" },
+  //   { icon: <File size={18} />, label: "Invoice" },
+  //   { icon: <Users size={18} />, label: "Team" },
+  // ];
 
   const settingsLogoutItems = [
-    { icon: <Settings size={18} />, label: "Settings" },
+    {
+      icon: <Settings size={18} />,
+      label: "Settings",
+      onClick: () => {
+        navigate("/profile-admin");
+      },
+    },
     {
       icon: <LogOut size={18} />,
       label: "Logout",
@@ -62,9 +81,28 @@ export default function Sidebar({ title = "Tutorify" }) {
     },
   ];
 
+  useEffect(() => {
+    setMainNavItems((prevItems) =>
+      prevItems.map((item) => ({
+        ...item,
+        active: item.path === location.pathname,
+      }))
+    );
+
+    if (!user) {
+      setMainNavItems((prevItems) =>
+        prevItems.map((item) =>
+          item.label === "Dashboard"
+            ? { ...item, active: true }
+            : { ...item, active: false }
+        )
+      );
+    }
+  }, [location.pathname, user]);
+
   return (
     <div style={{ display: "flex" }}>
-      <div className="sidebar">
+      <div className="sidebar-admin">
         <div className="sidebar-header">
           <h1 className="sidebar-title">{title}</h1>
         </div>
@@ -82,14 +120,14 @@ export default function Sidebar({ title = "Tutorify" }) {
             ))}
           </div>
 
-          <div className="pages-nav-section">
+          {/* <div className="pages-nav-section">
             <div className="sidebar-nav-section">
               <p className="sidebar-nav-section-title">Pages</p>
             </div>
             {pagesNavItems.map((item, index) => (
               <NavItem key={index} icon={item.icon} label={item.label} />
             ))}
-          </div>
+          </div> */}
 
           <div className="settings-logout-section">
             {settingsLogoutItems.map((item, index) => (

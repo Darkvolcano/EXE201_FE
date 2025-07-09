@@ -7,7 +7,7 @@
   padding: 20px;
 }
 
-.sidebar {
+.sidebar-profile-tutor {
   background: #ffffff;
   padding: 20px;
   display: grid;
@@ -212,12 +212,24 @@
   align-items: center;
 }
 
-.subject.coding { background-color: #4CAF50; }
-.subject.math { background-color: #2196F3; }
-.subject.chemistry { background-color: #9C27B0; }
-.subject.biology { background-color: #FF9800; }
-.subject.literature { background-color: #E91E63; }
-.subject.english { background-color: #607D8B; }
+.subject.coding {
+  background-color: #4caf50;
+}
+.subject.math {
+  background-color: #2196f3;
+}
+.subject.chemistry {
+  background-color: #9c27b0;
+}
+.subject.biology {
+  background-color: #ff9800;
+}
+.subject.literature {
+  background-color: #e91e63;
+}
+.subject.english {
+  background-color: #607d8b;
+}
 
 .show-details {
   background-color: #1a73e8;

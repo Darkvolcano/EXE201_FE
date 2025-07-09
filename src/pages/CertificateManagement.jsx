@@ -19,6 +19,8 @@ import {
   useUpdateIsChecked,
   useUpdateIsCanTeach,
 } from "../hooks/tutorsApi";
+import CheckmarkIcon from "../components/CheckmarkIcon";
+import CrossIcon from "../components/CrossIcon";
 
 const CertificateManagement = () => {
   const { data, isLoading, error, refetch } = useGetAllTutors();
@@ -115,21 +117,13 @@ const CertificateManagement = () => {
       title: "Checked",
       dataIndex: "isChecked",
       key: "isChecked",
-      render: (isChecked) => (
-        <Tag color={isChecked ? "success" : "error"}>
-          {isChecked ? "Yes" : "No"}
-        </Tag>
-      ),
+      render: (isChecked) => (isChecked ? <CheckmarkIcon /> : <CrossIcon />),
     },
     {
       title: "Teach",
       dataIndex: "isCanTeach",
       key: "isCanTeach",
-      render: (isCanTeach) => (
-        <Tag color={isCanTeach ? "success" : "error"}>
-          {isCanTeach ? "Yes" : "No"}
-        </Tag>
-      ),
+      render: (isCanTeach) => (isCanTeach ? <CheckmarkIcon /> : <CrossIcon />),
     },
     {
       title: "Image",
@@ -142,6 +136,8 @@ const CertificateManagement = () => {
     {
       title: "Action",
       key: "action",
+      width: 120,
+      align: "center",
       render: (_, record) => (
         <>
           <Tooltip title="View Details">
@@ -151,8 +147,11 @@ const CertificateManagement = () => {
                 setSelectedCertificate(record);
                 setIsModalVisible(true);
               }}
-              size="small"
-              style={{ marginRight: 8 }}
+              style={{
+                marginRight: 8,
+                borderColor: "transparent",
+                outline: "none",
+              }}
             />
           </Tooltip>
           {!record.isChecked && (
@@ -179,8 +178,11 @@ const CertificateManagement = () => {
               <Tooltip title="Update isChecked">
                 <Button
                   icon={<CheckOutlined />}
-                  size="small"
-                  style={{ marginRight: 8 }}
+                  style={{
+                    marginRight: 8,
+                    borderColor: "transparent",
+                    outline: "none",
+                  }}
                 />
               </Tooltip>
             </Popconfirm>
@@ -207,7 +209,10 @@ const CertificateManagement = () => {
               cancelText="No"
             >
               <Tooltip title="Update isCanTeach">
-                <Button icon={<CheckOutlined />} size="small" />
+                <Button
+                  icon={<CheckOutlined />}
+                  style={{ borderColor: "transparent", outline: "none" }}
+                />
               </Tooltip>
             </Popconfirm>
           )}
