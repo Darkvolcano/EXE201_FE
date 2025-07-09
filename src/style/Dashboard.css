@@ -4,11 +4,13 @@
   height: 100vh;
   background-color: #f9fafb;
   color: #1f2937;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif;
 }
 
 /* Loading and Error States */
-.loading-container, .error-container {
+.loading-container,
+.error-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +21,7 @@
 }
 
 .retry-button {
-  background-color: #4F46E5;
+  background-color: #4f46e5;
   color: white;
   border: none;
   border-radius: 6px;
@@ -34,11 +36,11 @@
 }
 
 /* Sidebar Styles */
-.sidebar {
+.sidebar-admin {
   width: 250px;
   background-color: #fff;
   border-right: 1px solid #e5e7eb;
-  height: 100vh;
+  /* height: 100vh; */
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -53,14 +55,14 @@
 .sidebar-title {
   font-size: 22px;
   font-weight: 700;
-  color: #4F46E5;
+  color: #4f46e5;
   margin: 0;
 }
 
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  padding: 16px 0;
+  /* padding: 16px 0; */
   flex-grow: 1;
 }
 
@@ -76,7 +78,8 @@
   margin: 0;
 }
 
-.main-nav-section, .pages-nav-section {
+.main-nav-section,
+.pages-nav-section {
   margin-bottom: 16px;
 }
 
@@ -97,12 +100,12 @@
 
 .nav-item:hover {
   background-color: #f1f5f9;
-  color: #4F46E5;
+  color: #4f46e5;
 }
 
 .nav-item.active {
   background-color: #eff6ff;
-  color: #4F46E5;
+  color: #4f46e5;
   font-weight: 500;
 }
 
@@ -114,7 +117,7 @@
 }
 
 .nav-item-icon.active {
-  color: #4F46E5;
+  color: #4f46e5;
 }
 
 /* Main Content Styles - FIXED */
@@ -370,7 +373,7 @@
 }
 
 .year-select:focus {
-  border-color: #4F46E5;
+  border-color: #4f46e5;
 }
 
 .chart-container {
@@ -390,11 +393,11 @@
   .detailed-stats-container {
     grid-template-columns: 1fr;
   }
-  
+
   .summary-cards {
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-  
+
   .revenue-header {
     flex-direction: column;
     align-items: flex-start;
@@ -402,26 +405,26 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar {
+  .sidebar-admin {
     width: 200px;
   }
-  
+
   .header {
     padding: 12px 16px;
   }
-  
+
   .dashboard-main {
     padding: 16px;
   }
-  
+
   .search-container {
     width: 200px;
   }
-  
+
   .header-actions {
     gap: 12px;
   }
-  
+
   .summary-cards {
     grid-template-columns: 1fr;
   }
@@ -611,7 +614,7 @@
 }
 
 .view-profile-btn {
-  background-color: #4F46E5;
+  background-color: #4f46e5;
   color: white;
   border: none;
   border-radius: 6px;
