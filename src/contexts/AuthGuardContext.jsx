@@ -112,6 +112,7 @@ export function AuthGuardProvider(props) {
         "/certificate",
         "/course-management",
         "/view-tutor",
+        "/account-management",
       ],
     };
 

@@ -36,6 +36,7 @@ import CourseManagement from "./pages/CourseManagement";
 import Forum from "./pages/Forum";
 import TutorCertifications from "./pages/TutorCertification";
 import TutorOrder from "./pages/TutorOrderDetail";
+import AccountManagement from "./pages/AccountManagement";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -92,12 +93,12 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/view-tutor" element={<AdminTutorsPage />} />
             <Route path="/profile-admin" element={<AdminProfile />} />
-            
           </Route>
 
           <Route element={<LayoutWithSidebarAdmin />}>
             <Route path="/certificate" element={<CertificateManagement />} />
             <Route path="/course-management" element={<CourseManagement />} />
+            <Route path="/account-management" element={<AccountManagement />} />
           </Route>
         </Routes>
       </AuthGuardProvider>
