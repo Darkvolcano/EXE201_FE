@@ -75,7 +75,7 @@ function App() {
               />
               <Route path="tutor-orders" element={<TutorOrder />} />
             </Route>
-            <Route path="/ai-chat" element={<AIChat />} />
+            {/* <Route path="/ai-chat" element={<AIChat />} /> */}
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/course-detail" element={<CoursePlayer />} />
             <Route path="/courses/:id" element={<CoursePlayer />} />

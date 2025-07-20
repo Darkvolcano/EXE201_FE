@@ -59,9 +59,9 @@ const Navbar = () => {
         <Menu.Item key="about" className="navbar-menu-item">
           <Link to="/about">About</Link>
         </Menu.Item>
-        <Menu.Item key="ai-chat" className="navbar-menu-item">
+        {/* <Menu.Item key="ai-chat" className="navbar-menu-item">
           <Link to="/ai-chat">AI Chat</Link>
-        </Menu.Item>
+        </Menu.Item> */}
         <Menu.Item key="forum" className="navbar-menu-item">
           <Link to="/forum">Forum</Link>
         </Menu.Item>
