@@ -20,6 +20,7 @@ import { NavItem } from "./NavItemAdmin";
 import useAuthStore from "../hooks/authenStoreApi";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { message } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 export default function Sidebar({ title = "Tutorify" }) {
   const { logout, user } = useAuthStore();
@@ -51,6 +52,14 @@ export default function Sidebar({ title = "Tutorify" }) {
         navigate("/course-management");
       },
       path: "/course-management",
+    },
+    {
+      icon: <UserOutlined size={18} />,
+      label: "Account",
+      onClick: () => {
+        navigate("/account-management");
+      },
+      path: "/account-management",
     },
   ]);
 
