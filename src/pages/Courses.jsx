@@ -10,6 +10,9 @@ import {
   message,
   Form,
   Rate,
+  Row,
+  Col,
+  Pagination,
 } from "antd";
 import "../style/Courses.css";
 import SearchIconWhite from "../components/SearchIconWhite";
@@ -30,6 +33,8 @@ const Courses = () => {
 
   // Lấy danh sách course từ API
   const courses = data?.data?.courses?.map((item) => item.course) || [];
+  const [currentPage, setCurrentPage] = useState(1);
+  const coursesPerPage = 12;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -59,6 +64,16 @@ const Courses = () => {
         );
       },
     });
+  };
+
+  // Calculate pagination
+  const indexOfLastCourse = currentPage * coursesPerPage;
+  const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+  const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
+  const totalPages = Math.ceil(courses.length / coursesPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -108,80 +123,68 @@ const Courses = () => {
       </div>
 
       <div className="course-content">
-        <div className="filter-sidebar">
-          <h3 className="filter-title">Subject</h3>
-          <Checkbox>English</Checkbox>
-          <Checkbox>Coding</Checkbox>
-          <Checkbox>Math</Checkbox>
-
-          <h3 className="filter-title">Categories</h3>
-          <Checkbox>Beginner</Checkbox>
-          <Checkbox>Intermediate</Checkbox>
-          <Checkbox>Advanced</Checkbox>
-          <Checkbox>Expert</Checkbox>
-
-          <h3 className="filter-title">Order By</h3>
-          <Radio.Group>
-            <Radio value="popularity">Popularity</Radio>
-            <Radio value="ratings">Ratings</Radio>
-            <Radio value="newest">Newest</Radio>
-          </Radio.Group>
-
-          <Button type="primary" className="filter-button">
-            Filter
-          </Button>
-        </div>
-
         <div className="course-list-container">
-          <div className="course-grid">
+          <Row gutter={[16, 16]}>
             {isLoadingCourses && <div>Loading...</div>}
             {isError && <div>Failed to load courses.</div>}
-            {!isLoadingCourses && !isError && courses.length === 0 && (
+            {!isLoadingCourses && !isError && currentCourses.length === 0 && (
               <div>No courses found.</div>
             )}
             {!isLoadingCourses &&
               !isError &&
-              courses.map((course) => (
-                <div
-                  className="course-card"
-                  key={course._id}
-                  onClick={() => navigate(`/courses/${course._id}`)}
-                  style={{ cursor: "pointer" }}
-                >
+              currentCourses.map((course) => (
+                <Col span={6} key={course._id} style={{ padding: "0 16px" }}>
                   <div
-                    className="course-image"
-                    style={{
-                      backgroundImage: `url(${
-                        course.image ||
-                        "https://via.placeholder.com/300x200?text=Course"
-                      })`,
-                    }}
-                  ></div>
-                  <h3 className="course-name">{course.name}</h3>
-                  <div className="course-category">Beginner</div>
-                  <div className="course-duration">
-                    <span className="course-meta-icon">🕒</span>
-                    24 hours - 1 hour a day
+                    className="course-card"
+                    onClick={() => navigate(`/courses/${course._id}`)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div
+                      className="course-image"
+                      style={{
+                        backgroundImage: `url(${
+                          course.image ||
+                          "https://via.placeholder.com/300x200?text=Course"
+                        })`,
+                      }}
+                    ></div>
+                    <h3 className="course-name">{course.name}</h3>
+                    <div className="course-category">Beginner</div>
+                    <div className="course-duration">
+                      <span className="course-meta-icon">🕒</span>
+                      24 hours - 1 hour a day
+                    </div>
+                    <div className="course-rating">
+                      <Rate
+                        value={course.rating || 4} // Default to 4 if no rating
+                        disabled // Make it read-only
+                      />
+                      <span>(200)</span>
+                    </div>
                   </div>
-                  <div className="course-rating">
-                    {/* <span className="stars">
-                      <span>★</span>
-                      <span>★</span>
-                      <span>★</span>
-                      <span>★</span>
-                      <span style={{ color: "#e0e0e0" }}>★</span>
-                    </span> */}
-                    <Rate
-                      value={course.rating || 4} // Default to 4 if no rating
-                      disabled // Make it read-only
-                    />
-                    <span>(200)</span>
-                  </div>
-                </div>
+                </Col>
               ))}
-          </div>
-          <div className="pagination">
-            <span>Showing {courses.length} Courses</span>
+          </Row>
+          <div
+            className="pagination"
+            style={{
+              marginTop: "20px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "20px",
+            }}
+          >
+            <span style={{ fontSize: 16 }}>
+              Total: {currentCourses.length} Courses
+            </span>
+            <Pagination
+              current={currentPage}
+              total={totalPages * coursesPerPage}
+              pageSize={coursesPerPage}
+              onChange={handlePageChange}
+              showSizeChanger={false}
+            />
           </div>
         </div>
       </div>
