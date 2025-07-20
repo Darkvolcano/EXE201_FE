@@ -33,7 +33,7 @@
   font-family: "Poppins", sans-serif;
 }
 
-.navbar-menu-item.tutor a {
+.navbar-menu-item.active a {
   color: #0077ff;
 }
 
