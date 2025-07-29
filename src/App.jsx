@@ -35,6 +35,7 @@ import SidebarAdmin from "./components/SidebarAdmin";
 import CourseManagement from "./pages/CourseManagement";
 import Forum from "./pages/Forum";
 import TutorCertifications from "./pages/TutorCertification";
+import CourseDetailPage from './pages/CourseDetailPage';
 
 const LayoutWithNavFooter = () => (
   <>
@@ -71,6 +72,7 @@ function App() {
                 path="tutor-certifications" // Changed from "/tutor-certifications" to "tutor-certifications"
                 element={<TutorCertifications />}
               />
+              <Route path="course-detail" element={<CourseDetailPage />} />
             </Route>
             <Route path="/ai-chat" element={<AIChat />} />
             <Route path="/pricing" element={<Pricing />} />
@@ -79,6 +81,7 @@ function App() {
             <Route path="/tutors/:accountId" element={<TutorDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/forum" element={<Forum />} />
+            
           </Route>
 
           <Route element={<LayoutWithoutNavFooter />}>

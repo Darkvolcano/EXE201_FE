@@ -8,32 +8,46 @@ import {
   EditOutlined,
   DeleteOutlined,
   EyeOutlined,
+  BookOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
-import { Avatar, Modal, Form, Input, InputNumber, Button, Card, message } from "antd";
+import { Avatar, Modal, Form, Input, InputNumber, Button, Card, message, Collapse, List } from "antd";
 import { useProfileUser } from "../hooks/ProfileApi";
 import { useCourseApi } from '../hooks/coursesAPIExtend';
+import { useChapterApi } from '../hooks/chapterApiExtend';
+import { useContentApi } from '../hooks/contentApiExtend';
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import "../style/ProfileTutor.css";
-import '../style/CourseProfilePage.css';
+import '../style/CourseDetailPage.css';
 
 const { Meta } = Card;
 const { TextArea } = Input;
+const { Panel } = Collapse;
 
 const TutorProfile = () => {
   const { data: userData, isLoading, error } = useProfileUser();
   const { courses, isLoading: coursesLoading, error: coursesError, createCourse, getTutorCourses } = useCourseApi();
+  const { chapters, isLoading: chaptersLoading, createChapter, getChaptersByCourse } = useChapterApi();
+  const { contents, isLoading: contentsLoading, createContent, getContentsByChapter } = useContentApi();
+  
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("OVERVIEW");
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isChapterModalVisible, setIsChapterModalVisible] = useState(false);
+  const [isContentModalVisible, setIsContentModalVisible] = useState(false);
+  const [selectedCourseId, setSelectedCourseId] = useState(null);
+  const [selectedChapterId, setSelectedChapterId] = useState(null);
   const [form] = Form.useForm();
+  const [chapterForm] = Form.useForm();
+  const [contentForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
+  const [courseChapters, setCourseChapters] = useState({});
+  const [chapterContents, setChapterContents] = useState({});
 
-  // Mock account ID - in real app, this would come from auth context
   const accountId = "682953018ebb6ea503ccd14b";
 
-  // Dữ liệu tĩnh cho các phần khác (schedule, support, stats)
   const tutorData = {
     fullName: "Prashant",
     schedule: [
@@ -49,52 +63,15 @@ const TutorProfile = () => {
         subject: "MATH",
         content: "Algebra Basics",
       },
-      {
-        studentName: "Jane Smith",
-        date: "27/2/2023",
-        subject: "CHEMISTRY",
-        content: "Chemical Reactions",
-      },
-      {
-        studentName: "Alice Brown",
-        date: "28/2/2023",
-        subject: "BIOLOGY",
-        content: "Cell Structure",
-      },
-      {
-        studentName: "Bob Wilson",
-        date: "1/3/2023",
-        subject: "LITERATURE",
-        content: "Shakespeare Analysis",
-      },
-      {
-        studentName: "Emma Davis",
-        date: "2/3/2023",
-        subject: "ENGLISH",
-        content: "Grammar Rules",
-      },
-      {
-        studentName: "Emma Davis",
-        date: "2/3/2023",
-        subject: "ENGLISH",
-        content: "Grammar Rules",
-      },
-      {
-        studentName: "Emma Davis",
-        date: "2/3/2023",
-        subject: "ENGLISH",
-        content: "Grammar Rules",
-      },
     ],
     support: [
       { name: "Prashant Kumar Singh", role: "IT Support" },
       { name: "Michael Lee", role: "Man & English Tutor" },
-      { name: "Sarah Johnson", role: "Software Developer" },
     ],
     stats: {
       totalBookings: 25,
       totalStudents: 120,
-      earnings: 1500000, // VND
+      earnings: 1500000,
     },
   };
 
@@ -107,17 +84,39 @@ const TutorProfile = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    // Fetch courses when component mounts or when Course section is active
     if (activeSection === "Course") {
       getTutorCourses(accountId);
     }
   }, [activeSection]);
 
-  // Course-related functions
-  const showModal = () => {
-    setIsModalVisible(true);
+  // Load chapters for a course
+  const loadChapters = async (courseId) => {
+    try {
+      const chaptersData = await getChaptersByCourse(courseId);
+      setCourseChapters(prev => ({
+        ...prev,
+        [courseId]: chaptersData
+      }));
+    } catch (error) {
+      console.error('Error loading chapters:', error);
+    }
   };
 
+  // Load contents for a chapter
+  const loadContents = async (chapterId) => {
+    try {
+      const contentsData = await getContentsByChapter(chapterId);
+      setChapterContents(prev => ({
+        ...prev,
+        [chapterId]: contentsData
+      }));
+    } catch (error) {
+      console.error('Error loading contents:', error);
+    }
+  };
+
+  // Course handlers
+  const showModal = () => setIsModalVisible(true);
   const handleCancel = () => {
     setIsModalVisible(false);
     form.resetFields();
@@ -132,6 +131,67 @@ const TutorProfile = () => {
       form.resetFields();
     } catch (error) {
       message.error('Failed to create course. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Chapter handlers
+  const showChapterModal = (courseId) => {
+    setSelectedCourseId(courseId);
+    setIsChapterModalVisible(true);
+  };
+
+  const handleChapterCancel = () => {
+    setIsChapterModalVisible(false);
+    setSelectedCourseId(null);
+    chapterForm.resetFields();
+  };
+
+  const handleChapterSubmit = async (values) => {
+    setSubmitting(true);
+    try {
+      await createChapter({
+        ...values,
+        courseId: selectedCourseId
+      });
+      message.success('Chapter created successfully!');
+      setIsChapterModalVisible(false);
+      chapterForm.resetFields();
+      loadChapters(selectedCourseId); // Reload chapters
+    } catch (error) {
+      message.error('Failed to create chapter. Please try again.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Content handlers
+  const showContentModal = (chapterId) => {
+    setSelectedChapterId(chapterId);
+    setIsContentModalVisible(true);
+  };
+
+  const handleContentCancel = () => {
+    setIsContentModalVisible(false);
+    setSelectedChapterId(null);
+    contentForm.resetFields();
+  };
+
+  const handleContentSubmit = async (values) => {
+    setSubmitting(true);
+    try {
+      await createContent({
+        ...values,
+        chapterId: selectedChapterId,
+        createdBy: accountId
+      });
+      message.success('Content created successfully!');
+      setIsContentModalVisible(false);
+      contentForm.resetFields();
+      loadContents(selectedChapterId); // Reload contents
+    } catch (error) {
+      message.error('Failed to create content. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -152,38 +212,24 @@ const TutorProfile = () => {
     });
   };
 
-  if (isLoading)
-    return (
-      <div className="profile-container">
-        <LoadingSpinner />
-      </div>
-    );
-  if (error)
-    return (
-      <div className="profile-container">
-        <ErrorMessage message="Error loading profile" />
-      </div>
-    );
+  if (isLoading) return <div className="profile-container"><LoadingSpinner /></div>;
+  if (error) return <div className="profile-container"><ErrorMessage message="Error loading profile" /></div>;
 
   return (
     <div className="tutor-profile-wrapper">
-      {/* Sidebar (Menu bên trái) */}
+      {/* Sidebar */}
       <div className="sidebar-profile-tutor">
         <div className="menu-list-profile-tutor">
           <Link
             to="/profile-tutor"
-            className={`menu-item ${
-              activeSection === "OVERVIEW" ? "active" : ""
-            }`}
+            className={`menu-item ${activeSection === "OVERVIEW" ? "active" : ""}`}
             onClick={() => setActiveSection("OVERVIEW")}
           >
             OVERVIEW
           </Link>
           <Link
             to="/profile-tutor"
-            className={`menu-item ${
-              activeSection === "Dashboard" ? "active" : ""
-            }`}
+            className={`menu-item ${activeSection === "Dashboard" ? "active" : ""}`}
             onClick={() => setActiveSection("Dashboard")}
           >
             Dashboard
@@ -197,18 +243,14 @@ const TutorProfile = () => {
           </Link>
           <Link
             to="/profile-tutor"
-            className={`menu-item ${
-              activeSection === "Course" ? "active" : ""
-            }`}
+            className={`menu-item ${activeSection === "Course" ? "active" : ""}`}
             onClick={() => setActiveSection("Course")}
           >
             Course
           </Link>
           <Link
             to="tutor-certifications"
-            className={`menu-item ${
-              activeSection === "Certificate" ? "active" : ""
-            }`}
+            className={`menu-item ${activeSection === "Certificate" ? "active" : ""}`}
             onClick={() => setActiveSection("Certificate")}
           >
             Certificate
@@ -239,10 +281,9 @@ const TutorProfile = () => {
         </div>
       </div>
 
-      {/* Nội dung chính */}
+      {/* Dashboard Section */}
       {activeSection === "Dashboard" && (
         <div className="tutor-profile-container">
-          {/* Welcome Section */}
           <div className="welcome-section">
             <h1>TUTOR PAGE {userData?.fullName || tutorData.fullName}</h1>
             <p>
@@ -262,9 +303,7 @@ const TutorProfile = () => {
                 src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png"
                 alt="Course 1"
               />
-              <h3>
-                Beginner's Guide to Becoming a Professional Frontend Developer
-              </h3>
+              <h3>Beginner's Guide to Becoming a Professional Frontend Developer</h3>
               <span>218 Watched</span>
               <button className="continue-button">Continue Teaching</button>
             </div>
@@ -277,18 +316,8 @@ const TutorProfile = () => {
               <span>218 Watched</span>
               <button className="continue-button">Continue Teaching</button>
             </div>
-            <div className="course-card">
-              <img
-                src="/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png"
-                alt="Course 3"
-              />
-              <h3>Learn Software Development with Us!</h3>
-              <span>218 Watched</span>
-              <button className="continue-button">Continue Teaching</button>
-            </div>
           </div>
 
-          {/* Schedule Section */}
           <div className="schedule-section">
             <h2>Your Schedule</h2>
             <div className="schedule-table">
@@ -316,13 +345,13 @@ const TutorProfile = () => {
         </div>
       )}
 
-      {/* Course Section */}
+      {/* Enhanced Course Section */}
       {activeSection === "Course" && (
         <div className="course-page-container">
           <div className="course-header">
             <div className="course-header-content">
               <h1>My Courses</h1>
-              <p>Manage your courses and track their performance</p>
+              <p>Manage your courses, chapters and content</p>
             </div>
             <Button 
               type="primary" 
@@ -375,7 +404,12 @@ const TutorProfile = () => {
                     actions={[
                       <EyeOutlined key="view" title="View Course" />,
                       <EditOutlined key="edit" title="Edit Course" />,
-                      <DeleteOutlined key="delete" title="Delete Course" />
+                      <DeleteOutlined key="delete" title="Delete Course" />,
+                      <BookOutlined 
+                        key="chapters" 
+                        title="Manage Chapters" 
+                        onClick={() => showChapterModal(course.courseId)}
+                      />
                     ]}
                   >
                     <Meta
@@ -392,6 +426,53 @@ const TutorProfile = () => {
                           <div className="course-dates">
                             <small>Created: {formatDate(course.createdAt)}</small>
                             <small>Updated: {formatDate(course.updatedAt)}</small>
+                          </div>
+                          
+                          {/* Chapters Section */}
+                          <div style={{ marginTop: '10px' }}>
+                            <Button 
+                              size="small" 
+                              type="link" 
+                              onClick={() => loadChapters(course.courseId)}
+                            >
+                              {courseChapters[course.courseId] ? 'Refresh Chapters' : 'Load Chapters'}
+                            </Button>
+                            
+                            {courseChapters[course.courseId] && (
+                              <Collapse size="small" style={{ marginTop: '8px' }}>
+                                <Panel header={`Chapters (${courseChapters[course.courseId].length})`} key="1">
+                                  <List
+                                    size="small"
+                                    dataSource={courseChapters[course.courseId]}
+                                    renderItem={(chapter) => (
+                                      <List.Item
+                                        actions={[
+                                          <Button 
+                                            size="small" 
+                                            icon={<FileTextOutlined />}
+                                            onClick={() => showContentModal(chapter._id)}
+                                          >
+                                            Add Content
+                                          </Button>,
+                                          <Button 
+                                            size="small" 
+                                            type="link"
+                                            onClick={() => loadContents(chapter._id)}
+                                          >
+                                            View Contents ({chapterContents[chapter._id]?.length || 0})
+                                          </Button>
+                                        ]}
+                                      >
+                                        <List.Item.Meta
+                                          title={chapter.title}
+                                          description={`Created: ${formatDate(chapter.createdAt)}`}
+                                        />
+                                      </List.Item>
+                                    )}
+                                  />
+                                </Panel>
+                              </Collapse>
+                            )}
                           </div>
                         </div>
                       }
@@ -412,6 +493,7 @@ const TutorProfile = () => {
             </>
           )}
 
+          {/* Course Modal */}
           <Modal
             title="Create New Course"
             visible={isModalVisible}
@@ -419,12 +501,7 @@ const TutorProfile = () => {
             footer={null}
             width={600}
           >
-            <Form
-              form={form}
-              layout="vertical"
-              onFinish={handleSubmit}
-              requiredMark={false}
-            >
+            <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false}>
               <Form.Item
                 name="name"
                 label="Course Name"
@@ -432,18 +509,13 @@ const TutorProfile = () => {
               >
                 <Input placeholder="Enter course name" />
               </Form.Item>
-
               <Form.Item
                 name="description"
                 label="Description"
                 rules={[{ required: true, message: 'Please enter course description' }]}
               >
-                <TextArea 
-                  rows={4} 
-                  placeholder="Enter course description"
-                />
+                <TextArea rows={4} placeholder="Enter course description" />
               </Form.Item>
-
               <Form.Item
                 name="image"
                 label="Course Image URL"
@@ -451,7 +523,6 @@ const TutorProfile = () => {
               >
                 <Input placeholder="https://example.com/course.jpg" />
               </Form.Item>
-
               <Form.Item
                 name="price"
                 label="Price (VND)"
@@ -466,13 +537,60 @@ const TutorProfile = () => {
                   parser={value => value.replace(/\$\s?|(,*)/g, '')}
                 />
               </Form.Item>
-
               <Form.Item className="form-buttons">
-                <Button onClick={handleCancel} style={{ marginRight: 8 }}>
-                  Cancel
-                </Button>
+                <Button onClick={handleCancel} style={{ marginRight: 8 }}>Cancel</Button>
                 <Button type="primary" htmlType="submit" loading={submitting}>
                   Create Course
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+
+          {/* Chapter Modal */}
+          <Modal
+            title="Create New Chapter"
+            visible={isChapterModalVisible}
+            onCancel={handleChapterCancel}
+            footer={null}
+            width={500}
+          >
+            <Form form={chapterForm} layout="vertical" onFinish={handleChapterSubmit} requiredMark={false}>
+              <Form.Item
+                name="title"
+                label="Chapter Title"
+                rules={[{ required: true, message: 'Please enter chapter title' }]}
+              >
+                <Input placeholder="Enter chapter title" />
+              </Form.Item>
+              <Form.Item className="form-buttons">
+                <Button onClick={handleChapterCancel} style={{ marginRight: 8 }}>Cancel</Button>
+                <Button type="primary" htmlType="submit" loading={submitting}>
+                  Create Chapter
+                </Button>
+              </Form.Item>
+            </Form>
+          </Modal>
+
+          {/* Content Modal */}
+          <Modal
+            title="Create New Content"
+            visible={isContentModalVisible}
+            onCancel={handleContentCancel}
+            footer={null}
+            width={600}
+          >
+            <Form form={contentForm} layout="vertical" onFinish={handleContentSubmit} requiredMark={false}>
+              <Form.Item
+                name="contentDescription"
+                label="Content Description"
+                rules={[{ required: true, message: 'Please enter content description' }]}
+              >
+                <TextArea rows={4} placeholder="Enter content description" />
+              </Form.Item>
+              <Form.Item className="form-buttons">
+                <Button onClick={handleContentCancel} style={{ marginRight: 8 }}>Cancel</Button>
+                <Button type="primary" htmlType="submit" loading={submitting}>
+                  Create Content
                 </Button>
               </Form.Item>
             </Form>
@@ -480,12 +598,10 @@ const TutorProfile = () => {
         </div>
       )}
 
-      {/* Outlet for child routes at the top level */}
       <Outlet />
 
-      {/* Cột phụ bên phải */}
+      {/* Right Sidebar */}
       <div className="right-sidebar">
-        {/* Thông tin cá nhân */}
         <div className="profile-info">
           <Avatar
             size={60}
@@ -509,7 +625,6 @@ const TutorProfile = () => {
           </div>
         </div>
 
-        {/* Your Stats Section */}
         <div className="stats-section">
           <h2>Your Stats</h2>
           <div className="stat-item">
@@ -531,7 +646,6 @@ const TutorProfile = () => {
           </div>
         </div>
 
-        {/* Support Section - Đặt ở cuối */}
         <div className="support-section">
           <h2>Support</h2>
           <div className="support-table">
