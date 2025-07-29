@@ -33,7 +33,7 @@ const AccountManagement = () => {
 
   const columns = [
     {
-      title: "Name",
+      title: "Tên",
       dataIndex: "fullName",
       key: "fullName",
       sorter: (a, b) => a.fullName.localeCompare(b.fullName),
@@ -57,10 +57,10 @@ const AccountManagement = () => {
             size="small"
             style={{ width: 90, marginRight: 8 }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-            Reset
+            Đặt lại
           </Button>
         </div>
       ),
@@ -74,7 +74,7 @@ const AccountManagement = () => {
       sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
-      title: "Phone",
+      title: "Số điện thoại",
       dataIndex: "phone",
       key: "phone",
     },
@@ -83,29 +83,29 @@ const AccountManagement = () => {
       dataIndex: "avatar",
       key: "avatar",
       render: (avatar) => (
-        <img src={avatar} alt="Avatar" style={{ maxWidth: "100px" }} />
+        <img src={avatar} alt="Ảnh đại diện" style={{ maxWidth: "100px" }} />
       ),
     },
     {
-      title: "Role",
+      title: "Vai trò",
       dataIndex: "role",
       key: "role",
     },
     {
-      title: "Status",
+      title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       render: (status) => (
         <Tag color={status === "Active" ? "green" : "volcano"}>
-          {status === "Active" ? "Active" : "Inactive"}
+          {status === "Active" ? "Hoạt động" : "Không hoạt động"}
         </Tag>
       ),
     },
     {
-      title: "Action",
+      title: "Hành động",
       key: "action",
       render: (_, record) => (
-        <Tooltip title="View Details">
+        <Tooltip title="Xem chi tiết">
           <Button
             icon={<EyeOutlined />}
             onClick={() => {
@@ -122,13 +122,13 @@ const AccountManagement = () => {
   return (
     <div style={{ display: "flex", width: "-webkit-fill-available" }}>
       <div style={{ width: "-webkit-fill-available", padding: 24 }}>
-        <h2>Account Management</h2>
-        {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+        <h2>Quản lý Tài khoản</h2>
+        {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
         <div
           style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
         >
           <Input
-            placeholder="Search name, email"
+            placeholder="Tìm kiếm tên, email"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: 500 }}
@@ -142,7 +142,7 @@ const AccountManagement = () => {
           pagination={{ pageSize: 5 }}
         />
         <Modal
-          title="Account Details"
+          title="Chi tiết Tài khoản"
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={null}
@@ -151,32 +151,34 @@ const AccountManagement = () => {
           {selectedAccount ? (
             <Card>
               <Descriptions column={2} bordered>
-                <Descriptions.Item label="Name">
+                <Descriptions.Item label="Tên">
                   {selectedAccount.fullName}
                 </Descriptions.Item>
-                <Descriptions.Item label="Phone">
+                <Descriptions.Item label="Số điện thoại">
                   {selectedAccount.phone}
                 </Descriptions.Item>
                 <Descriptions.Item label="Email">
                   {selectedAccount.email}
                 </Descriptions.Item>
-                <Descriptions.Item label="Role">
+                <Descriptions.Item label="Vai trò">
                   {selectedAccount.role}
                 </Descriptions.Item>
-                <Descriptions.Item label="Status">
-                  {selectedAccount.status === "active" ? "Active" : "Inactive"}
+                <Descriptions.Item label="Trạng thái">
+                  {selectedAccount.status === "active"
+                    ? "Hoạt động"
+                    : "Không hoạt động"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Avatar" span={2}>
+                <Descriptions.Item label="Ảnh đại diện" span={2}>
                   <img
                     src={selectedAccount.avatar}
-                    alt="Avatar"
+                    alt="Ảnh đại diện"
                     style={{ maxWidth: "500px" }}
                   />
                 </Descriptions.Item>
               </Descriptions>
             </Card>
           ) : (
-            <p>No details available.</p>
+            <p>Không có chi tiết nào sẵn có.</p>
           )}
         </Modal>
       </div>

@@ -28,10 +28,10 @@ const Navbar = () => {
           navigate(user?.role === "Tutor" ? "/profile-tutor" : "/profile");
         }}
       >
-        Profile
+        Hồ sơ
       </Menu.Item>
       <Menu.Item key="logout" onClick={handleLogout}>
-        Logout
+        Đăng xuất
       </Menu.Item>
     </Menu>
   );
@@ -54,7 +54,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/">Home</Link>
+          <Link to="/">Trang chủ</Link>
         </Menu.Item>
         <Menu.Item
           key="course"
@@ -65,7 +65,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/courses">Course</Link>
+          <Link to="/courses">Khóa học</Link>
         </Menu.Item>
         <Menu.Item
           key="tutor"
@@ -76,7 +76,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/tutor">Tutor</Link>
+          <Link to="/tutor">Gia sư</Link>
         </Menu.Item>
         <Menu.Item
           key="pricing"
@@ -87,7 +87,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/pricing">Pricing</Link>
+          <Link to="/pricing">Bảng giá</Link>
         </Menu.Item>
         <Menu.Item
           key="about"
@@ -98,7 +98,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/about">About</Link>
+          <Link to="/about">Về chúng tôi</Link>
         </Menu.Item>
         <Menu.Item
           key="forum"
@@ -109,7 +109,7 @@ const Navbar = () => {
               : ""
           }`}
         >
-          <Link to="/forum">Forum</Link>
+          <Link to="/forum">Diễn đàn</Link>
         </Menu.Item>
       </Menu>
 
@@ -120,33 +120,19 @@ const Navbar = () => {
               className="navbar-signin"
               onClick={() => navigate("/register")}
             >
-              Sign In
+              Đăng ký
             </span>
             <Button
               type="primary"
               className="navbar-login-button"
               onClick={() => navigate("/login")}
             >
-              Login
+              Đăng nhập
             </Button>
           </>
         ) : (
           <>
-            <div className="navbar-icons">
-              {/* <Badge dot color="blue" className="navbar-badge">
-                <BellOutlined className="navbar-icon" />
-              </Badge>
-              <Badge className="navbar-badge">
-                <HeartOutlined className="navbar-icon" />
-              </Badge>
-              <Badge
-                count={user.cartItems || 2}
-                color="blue"
-                className="navbar-badge"
-              >
-                <ShoppingCartOutlined className="navbar-icon" />
-              </Badge> */}
-            </div>
+            <div className="navbar-icons"></div>
             <div className="user-profile">
               <Dropdown
                 overlay={menu}
@@ -160,7 +146,7 @@ const Navbar = () => {
                       "https://thumbs.dreamstime.com/b/default-avatar-profile-icon-vector-social-media-user-photo-183042379.jpg"
                     }
                     className="user-avatar-nav"
-                    alt="User Avatar"
+                    alt="Ảnh đại diện người dùng"
                   />
                 </Badge>
               </Dropdown>

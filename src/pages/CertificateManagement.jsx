@@ -30,12 +30,11 @@ const CertificateManagement = () => {
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [experienceRange, setExperienceRange] = useState([0, 10]); // Default range: 0 to 10 years
-  const [canTeachFilter, setCanTeachFilter] = useState("all"); // "all", "yes", "no"
+  const [experienceRange, setExperienceRange] = useState([0, 10]);
+  const [canTeachFilter, setCanTeachFilter] = useState("all");
 
   const tutorsData = data?.data?.tutors || [];
 
-  // Flatten and filter the data
   const certificateData = tutorsData
     .filter((tutor) => tutor.certifications && tutor.certifications.length > 0)
     .flatMap((tutor) =>
@@ -61,7 +60,7 @@ const CertificateManagement = () => {
 
   const columns = [
     {
-      title: "Tutor Name",
+      title: "Gia sư",
       dataIndex: "tutorName",
       key: "tutorName",
       sorter: (a, b) => a.tutorName.localeCompare(b.tutorName),
@@ -73,6 +72,7 @@ const CertificateManagement = () => {
       }) => (
         <div style={{ padding: 8 }}>
           <Input
+            placeholder="Tìm theo tên"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -85,10 +85,10 @@ const CertificateManagement = () => {
             size="small"
             style={{ width: 90, marginRight: 8 }}
           >
-            Search
+            Tìm
           </Button>
           <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-            Reset
+            Đặt lại
           </Button>
         </div>
       ),
@@ -96,51 +96,51 @@ const CertificateManagement = () => {
         record.tutorName.toLowerCase().includes(value.toLowerCase()),
     },
     {
-      title: "Certificate Name",
+      title: "Chứng chỉ",
       dataIndex: "name",
       key: "name",
       sorter: (a, b) => a.name.localeCompare(b.name),
     },
     {
-      title: "Description",
+      title: "Mô tả",
       dataIndex: "description",
       key: "description",
     },
     {
-      title: "Experience",
+      title: "Kinh nghiệm",
       dataIndex: "experience",
       key: "experience",
       sorter: (a, b) => a.experience - b.experience,
-      render: (experience) => `${experience} years`,
+      render: (experience) => `${experience} năm`,
     },
     {
-      title: "Checked",
+      title: "Đã duyệt",
       dataIndex: "isChecked",
       key: "isChecked",
       render: (isChecked) => (isChecked ? <CheckmarkIcon /> : <CrossIcon />),
     },
     {
-      title: "Teach",
+      title: "Có thể dạy",
       dataIndex: "isCanTeach",
       key: "isCanTeach",
       render: (isCanTeach) => (isCanTeach ? <CheckmarkIcon /> : <CrossIcon />),
     },
     {
-      title: "Image",
+      title: "Hình ảnh",
       dataIndex: "image",
       key: "image",
       render: (image) => (
-        <img src={image[0]} alt="Certificate" style={{ maxWidth: "100px" }} />
+        <img src={image[0]} alt="Chứng chỉ" style={{ maxWidth: "100px" }} />
       ),
     },
     {
-      title: "Action",
+      title: "Hành động",
       key: "action",
       width: 120,
       align: "center",
       render: (_, record) => (
         <>
-          <Tooltip title="View Details">
+          <Tooltip title="Xem chi tiết">
             <Button
               icon={<EyeOutlined />}
               onClick={() => {
@@ -156,26 +156,26 @@ const CertificateManagement = () => {
           </Tooltip>
           {!record.isChecked && (
             <Popconfirm
-              title="Are you sure to update isChecked to true?"
+              title="Bạn có chắc muốn duyệt chứng chỉ này?"
               onConfirm={() => {
                 updateIsCheckedMutation.mutate(
                   { certificationId: record._id },
                   {
                     onSuccess: () => {
-                      message.success("isChecked updated successfully!");
+                      message.success("Đã duyệt thành công!");
                       refetch();
                     },
                     onError: (err) => {
-                      console.error("Failed to update isChecked:", err);
-                      message.error("Failed to update isChecked.");
+                      console.error("Cập nhật thất bại:", err);
+                      message.error("Không thể cập nhật trạng thái duyệt.");
                     },
                   }
                 );
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
-              <Tooltip title="Update isChecked">
+              <Tooltip title="Duyệt chứng chỉ">
                 <Button
                   icon={<CheckOutlined />}
                   style={{
@@ -189,26 +189,26 @@ const CertificateManagement = () => {
           )}
           {record.isChecked && !record.isCanTeach && (
             <Popconfirm
-              title="Are you sure to update isCanTeach to true?"
+              title="Bạn có chắc muốn cho phép dạy?"
               onConfirm={() => {
                 updateIsCanTeachMutation.mutate(
                   { certificationId: record._id },
                   {
                     onSuccess: () => {
-                      message.success("isCanTeach updated successfully!");
+                      message.success("Đã cập nhật quyền dạy!");
                       refetch();
                     },
                     onError: (err) => {
-                      console.error("Failed to update isCanTeach:", err);
-                      message.error("Failed to update isCanTeach.");
+                      console.error("Cập nhật thất bại:", err);
+                      message.error("Không thể cập nhật quyền dạy.");
                     },
                   }
                 );
               }}
-              okText="Yes"
-              cancelText="No"
+              okText="Có"
+              cancelText="Không"
             >
-              <Tooltip title="Update isCanTeach">
+              <Tooltip title="Cho phép dạy">
                 <Button
                   icon={<CheckOutlined />}
                   style={{ borderColor: "transparent", outline: "none" }}
@@ -222,15 +222,13 @@ const CertificateManagement = () => {
   ];
 
   return (
-    <div style={{ display: "flex", width: "-webkit-fill-available" }}>
-      <div style={{ width: "-webkit-fill-available", padding: 24 }}>
-        <h2>Certificate Management</h2>
-        {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
-        <div
-          style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
-        >
+    <div style={{ display: "flex", width: "100%" }}>
+      <div style={{ width: "100%", padding: 24 }}>
+        <h2>Quản lý Chứng chỉ</h2>
+        {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
+        <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
           <Input
-            placeholder="Search certificate name, description"
+            placeholder="Tìm kiếm theo tên hoặc mô tả chứng chỉ"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: 500 }}
@@ -239,7 +237,7 @@ const CertificateManagement = () => {
             icon={<FilterOutlined />}
             onClick={() => setIsFilterModalVisible(true)}
           >
-            Filter
+            Bộ lọc
           </Button>
         </div>
         <Table
@@ -254,7 +252,7 @@ const CertificateManagement = () => {
           pagination={{ pageSize: 5 }}
         />
         <Modal
-          title="Certificate Details"
+          title="Chi tiết Chứng chỉ"
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={null}
@@ -264,50 +262,47 @@ const CertificateManagement = () => {
           {selectedCertificate ? (
             <Card>
               <Descriptions column={2} bordered>
-                <Descriptions.Item label="Tutor Name">
+                <Descriptions.Item label="Tên gia sư">
                   {selectedCertificate.tutorName}
                 </Descriptions.Item>
-                <Descriptions.Item label="Certificate Name">
+                <Descriptions.Item label="Tên chứng chỉ">
                   {selectedCertificate.name}
                 </Descriptions.Item>
-                <Descriptions.Item
-                  label="Description"
-                  style={{ maxWidth: "280px" }}
-                >
-                  <div>{selectedCertificate.description}</div>
+                <Descriptions.Item label="Mô tả">
+                  {selectedCertificate.description}
                 </Descriptions.Item>
-                <Descriptions.Item label="Experience">
-                  {selectedCertificate.experience} years
+                <Descriptions.Item label="Kinh nghiệm">
+                  {selectedCertificate.experience} năm
                 </Descriptions.Item>
-                <Descriptions.Item label="Checked">
+                <Descriptions.Item label="Đã duyệt">
                   <Tag
                     color={selectedCertificate.isChecked ? "success" : "error"}
                   >
-                    {selectedCertificate.isChecked ? "Yes" : "No"}
+                    {selectedCertificate.isChecked ? "Có" : "Không"}
                   </Tag>
                 </Descriptions.Item>
-                <Descriptions.Item label="Can Teach">
+                <Descriptions.Item label="Có thể dạy">
                   <Tag
                     color={selectedCertificate.isCanTeach ? "success" : "error"}
                   >
-                    {selectedCertificate.isCanTeach ? "Yes" : "No"}
+                    {selectedCertificate.isCanTeach ? "Có" : "Không"}
                   </Tag>
                 </Descriptions.Item>
-                <Descriptions.Item label="Image" span={2}>
+                <Descriptions.Item label="Hình ảnh" span={2}>
                   <img
                     src={selectedCertificate.image[0]}
-                    alt="Certificate"
+                    alt="Chứng chỉ"
                     style={{ maxWidth: "500px" }}
                   />
                 </Descriptions.Item>
               </Descriptions>
             </Card>
           ) : (
-            <p>No details available.</p>
+            <p>Không có thông tin chi tiết.</p>
           )}
         </Modal>
         <Modal
-          title="Filter Certificates"
+          title="Bộ lọc chứng chỉ"
           open={isFilterModalVisible}
           onCancel={() => setIsFilterModalVisible(false)}
           footer={[
@@ -316,7 +311,7 @@ const CertificateManagement = () => {
               type="primary"
               onClick={() => setIsFilterModalVisible(false)}
             >
-              Apply
+              Áp dụng
             </Button>,
             <Button
               key="reset"
@@ -326,34 +321,34 @@ const CertificateManagement = () => {
                 setIsFilterModalVisible(false);
               }}
             >
-              Reset
+              Đặt lại
             </Button>,
           ]}
         >
           <div style={{ marginBottom: 16 }}>
-            <h3>Experience Range (years)</h3>
+            <h3>Khoảng kinh nghiệm (năm)</h3>
             <Slider
               range
               min={0}
               max={10}
               value={experienceRange}
               onChange={setExperienceRange}
-              tipFormatter={(value) => `${value} years`}
+              tipFormatter={(value) => `${value} năm`}
             />
             <p>
-              Range: {experienceRange[0]} - {experienceRange[1]} years
+              Từ {experienceRange[0]} đến {experienceRange[1]} năm
             </p>
           </div>
           <div>
-            <h3>Can Teach</h3>
+            <h3>Trạng thái có thể dạy</h3>
             <Select
               value={canTeachFilter}
               onChange={setCanTeachFilter}
               style={{ width: 200 }}
             >
-              <Select.Option value="all">All</Select.Option>
-              <Select.Option value="yes">Yes</Select.Option>
-              <Select.Option value="no">No</Select.Option>
+              <Select.Option value="all">Tất cả</Select.Option>
+              <Select.Option value="yes">Có</Select.Option>
+              <Select.Option value="no">Không</Select.Option>
             </Select>
           </div>
         </Modal>

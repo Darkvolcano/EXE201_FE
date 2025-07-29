@@ -14,7 +14,7 @@ import {
   Users,
 } from "lucide-react";
 import SidebarAdmin from "../components/SidebarAdmin";
-import { useProfileUser, useEditProfileAdmin } from "../hooks/ProfileApi"; // Import actual hooks
+import { useProfileUser, useEditProfileAdmin } from "../hooks/ProfileApi";
 import { useQueryClient } from "@tanstack/react-query";
 import "../style/ProfileAdmin.css";
 
@@ -30,7 +30,6 @@ export default function AdminProfile() {
     phone: "",
   });
 
-  // Initialize form data only once on mount or when userData is available
   useEffect(() => {
     if (userData && !formData.fullName && !formData.email && !formData.phone) {
       setFormData({
@@ -39,7 +38,7 @@ export default function AdminProfile() {
         phone: userData.phone || "",
       });
     }
-  }, [userData]); // Keep userData as dependency, but add a guard to prevent re-run
+  }, [userData]);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -56,7 +55,6 @@ export default function AdminProfile() {
     updateProfile(formData, {
       onSuccess: () => {
         setIsEditing(false);
-        // Invalidate and refetch the profile data
         queryClient.invalidateQueries(["userProfile"]);
       },
     });
@@ -74,7 +72,7 @@ export default function AdminProfile() {
       <div className="admin-layout">
         <SidebarAdmin />
         <div className="admin-main-content">
-          <div className="loading-spinner">Loading...</div>
+          <div className="loading-spinner">Đang tải...</div>
         </div>
       </div>
     );
@@ -86,65 +84,73 @@ export default function AdminProfile() {
         <SidebarAdmin />
         <div className="admin-main-content">
           <div className="error-message">
-            Error loading profile:{" "}
-            {error.response?.data?.message || error.message}
+            Lỗi tải hồ sơ: {error.response?.data?.message || error.message}
           </div>
         </div>
       </div>
     );
   }
 
-  // Mock admin stats - these would typically come from separate API calls
   const adminStats = [
     {
-      label: "Total Users",
+      label: "Tổng số người dùng",
       value: "2,847",
       icon: <Users size={24} />,
       trend: "+12%",
     },
     {
-      label: "Active Tutors",
+      label: "Gia sư đang hoạt động",
       value: "156",
       icon: <Award size={24} />,
       trend: "+8%",
     },
     {
-      label: "Monthly Revenue",
+      label: "Doanh thu tháng",
       value: "$24,593",
       icon: <DollarSign size={24} />,
       trend: "+15%",
     },
   ];
 
-  // Mock recent activities - these would typically come from separate API calls
   const recentActivities = [
-    { action: "User Registration", count: "23 new users", time: "2 hours ago" },
-    { action: "Tutor Verification", count: "5 verified", time: "4 hours ago" },
-    { action: "Payment Processed", count: "$1,234", time: "1 day ago" },
-    { action: "Support Tickets", count: "12 resolved", time: "2 days ago" },
+    {
+      action: "Đăng ký người dùng",
+      count: "23 người mới",
+      time: "2 giờ trước",
+    },
+    {
+      action: "Xác minh gia sư",
+      count: "5 người đã xác minh",
+      time: "4 giờ trước",
+    },
+    { action: "Xử lý thanh toán", count: "$1,234", time: "1 ngày trước" },
+    {
+      action: "Hỗ trợ khách hàng",
+      count: "12 yêu cầu đã giải quyết",
+      time: "2 ngày trước",
+    },
   ];
 
   return (
     <div className="admin-layout">
       <SidebarAdmin />
       <div className="admin-main-content">
-        {/* Header Section */}
         <div className="admin-header">
           <div className="admin-welcome">
             <h1>Admin Dashboard</h1>
             <p>
-              Welcome back, {userData?.fullName}! Here's what's happening today.
+              Chào mừng trở lại, {userData?.fullName}! Dưới đây là những gì đang
+              diễn ra hôm nay.
             </p>
           </div>
           <div className="admin-actions">
             <button className="view-site-btn">
               <Eye size={18} />
-              View Site
+              Xem trang
             </button>
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="stats-grid">
           {adminStats.map((stat, index) => (
             <div key={index} className="stat-card">
@@ -160,14 +166,13 @@ export default function AdminProfile() {
           ))}
         </div>
 
-        {/* Main Profile Section */}
         <div className="profile-section">
           <div className="profile-card">
             <div className="profile-header">
               <div className="profile-avatar-section">
                 <img
                   src={userData?.avatar || "https://via.placeholder.com/120"}
-                  alt="Profile"
+                  alt="Ảnh đại diện"
                   className="profile-avatar"
                 />
                 <div className="avatar-badge">
@@ -185,7 +190,7 @@ export default function AdminProfile() {
                         handleInputChange("fullName", e.target.value)
                       }
                       className="edit-input"
-                      placeholder="Full Name"
+                      placeholder="Họ và tên"
                     />
                     <input
                       type="email"
@@ -203,14 +208,14 @@ export default function AdminProfile() {
                         handleInputChange("phone", e.target.value)
                       }
                       className="edit-input"
-                      placeholder="Phone"
+                      placeholder="Số điện thoại"
                     />
                   </div>
                 ) : (
                   <div className="profile-details">
                     <h2 className="profile-name">{userData?.fullName}</h2>
                     <p className="profile-role">
-                      {userData?.role} • Member since {userData?.joinDate}
+                      {userData?.role} • Thành viên từ {userData?.joinDate}
                     </p>
                     <div className="profile-contact">
                       <div className="contact-item">
@@ -225,7 +230,10 @@ export default function AdminProfile() {
                       )}
                       <div className="contact-item">
                         <Clock size={16} />
-                        <span>Last login: {userData?.lastLogin || "N/A"}</span>
+                        <span>
+                          Đăng nhập lần cuối:{" "}
+                          {userData?.lastLogin || "Không có dữ liệu"}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -241,17 +249,17 @@ export default function AdminProfile() {
                       disabled={isUpdating}
                     >
                       <Save size={18} />
-                      {isUpdating ? "Saving..." : "Save"}
+                      {isUpdating ? "Đang lưu..." : "Lưu"}
                     </button>
                     <button onClick={handleEditToggle} className="cancel-btn">
                       <X size={18} />
-                      Cancel
+                      Hủy
                     </button>
                   </div>
                 ) : (
                   <button onClick={handleEditToggle} className="edit-btn">
                     <Edit3 size={18} />
-                    Edit Profile
+                    Chỉnh sửa hồ sơ
                   </button>
                 )}
               </div>
@@ -259,9 +267,8 @@ export default function AdminProfile() {
           </div>
         </div>
 
-        {/* Recent Activities */}
         <div className="activities-section">
-          <h3>Recent Activities</h3>
+          <h3>Hoạt động gần đây</h3>
           <div className="activities-list">
             {recentActivities.map((activity, index) => (
               <div key={index} className="activity-item">

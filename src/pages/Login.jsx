@@ -19,20 +19,18 @@ const Login = () => {
           navigate("/");
         } else if (response.role === "Tutor") {
           navigate("/");
-        }
-        else if (response.role === "User") {
+        } else if (response.role === "User") {
           navigate("/");
-        }
-        else {
+        } else {
           navigate("/home-page");
         }
-        message.success("Login successfully");
+        message.success("Đăng nhập thành công");
       } else {
         message.error(response.message);
       }
     },
     onError: (error) => {
-      message.error("Login failed: " + error.message);
+      message.error("Đăng nhập thất bại: " + error.message);
     },
   });
 
@@ -45,10 +43,10 @@ const Login = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-          Welcome Back
+          Chào mừng trở lại
         </Title>
         <Text className="auth-subtitle">
-          Log in to find the perfect tutor for your learning journey.
+          Đăng nhập để tìm gia sư hoàn hảo cho hành trình học tập của bạn.
         </Text>
         <Form
           name="login"
@@ -60,23 +58,25 @@ const Login = () => {
             label="Email"
             name="email"
             rules={[
-              { required: true, message: "Please input your email!" },
-              { type: "email", message: "Please enter a valid email!" },
+              { required: true, message: "Vui lòng nhập email của bạn!" },
+              { type: "email", message: "Vui lòng nhập email hợp lệ!" },
             ]}
           >
             <Input
-              placeholder="Enter your email"
+              placeholder="Nhập email của bạn"
               className="auth-input"
               size="large"
             />
           </Form.Item>
           <Form.Item
-            label="Password"
+            label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
+            ]}
           >
             <Input.Password
-              placeholder="Enter your password"
+              placeholder="Nhập mật khẩu của bạn"
               className="auth-input"
               size="large"
             />
@@ -90,13 +90,13 @@ const Login = () => {
               loading={loginMutation.isPending}
               block
             >
-              Log In
+              Đăng nhập
             </Button>
           </Form.Item>
         </Form>
         <Text className="auth-link">
-          Don't have an account?{" "}
-          <a onClick={() => navigate("/register")}>Sign up here</a>
+          Chưa có tài khoản?{" "}
+          <a onClick={() => navigate("/register")}>Đăng ký tại đây</a>
         </Text>
       </div>
     </div>

@@ -27,16 +27,18 @@ const VerifyOTP = () => {
       {
         onSuccess: (data) => {
           if (data.status === 200) {
-            message.success(data.message || "Account verified successfully!");
+            message.success(
+              data.message || "Tài khoản đã được xác minh thành công!"
+            );
             navigate("/login");
           } else {
-            message.error(data.message || "OTP verification failed");
+            message.error(data.message || "Xác minh OTP thất bại");
           }
         },
         onError: (error) => {
           message.error(
             error.response?.data?.message ||
-              "OTP verification failed: " + error.message
+              "Xác minh OTP thất bại: " + error.message
           );
         },
       }
@@ -53,10 +55,11 @@ const VerifyOTP = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-          Verify Your Account
+          Xác minh Tài khoản của bạn
         </Title>
         <Text className="auth-subtitle">
-          Enter the OTP sent to <strong>{email}</strong> to verify your account.
+          Nhập OTP đã được gửi đến <strong>{email}</strong> để xác minh tài
+          khoản của bạn.
         </Text>
         <Form
           name="verify-otp"
@@ -68,10 +71,10 @@ const VerifyOTP = () => {
             label="OTP"
             name="otp"
             rules={[
-              { required: true, message: "Please input the OTP!" },
+              { required: true, message: "Vui lòng nhập OTP!" },
               {
                 pattern: /^[0-9]{6}$/,
-                message: "OTP must be a 6-digit number!",
+                message: "OTP phải là số gồm 6 chữ số!",
               },
             ]}
             style={{ marginBottom: 20 }}
@@ -79,7 +82,7 @@ const VerifyOTP = () => {
             <Input.OTP
               length={6}
               formatter={handleOtpChange}
-              placeholder="Enter 6-digit OTP"
+              placeholder="Nhập OTP 6 chữ số"
               className="auth-input"
               size="large"
             />
@@ -93,13 +96,13 @@ const VerifyOTP = () => {
               loading={isPending}
               block
             >
-              Verify OTP
+              Xác minh OTP
             </Button>
           </Form.Item>
         </Form>
         <Text className="auth-link">
-          Didn’t receive the OTP?{" "}
-          <a onClick={() => navigate("/register")}>Resend OTP</a>
+          Chưa nhận được OTP?{" "}
+          <a onClick={() => navigate("/register")}>Gửi lại OTP</a>
         </Text>
       </div>
     </div>
