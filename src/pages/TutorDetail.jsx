@@ -25,7 +25,10 @@ const TutorDetail = () => {
         <div className="tutor-detail-header">
           <Avatar
             size={100}
-            src={certifications[0]?.image[0] || "https://via.placeholder.com/100x100?text=Tutor"}
+            src={
+              certifications[0]?.image[0] ||
+              "https://via.placeholder.com/100x100?text=Tutor"
+            }
             alt={account.fullName}
           />
           <div className="tutor-info">
@@ -35,8 +38,6 @@ const TutorDetail = () => {
             <Text>Email: {account.email}</Text>
             <br />
             <Text>Phone: {account.phone}</Text>
-            <br />
-            <Text>Status: {account.status}</Text>
           </div>
         </div>
 
@@ -51,7 +52,10 @@ const TutorDetail = () => {
               <Text>Experience: {cert.experience} years</Text>
               <br />
               <img
-                src={cert.image[0] || "https://via.placeholder.com/100x100?text=Cert"}
+                src={
+                  cert.image[0] ||
+                  "https://via.placeholder.com/100x100?text=Cert"
+                }
                 alt={cert.name}
                 style={{ width: "100px", marginTop: "10px" }}
               />
@@ -70,7 +74,10 @@ const TutorDetail = () => {
               <Text>Price: {course.price} VND</Text>
               <br />
               <img
-                src={course.image || "https://via.placeholder.com/100x100?text=Course"}
+                src={
+                  course.image ||
+                  "https://via.placeholder.com/100x100?text=Course"
+                }
                 alt={course.name}
                 style={{ width: "100px", marginTop: "10px" }}
               />
