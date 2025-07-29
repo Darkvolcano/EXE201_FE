@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, Typography, Row, Col, Image, Avatar } from "antd";
-import { useGetCourse } from "../hooks/coursesApi"; // Adjust the import path as needed
+import { useGetCourse } from "../hooks/coursesApi"; // Điều chỉnh đường dẫn nếu cần
 import "../style/Pricing.css";
 
 const { Title, Text } = Typography;
@@ -8,15 +8,15 @@ const { Title, Text } = Typography;
 const Pricing = () => {
   const { data, isLoading, error } = useGetCourse();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading courses: {error.message}</div>;
+  if (isLoading) return <div>Đang tải...</div>;
+  if (error) return <div>Lỗi khi tải khóa học: {error.message}</div>;
 
   const courses = data?.data?.courses || [];
 
   return (
     <div className="pricing-page-container">
       <Title level={2} className="pricing-title">
-        Pricing Plans for All Courses
+        Bảng Giá Cho Tất Cả Khóa Học
       </Title>
       <Row gutter={[16, 16]} className="pricing-row">
         {courses.map((courseData, index) => (
@@ -36,7 +36,7 @@ const Pricing = () => {
               </Text>
               <div className="course-details">
                 <Avatar src={courseData.account.avatar}></Avatar>
-                <Text>Tutor: {courseData.account.fullName}</Text>
+                <Text>Gia sư: {courseData.account.fullName}</Text>
               </div>
             </Card>
           </Col>

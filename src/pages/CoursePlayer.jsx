@@ -39,14 +39,14 @@ const CoursePlayer = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Lấy danh sách courses từ API
+  // Lấy danh sách khóa học từ API
   const {
     data: allCoursesData,
     isLoading: isLoadingCourses,
     isError: isErrorCourses,
   } = useGetCourse();
 
-  // Tìm course theo id
+  // Tìm khóa học theo id
   const courseObj = allCoursesData?.data?.courses?.find(
     (item) => item.course._id === id
   )?.course;
@@ -89,16 +89,16 @@ const CoursePlayer = () => {
 
   const [activeChapterKey, setActiveChapterKey] = useState(null);
 
-  // Loading & error UI cho course
+  // Loading & error UI cho khóa học
   if (isLoadingCourses) {
-    return <div style={{ padding: 32 }}>Loading course...</div>;
+    return <div style={{ padding: 32 }}>Đang tải khóa học...</div>;
   }
   if (isErrorCourses || !courseObj) {
     return (
       <div style={{ padding: 32, color: "red" }}>
-        Course not found.
+        Không tìm thấy khóa học.
         <Button style={{ marginLeft: 16 }} onClick={() => navigate("/courses")}>
-          Back to Courses
+          Quay lại Khóa học
         </Button>
       </div>
     );
@@ -112,63 +112,63 @@ const CoursePlayer = () => {
     lectures: 202,
     duration: "19h 37m",
     students: 512,
-    lastUpdated: "Oct 26, 2024",
+    lastUpdated: "26/10/2024",
     comments: 154,
     progress: 15,
-    currentLecture: "2. Sign up in Visual Studio Code",
+    currentLecture: "2. Đăng ký trong Visual Studio Code",
     videoUrl:
       courseObj.image ||
-      "https://via.placeholder.com/800x400?text=Video+Player",
+      "https://via.placeholder.com/800x400?text=Trình+phát+Video",
     lectureNotes: [
-      "• Install & Set up Visual Studio Code",
-      "• Basic HTML & CSS structure",
-      "• Debugging tools & best practices",
-      "• Tips for improving productivity",
+      "• Cài đặt & Thiết lập Visual Studio Code",
+      "• Cấu trúc cơ bản HTML & CSS",
+      "• Công cụ gỡ lỗi & cách làm tốt nhất",
+      "• Mẹo cải thiện năng suất",
     ],
     attachedFile: {
-      name: "Create account on webflow.pdf",
+      name: "Tạo tài khoản trên webflow.pdf",
       size: "12.6 MB",
     },
     commentsData: [
       {
         user: "Rizqi Assegaf",
-        role: "Instructor",
-        time: "3 months ago",
-        text: "Great question! Let me explain how you can set up your account in Visual Studio Code.",
+        role: "Giảng viên",
+        time: "3 tháng trước",
+        text: "Câu hỏi tuyệt vời! Để tôi giải thích cách bạn có thể thiết lập tài khoản trong Visual Studio Code.",
         subtext:
-          "First, download the installer from the official website. Then follow the setup wizard.",
-        subsubtext: "Let me know if you need further clarification!",
+          "Trước tiên, hãy tải trình cài đặt từ trang web chính thức. Sau đó làm theo hướng dẫn thiết lập.",
+        subsubtext: "Hãy cho tôi biết nếu bạn cần làm rõ thêm!",
         replies: [
           {
             user: "Jane Smith",
-            time: "2 months ago",
-            text: "Thanks for the detailed explanation! I was able to set it up without any issues.",
+            time: "2 tháng trước",
+            text: "Cảm ơn vì giải thích chi tiết! Tôi đã thiết lập mà không gặp vấn đề gì.",
           },
           {
             user: "Rizqi Assegaf",
-            role: "Instructor",
-            time: "1 month ago",
-            text: "Glad it worked for you, Jane! Let me know if you have any other questions.",
+            role: "Giảng viên",
+            time: "1 tháng trước",
+            text: "Rất vui vì nó hoạt động với bạn, Jane! Hãy cho tôi biết nếu bạn có thêm câu hỏi nào.",
           },
         ],
       },
       {
         user: "John Doe",
         role: "",
-        time: "2 months ago",
-        text: "Thanks for the explanation! It worked perfectly.",
+        time: "2 tháng trước",
+        text: "Cảm ơn vì giải thích! Nó hoạt động hoàn hảo.",
         replies: [
           {
             user: "Emily Brown",
-            time: "1 month ago",
-            text: "I agree, this was really helpful!",
+            time: "1 tháng trước",
+            text: "Tôi đồng ý, điều này rất hữu ích!",
           },
         ],
       },
     ],
   };
 
-  // Replace courseSections with chapters from API if available
+  // Thay courseSections bằng chapters từ API nếu có sẵn
 
   return (
     <div className="course-player-container">
@@ -180,10 +180,10 @@ const CoursePlayer = () => {
           <span>{courseData.name}</span>
           <div className="metadata">
             <span>
-              <FolderOutlined /> {courseData.sections} Sections
+              <FolderOutlined /> {courseData.sections} Phần
             </span>
             <span>
-              <VideoCameraOutlined /> {courseData.lectures} Lectures
+              <VideoCameraOutlined /> {courseData.lectures} Bài giảng
             </span>
             <span>
               <ClockCircleTwoTone /> {courseData.duration}
@@ -192,10 +192,10 @@ const CoursePlayer = () => {
         </div>
         <div className="top-actions">
           <Button type="default" className="review-button">
-            Write A Review
+            Viết Đánh giá
           </Button>
           <Button type="primary" className="next-button">
-            Next Lecture
+            Bài giảng Tiếp theo
           </Button>
         </div>
       </div>
@@ -203,7 +203,7 @@ const CoursePlayer = () => {
         <div className="video-section">
           <Card className="video-card">
             <div className="video-placeholder">
-              <img src={courseData.videoUrl} alt="Video Thumbnail" />
+              <img src={courseData.videoUrl} alt="Hình thu nhỏ Video" />
               <div className="play-overlay">
                 <PlayCircleOutlined className="play-icon" />
               </div>
@@ -211,22 +211,23 @@ const CoursePlayer = () => {
             <h2 className="lecture-title">{courseData.currentLecture}</h2>
             <div className="metadata">
               <span>
-                <UserOutlined /> {courseData.students} Students Have Joined
+                <UserOutlined /> {courseData.students} Học sinh đã tham gia
               </span>
               <span>
-                <ClockCircleOutlined /> Last updated: {courseData.lastUpdated}
+                <ClockCircleOutlined /> Cập nhật lần cuối:{" "}
+                {courseData.lastUpdated}
               </span>
               <span>
-                <CommentOutlined /> {courseData.comments} Comments
+                <CommentOutlined /> {courseData.comments} Bình luận
               </span>
             </div>
             <Tabs defaultActiveKey="1" className="content-tabs">
-              <TabPane tab="Description" key="1">
+              <TabPane tab="Mô tả" key="1">
                 <div className="description-content">
                   <p>{courseData.description}</p>
                 </div>
               </TabPane>
-              <TabPane tab="Lecture Notes" key="2">
+              <TabPane tab="Ghi chú Bài giảng" key="2">
                 <div className="lecture-notes">
                   <ul>
                     {courseData.lectureNotes.map((note, index) => (
@@ -235,11 +236,11 @@ const CoursePlayer = () => {
                   </ul>
                   <Button type="primary" className="download-notes">
                     <DownloadOutlined />
-                    Download Notes
+                    Tải Ghi chú
                   </Button>
                 </div>
               </TabPane>
-              <TabPane tab="Attach File" key="3">
+              <TabPane tab="Tệp Đính kèm" key="3">
                 <div className="attach-file">
                   <div className="file-item">
                     <div className="file-icon">
@@ -253,50 +254,15 @@ const CoursePlayer = () => {
                     </div>
                     <Button type="primary" className="download-file">
                       <DownloadOutlined />
-                      Download File
+                      Tải Tệp
                     </Button>
                   </div>
                 </div>
               </TabPane>
-              {/* <TabPane tab="Comments" key="4">
-              <div className="comments">
-                <div className="comment-count">
-                  {courseData.comments} Comments
-                </div>
-                {courseData.commentsData.map((comment, index) => (
-                  <div key={index} className="comment-item">
-                    <Avatar icon={<UserOutlined />} />
-                    <div className="comment-content">
-                      <div className="comment-header">
-                        <span>
-                          <span className="comment-user">{comment.user}</span>
-                          {comment.role && (
-                            <span className="comment-role">{comment.role}</span>
-                          )}
-                        </span>
-                        <span className="comment-time">{comment.time}</span>
-                      </div>
-                      <div className="comment-text">{comment.text}</div>
-                      {comment.subtext && (
-                        <div className="comment-subtext">{comment.subtext}</div>
-                      )}
-                      {comment.subsubtext && (
-                        <div className="comment-subsubtext">
-                          {comment.subsubtext}
-                        </div>
-                      )}
-                      <Button type="link" className="reply-button">
-                        Reply
-                      </Button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </TabPane> */}
-              <TabPane tab="Comments" key="4">
+              <TabPane tab="Bình luận" key="4">
                 <div className="comments">
                   <div className="comment-count">
-                    {courseData.comments} Comments
+                    {courseData.comments} Bình luận
                   </div>
                   {courseData.commentsData.map((comment, index) => (
                     <div key={index} className="comment-item">
@@ -329,7 +295,7 @@ const CoursePlayer = () => {
                           className="reply-button"
                           icon={<ReplyIcon />}
                         >
-                          REPLY
+                          TRẢ LỜI
                         </Button>
                         {comment.replies && comment.replies.length > 0 && (
                           <div className="replies">
@@ -358,7 +324,7 @@ const CoursePlayer = () => {
                                     className="reply-button"
                                     icon={<ReplyIcon />}
                                   >
-                                    REPLY
+                                    TRẢ LỜI
                                   </Button>
                                 </div>
                               </div>
@@ -372,12 +338,14 @@ const CoursePlayer = () => {
               </TabPane>
             </Tabs>
             <div className="feedback-section" style={{ marginTop: 32 }}>
-              <h2 style={{ marginBottom: 12 }}>Feedback</h2>
-              {isLoadingFeedback && <div>Loading feedback...</div>}
-              {isErrorFeedback && <div>Failed to load feedback.</div>}
+              <h2 style={{ marginBottom: 12 }}>Phản hồi</h2>
+              {isLoadingFeedback && <div>Đang tải phản hồi...</div>}
+              {isErrorFeedback && <div>Tải phản hồi thất bại.</div>}
               {!isLoadingFeedback &&
                 !isErrorFeedback &&
-                feedbackData?.data?.length === 0 && <div>No feedback yet.</div>}
+                feedbackData?.data?.length === 0 && (
+                  <div>Chưa có phản hồi.</div>
+                )}
               {!isLoadingFeedback &&
                 !isErrorFeedback &&
                 feedbackData?.data?.length > 0 && (
@@ -444,8 +412,8 @@ const CoursePlayer = () => {
           <Card className="content-card">
             <div className="header-course">
               <div className="progress">
-                <h3>Course Contents</h3>
-                <span className="progress-text">15% Completed</span>
+                <h3>Nội dung Khóa học</h3>
+                <span className="progress-text">15% Hoàn thành</span>
               </div>
               <Progress
                 percent={15}
@@ -455,10 +423,10 @@ const CoursePlayer = () => {
               />
             </div>
             {isLoadingChapters ? (
-              <div style={{ padding: 16 }}>Loading chapters...</div>
+              <div style={{ padding: 16 }}>Đang tải chương...</div>
             ) : isErrorChapters ? (
               <div style={{ padding: 16, color: "red" }}>
-                Failed to load chapters.
+                Tải chương thất bại.
               </div>
             ) : (
               <Collapse
@@ -474,17 +442,19 @@ const CoursePlayer = () => {
                       key={chapter._id}
                       extra={
                         <span>
-                          <span className="lecture-count">0 lectures</span>
+                          <span className="lecture-count">0 bài giảng</span>
                           <span className="duration">
                             <ClockCircleOutlined /> N/A
                           </span>
                         </span>
                       }
                     >
-                      {/* Always show contentDescription(s) */}
+                      {/* Luôn hiển thị contentDescription(s) */}
                       {chapterContentQueries.length === 0 ||
                       chapterContentQueries.some((q) => q.isLoading) ? (
-                        <div style={{ color: "#888" }}>Loading contents...</div>
+                        <div style={{ color: "#888" }}>
+                          Đang tải nội dung...
+                        </div>
                       ) : chapterContentsMap[chapter._id]?.length > 0 ? (
                         <ul style={{ paddingLeft: 20, margin: 0 }}>
                           {chapterContentsMap[chapter._id].map((content) => (
@@ -498,7 +468,7 @@ const CoursePlayer = () => {
                         </ul>
                       ) : (
                         <div style={{ color: "#888" }}>
-                          No contents in this chapter.
+                          Không có nội dung trong chương này.
                         </div>
                       )}
                     </Panel>

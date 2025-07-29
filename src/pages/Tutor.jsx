@@ -27,7 +27,7 @@ const Tutor = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("latest");
 
-  // Filter tutors based on search term
+  // Lọc gia sư dựa trên từ khóa tìm kiếm
   const filteredTutors = uniqueTutors.filter(
     (tutor) =>
       tutor.account.fullName
@@ -39,13 +39,13 @@ const Tutor = () => {
       tutor.account.role?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Sort tutors based on experience
+  // Sắp xếp gia sư dựa trên kinh nghiệm
   const sortedTutors = [...filteredTutors].sort((a, b) => {
     const expA = parseInt(a.certifications[0]?.experience || 0);
     const expB = parseInt(b.certifications[0]?.experience || 0);
-    if (sortOrder === "years") return expB - expA; // High to low
-    if (sortOrder === "years-asc") return expA - expB; // Low to high
-    return 0; // Default (latest)
+    if (sortOrder === "years") return expB - expA; // Cao đến thấp
+    if (sortOrder === "years-asc") return expA - expB; // Thấp đến cao
+    return 0; // Mặc định (mới nhất)
   });
 
   console.log("Sorted tutors:", sortedTutors);
@@ -53,17 +53,17 @@ const Tutor = () => {
   return (
     <div className="mentor-search-container">
       <div className="mentor-search-header">
-        <h1 className="header-title">Find The Right Mentor For You</h1>
+        <h1 className="header-title">Tìm Gia Sư Phù Hợp Với Bạn</h1>
         <p className="header-subtitle">
-          Learn more effectively with professional tutors. Choose a tutor based
-          on your needs.
+          Học hiệu quả hơn với các gia sư chuyên nghiệp. Chọn gia sư dựa trên
+          nhu cầu của bạn.
         </p>
         <div className="header-buttons">
           <Button type="primary" className="explore-button">
-            Explore More
+            Khám phá thêm
           </Button>
           <Button className="watch-video-button">
-            <span className="play-icon">▶</span> Watch Video
+            <span className="play-icon">▶</span> Xem Video
           </Button>
         </div>
         <div className="header-decoration"></div>
@@ -71,7 +71,7 @@ const Tutor = () => {
 
       <div className="search-bar">
         <Input
-          placeholder="Search for tutors by subject, level, location, etc."
+          placeholder="Tìm gia sư theo môn học, cấp độ, địa điểm, v.v."
           suffix={<SearchIconWhite />}
           className="search-input-tutor"
           value={searchTerm}
@@ -82,18 +82,22 @@ const Tutor = () => {
           className="sort-select-tutor"
           onChange={(value) => setSortOrder(value)}
         >
-          <Option value="years">Sort by: Years (High to Low)</Option>
-          <Option value="years-asc">Sort by: Years (Low to High)</Option>
+          <Option value="years">
+            Sắp xếp theo: Năm kinh nghiệm (Cao đến Thấp)
+          </Option>
+          <Option value="years-asc">
+            Sắp xếp theo: Năm kinh nghiệm (Thấp đến Cao)
+          </Option>
         </Select>
       </div>
 
       <div className="mentor-search-content">
         <div className="mentor-list-container">
           <div className="mentor-grid-friendly">
-            {isLoading && <div>Loading...</div>}
-            {isError && <div>Failed to load tutors.</div>}
+            {isLoading && <div>Đang tải...</div>}
+            {isError && <div>Tải gia sư thất bại.</div>}
             {!isLoading && !isError && sortedTutors.length === 0 && (
-              <div>No tutors found.</div>
+              <div>Không tìm thấy gia sư.</div>
             )}
             {!isLoading &&
               !isError &&
@@ -109,14 +113,14 @@ const Tutor = () => {
                       className="mentor-img"
                       src={
                         tutor.certifications[0]?.image[0] ||
-                        "https://via.placeholder.com/200x200?text=Tutor"
+                        "https://via.placeholder.com/200x200?text=Gia+Sư"
                       }
                       alt={tutor.account.fullName}
                     />
                   </div>
                   <div className="mentor-info-wrap">
                     <div className="mentor-name">
-                      {tutor.account.fullName || "No Name"}
+                      {tutor.account.fullName || "Không có tên"}
                     </div>
                     <div className="mentor-role">
                       {tutor.certifications[0]?.name || tutor.account.role}
@@ -124,7 +128,7 @@ const Tutor = () => {
                     <div className="mentor-meta">
                       <span className="mentor-meta-icon">🕒</span>
                       <span>
-                        {tutor.certifications[0]?.experience || 0} years
+                        {tutor.certifications[0]?.experience || 0} năm
                       </span>
                     </div>
                     <div className="mentor-rating-row">
@@ -142,7 +146,7 @@ const Tutor = () => {
               ))}
           </div>
           <div className="pagination">
-            <span>Showing {sortedTutors.length} Mentors</span>
+            <span>Hiển thị {sortedTutors.length} Gia sư</span>
           </div>
         </div>
       </div>

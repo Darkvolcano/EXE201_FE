@@ -24,7 +24,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 const { Option } = Select;
 const { TextArea } = Input;
 
-// Enable customParseFormat plugin
+// Bật plugin customParseFormat
 dayjs.extend(customParseFormat);
 
 const Courses = () => {
@@ -36,7 +36,7 @@ const Courses = () => {
   const { mutate: createCourse, isLoading } = useCreateCourse();
   const { data, isLoading: isLoadingCourses, isError } = useGetCourse();
 
-  // Lấy danh sách course từ API
+  // Lấy danh sách khóa học từ API
   const courses =
     data?.data?.courses?.map((item) => ({
       ...item.course,
@@ -65,19 +65,19 @@ const Courses = () => {
     };
     createCourse(payload, {
       onSuccess: () => {
-        message.success("Course created successfully!");
+        message.success("Khóa học đã được tạo thành công!");
         setIsModalVisible(false);
         form.resetFields();
       },
       onError: (error) => {
         message.error(
-          error.response?.data?.message || "Failed to create course."
+          error.response?.data?.message || "Tạo khóa học thất bại."
         );
       },
     });
   };
 
-  // Filter courses by name and accountName
+  // Lọc khóa học theo tên và tên tài khoản
   const filteredCourses = courses.filter(
     (course) =>
       course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -86,7 +86,7 @@ const Courses = () => {
         .includes(searchTerm.toLowerCase())
   );
 
-  // Sort courses
+  // Sắp xếp khóa học
   const sortedCourses = [...filteredCourses].sort((a, b) => {
     if (sortOrder === "price-high") return b.price - a.price;
     if (sortOrder === "price-low") return a.price - b.price;
@@ -94,10 +94,10 @@ const Courses = () => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     if (sortOrder === "created-oldest")
       return new Date(a.createdAt) - new Date(b.createdAt);
-    return 0; // Default (latest)
+    return 0; // Mặc định (mới nhất)
   });
 
-  // Calculate pagination
+  // Tính toán phân trang
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = sortedCourses.slice(
@@ -112,18 +112,21 @@ const Courses = () => {
 
   return (
     <div className="course-container">
-      <div className="course-header">
-        <h1 className="header-title">Find The Right Course For You</h1>
+      <div
+        className="course-header"
+        style={{ flexDirection: "column", alignItems: "flex-start" }}
+      >
+        <h1 className="header-title">Tìm Khóa Học Phù Hợp Với Bạn</h1>
         <p className="header-subtitle">
-          Learn more effectively with suitable courses. Choose more than a
-          course based on your needs.
+          Học hiệu quả hơn với các khóa học phù hợp. Chọn hơn một khóa học dựa
+          trên nhu cầu của bạn.
         </p>
         <div className="header-buttons">
           <Button type="primary" className="explore-button">
-            Explore More
+            Khám phá thêm
           </Button>
           <Button className="watch-video-button">
-            <span className="play-icon">▶</span> Watch Video
+            <span className="play-icon">▶</span> Xem Video
           </Button>
         </div>
         <div className="header-decoration"></div>
@@ -131,7 +134,7 @@ const Courses = () => {
 
       <div className="search-bar">
         <Input
-          placeholder="Find courses by subject, difficulty, duration, etc."
+          placeholder="Tìm khóa học theo môn học, độ khó, thời lượng, v.v."
           suffix={<SearchIconWhite />}
           className="search-input-course"
           value={searchTerm}
@@ -142,24 +145,24 @@ const Courses = () => {
           className="sort-select-course"
           onChange={(value) => setSortOrder(value)}
         >
-          <Option value="latest">Sort by: Latest</Option>
-          <Option value="price-high">Sort by: Price (High to Low)</Option>
-          <Option value="price-low">Sort by: Price (Low to High)</Option>
+          <Option value="latest">Sắp xếp theo: Mới nhất</Option>
+          <Option value="price-high">Sắp xếp theo: Giá (Cao đến Thấp)</Option>
+          <Option value="price-low">Sắp xếp theo: Giá (Thấp đến Cao)</Option>
           <Option value="created-newest">
-            Sort by: Date (Newest to Oldest)
+            Sắp xếp theo: Ngày (Mới nhất đến Cũ nhất)
           </Option>
           <Option value="created-oldest">
-            Sort by: Date (Oldest to Newest)
+            Sắp xếp theo: Ngày (Cũ nhất đến Mới nhất)
           </Option>
         </Select>
-        {user.role === "Tutor" ? (
+        {user && user.role === "Tutor" ? (
           <>
             <Button
               type="primary"
               className="create-course-button"
               onClick={showModal}
             >
-              Create courses
+              Tạo khóa học
             </Button>
           </>
         ) : (
@@ -170,10 +173,10 @@ const Courses = () => {
       <div className="course-content">
         <div className="course-list-container">
           <Row gutter={[16, 16]}>
-            {isLoadingCourses && <div>Loading...</div>}
-            {isError && <div>Failed to load courses.</div>}
+            {isLoadingCourses && <div>Đang tải...</div>}
+            {isError && <div>Tải khóa học thất bại.</div>}
             {!isLoadingCourses && !isError && currentCourses.length === 0 && (
-              <div>No courses found.</div>
+              <div>Không tìm thấy khóa học.</div>
             )}
             {!isLoadingCourses &&
               !isError &&
@@ -189,16 +192,16 @@ const Courses = () => {
                       style={{
                         backgroundImage: `url(${
                           course.image ||
-                          "https://via.placeholder.com/300x200?text=Course"
+                          "https://via.placeholder.com/300x200?text=Khóa học"
                         })`,
                       }}
                     ></div>
                     <h3 className="course-name">{course.name}</h3>
                     <div className="course-creator">
-                      Tutor: {course.accountName || "Unknown"}
+                      Tutor: {course.accountName || "Không rõ"}
                     </div>
                     <div className="course-created-date">
-                      Created on: {dayjs(course.createdAt).format("DD/MM/YYYY")}
+                      Ngày tạo: {dayjs(course.createdAt).format("DD/MM/YYYY")}
                     </div>
                   </div>
                 </Col>
@@ -215,7 +218,7 @@ const Courses = () => {
             }}
           >
             <span style={{ fontSize: 16 }}>
-              Total: {currentCourses.length} Courses
+              Tổng cộng: {currentCourses.length} Khóa học
             </span>
             <Pagination
               current={currentPage}
@@ -229,7 +232,7 @@ const Courses = () => {
       </div>
 
       <Modal
-        title="Create New Course"
+        title="Tạo Khóa Học Mới"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
@@ -245,45 +248,41 @@ const Courses = () => {
           className="create-course-form"
         >
           <Form.Item
-            label="Course Name"
+            label="Tên khóa học"
             name="name"
-            rules={[
-              { required: true, message: "Please input the course name!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập tên khóa học!" }]}
           >
-            <Input placeholder="e.g., Introduction to Cloud Computing" />
+            <Input placeholder="Ví dụ: Giới thiệu về Điện toán đám mây" />
           </Form.Item>
           <Form.Item
-            label="Description"
+            label="Mô tả"
             name="description"
-            rules={[
-              { required: true, message: "Please input the description!" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập mô tả!" }]}
           >
             <TextArea
               rows={4}
-              placeholder="e.g., Learn the fundamentals of cloud computing"
+              placeholder="Ví dụ: Học các nguyên tắc cơ bản của điện toán đám mây"
             />
           </Form.Item>
           <Form.Item
-            label="Image URL"
+            label="URL Hình ảnh"
             name="image"
             rules={[
-              { required: true, message: "Please input the image URL!" },
-              { type: "url", message: "Please input a valid URL!" },
+              { required: true, message: "Vui lòng nhập URL hình ảnh!" },
+              { type: "url", message: "Vui lòng nhập URL hợp lệ!" },
             ]}
           >
-            <Input placeholder="e.g., https://example.com/course.jpg" />
+            <Input placeholder="Ví dụ: https://example.com/course.jpg" />
           </Form.Item>
           <Form.Item
-            label="Price"
+            label="Giá"
             name="price"
             rules={[
-              { required: true, message: "Please input the price!" },
-              { min: 0, message: "Price cannot be negative!" },
+              { required: true, message: "Vui lòng nhập giá!" },
+              { min: 0, message: "Giá không được âm!" },
             ]}
           >
-            <Input type="number" placeholder="e.g., 99.99" />
+            <Input type="number" placeholder="Ví dụ: 99.99" />
           </Form.Item>
           <Form.Item>
             <Button
@@ -292,14 +291,14 @@ const Courses = () => {
               className="submit-course-button"
               loading={isLoading}
             >
-              Create Course
+              Tạo Khóa Học
             </Button>
             <Button
               className="cancel-course-button"
               onClick={handleCancel}
               style={{ marginLeft: 8 }}
             >
-              Cancel
+              Hủy
             </Button>
           </Form.Item>
         </Form>
