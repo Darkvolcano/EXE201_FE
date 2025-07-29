@@ -7,12 +7,12 @@ import "../style/TutorOrderDetail.css";
 const TutorOrder = () => {
   const { data, isLoading, error } = useGetAllTutorOrder();
 
-  if (isLoading) return <div className="loading">Loading...</div>;
-  if (error) return <div className="error">Error: {error.message}</div>;
+  if (isLoading) return <div className="loading">Đang tải...</div>;
+  if (error) return <div className="error">Lỗi: {error.message}</div>;
 
   return (
     <div className="tutor-order-container">
-      <h2 className="tutor-order-title">Your Orders</h2>
+      <h2 className="tutor-order-title">Khóa đã đặt</h2>
       {data &&
         data.map((orders) => (
           <Card
@@ -25,7 +25,7 @@ const TutorOrder = () => {
                   orders.order?.status === "Pending" ? "pending" : ""
                 }`}
               >
-                {orders.order?.status || "N/A"}
+                {orders.order?.status || "Không xác định"}
               </span>
             }
           >
@@ -37,29 +37,30 @@ const TutorOrder = () => {
               />
               <div className="tutor-order-info">
                 <p>
-                  <strong>Student:</strong>{" "}
-                  {orders.order?.account?.fullName || "N/A"}
+                  <strong>Học viên:</strong>{" "}
+                  {orders.order?.account?.fullName || "Không xác định"}
                 </p>
                 <p>
                   <strong>Email:</strong>{" "}
-                  {orders.order?.account?.email || "N/A"}
+                  {orders.order?.account?.email || "Không xác định"}
                 </p>
                 <p>
-                  <strong>Price:</strong>{" "}
-                  {orders.price?.toLocaleString() || "0"} VND
+                  <strong>Giá:</strong> {orders.price?.toLocaleString() || "0"}{" "}
+                  VND
                 </p>
                 <p>
-                  <strong>Created At:</strong>{" "}
+                  <strong>Ngày tạo:</strong>{" "}
                   {orders.createdAt
-                    ? new Date(orders.createdAt).toLocaleDateString()
-                    : "N/A"}
+                    ? new Date(orders.createdAt).toLocaleDateString("vi-VN")
+                    : "Không xác định"}
                 </p>
                 <p>
-                  <strong>Status:</strong> {orders.order?.status || "N/A"}
+                  <strong>Trạng thái:</strong>{" "}
+                  {orders.order?.status || "Không xác định"}
                 </p>
                 <p>
-                  <strong>Completed:</strong>{" "}
-                  {orders.isFinishCourse ? "Yes" : "No"}
+                  <strong>Hoàn thành:</strong>{" "}
+                  {orders.isFinishCourse ? "Có" : "Chưa"}
                 </p>
               </div>
             </div>

@@ -112,7 +112,10 @@ const Courses = () => {
 
   return (
     <div className="course-container">
-      <div className="course-header">
+      <div
+        className="course-header"
+        style={{ flexDirection: "column", alignItems: "flex-start" }}
+      >
         <h1 className="header-title">Tìm Khóa Học Phù Hợp Với Bạn</h1>
         <p className="header-subtitle">
           Học hiệu quả hơn với các khóa học phù hợp. Chọn hơn một khóa học dựa
