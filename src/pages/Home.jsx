@@ -947,13 +947,11 @@ const ModernHomepage = () => {
                   </div>
                 </div>
 
-                <div className="plan-features">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="feature-item">
-                      <Check className="feature-check-icon" />
-                      <span>{feature}</span>
-                    </div>
-                  ))}
+                <div class="price-container">
+                  <div class="price-display">
+                    <span class="price-amount">$19</span>
+                    <span class="price-period">/month</span>
+                  </div>
                 </div>
 
                 <button
