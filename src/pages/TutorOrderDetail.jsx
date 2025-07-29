@@ -12,7 +12,7 @@ const TutorOrder = () => {
 
   return (
     <div className="tutor-order-container">
-      <h2 className="tutor-order-title">Khóa đã đặt</h2>
+      <h2 className="tutor-order-title">Khóa học đã được đặt</h2>
       {data &&
         data.map((orders) => (
           <Card

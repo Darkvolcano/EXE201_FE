@@ -90,3 +90,14 @@ export const useGetAllTutorOrder = () => {
     },
   });
 };
+
+export const useCompleteCourse = () => {
+  return useMutation({
+    mutationFn: async ({ orderDetailId }) => {
+      const response = await axiosInstance.patch(
+        `tutor/complete-course/${orderDetailId}`
+      );
+      return response.data;
+    },
+  });
+};
