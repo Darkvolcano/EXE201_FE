@@ -18,9 +18,14 @@ import "../style/Courses.css";
 import SearchIconWhite from "../components/SearchIconWhite";
 import useAuthStore from "../hooks/authenStoreApi";
 import { useCreateCourse, useGetCourse } from "../hooks/coursesApi";
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
 
 const { Option } = Select;
 const { TextArea } = Input;
+
+// Enable customParseFormat plugin
+dayjs.extend(customParseFormat);
 
 const Courses = () => {
   const { user } = useAuthStore();
@@ -32,9 +37,15 @@ const Courses = () => {
   const { data, isLoading: isLoadingCourses, isError } = useGetCourse();
 
   // Lấy danh sách course từ API
-  const courses = data?.data?.courses?.map((item) => item.course) || [];
+  const courses =
+    data?.data?.courses?.map((item) => ({
+      ...item.course,
+      accountName: item.account.fullName,
+    })) || [];
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 12;
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("latest");
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -66,11 +77,34 @@ const Courses = () => {
     });
   };
 
+  // Filter courses by name and accountName
+  const filteredCourses = courses.filter(
+    (course) =>
+      course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (course.accountName || "")
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase())
+  );
+
+  // Sort courses
+  const sortedCourses = [...filteredCourses].sort((a, b) => {
+    if (sortOrder === "price-high") return b.price - a.price;
+    if (sortOrder === "price-low") return a.price - b.price;
+    if (sortOrder === "created-newest")
+      return new Date(b.createdAt) - new Date(a.createdAt);
+    if (sortOrder === "created-oldest")
+      return new Date(a.createdAt) - new Date(b.createdAt);
+    return 0; // Default (latest)
+  });
+
   // Calculate pagination
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
-  const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
-  const totalPages = Math.ceil(courses.length / coursesPerPage);
+  const currentCourses = sortedCourses.slice(
+    indexOfFirstCourse,
+    indexOfLastCourse
+  );
+  const totalPages = Math.ceil(sortedCourses.length / coursesPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -100,12 +134,23 @@ const Courses = () => {
           placeholder="Find courses by subject, difficulty, duration, etc."
           suffix={<SearchIconWhite />}
           className="search-input-course"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Select defaultValue="latest" className="sort-select-course">
+        <Select
+          value={sortOrder}
+          className="sort-select-course"
+          onChange={(value) => setSortOrder(value)}
+        >
           <Option value="latest">Sort by: Latest</Option>
-          <Option value="popularity">Sort by: Popularity</Option>
-          <Option value="ratings">Sort by: Ratings</Option>
-          <Option value="newest">Sort by: Newest</Option>
+          <Option value="price-high">Sort by: Price (High to Low)</Option>
+          <Option value="price-low">Sort by: Price (Low to High)</Option>
+          <Option value="created-newest">
+            Sort by: Date (Newest to Oldest)
+          </Option>
+          <Option value="created-oldest">
+            Sort by: Date (Oldest to Newest)
+          </Option>
         </Select>
         {user.role === "Tutor" ? (
           <>
@@ -149,17 +194,11 @@ const Courses = () => {
                       }}
                     ></div>
                     <h3 className="course-name">{course.name}</h3>
-                    <div className="course-category">Beginner</div>
-                    <div className="course-duration">
-                      <span className="course-meta-icon">🕒</span>
-                      24 hours - 1 hour a day
+                    <div className="course-creator">
+                      Tutor: {course.accountName || "Unknown"}
                     </div>
-                    <div className="course-rating">
-                      <Rate
-                        value={course.rating || 4} // Default to 4 if no rating
-                        disabled // Make it read-only
-                      />
-                      <span>(200)</span>
+                    <div className="course-created-date">
+                      Created on: {dayjs(course.createdAt).format("DD/MM/YYYY")}
                     </div>
                   </div>
                 </Col>

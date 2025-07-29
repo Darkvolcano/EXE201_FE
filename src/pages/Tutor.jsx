@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Checkbox, Input, Radio, Slider, Select } from "antd";
 import "../style/Tutor.css";
 import SearchIconWhite from "../components/SearchIconWhite";
@@ -24,7 +24,31 @@ const Tutor = () => {
     ).values()
   );
 
-  console.log("Unique tutors:", uniqueTutors);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("latest");
+
+  // Filter tutors based on search term
+  const filteredTutors = uniqueTutors.filter(
+    (tutor) =>
+      tutor.account.fullName
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      tutor.certifications[0]?.name
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      tutor.account.role?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  // Sort tutors based on experience
+  const sortedTutors = [...filteredTutors].sort((a, b) => {
+    const expA = parseInt(a.certifications[0]?.experience || 0);
+    const expB = parseInt(b.certifications[0]?.experience || 0);
+    if (sortOrder === "years") return expB - expA; // High to low
+    if (sortOrder === "years-asc") return expA - expB; // Low to high
+    return 0; // Default (latest)
+  });
+
+  console.log("Sorted tutors:", sortedTutors);
 
   return (
     <div className="mentor-search-container">
@@ -50,52 +74,30 @@ const Tutor = () => {
           placeholder="Search for tutors by subject, level, location, etc."
           suffix={<SearchIconWhite />}
           className="search-input-tutor"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
-        <Select defaultValue="latest" className="sort-select-tutor">
-          <Option value="latest">Sort by: Latest</Option>
-          <Option value="popularity">Sort by: Popularity</Option>
-          <Option value="years">Sort by: Years</Option>
-          <Option value="category">Sort by: Category</Option>
+        <Select
+          value={sortOrder}
+          className="sort-select-tutor"
+          onChange={(value) => setSortOrder(value)}
+        >
+          <Option value="years">Sort by: Years (High to Low)</Option>
+          <Option value="years-asc">Sort by: Years (Low to High)</Option>
         </Select>
       </div>
 
       <div className="mentor-search-content">
-        <div className="filter-sidebar">
-          <h3 className="filter-title">Categories</h3>
-          <Checkbox>SD</Checkbox>
-          <Checkbox>SMA</Checkbox>
-          <Checkbox>University</Checkbox>
-          <Checkbox>Professional</Checkbox>
-
-          <h3 className="filter-title">Order By</h3>
-          <Radio.Group>
-            <Radio value="popularity">Popularity</Radio>
-            <Radio value="years">Years</Radio>
-            <Radio value="category">Category</Radio>
-          </Radio.Group>
-
-          <h3 className="filter-title">Location</h3>
-          <Slider
-            range
-            defaultValue={[0, 100]}
-            tipFormatter={(value) => `${value} km`}
-          />
-
-          <Button type="primary" className="filter-button">
-            Filter
-          </Button>
-        </div>
-
         <div className="mentor-list-container">
           <div className="mentor-grid-friendly">
             {isLoading && <div>Loading...</div>}
             {isError && <div>Failed to load tutors.</div>}
-            {!isLoading && !isError && uniqueTutors.length === 0 && (
+            {!isLoading && !isError && sortedTutors.length === 0 && (
               <div>No tutors found.</div>
             )}
             {!isLoading &&
               !isError &&
-              uniqueTutors.map((tutor) => (
+              sortedTutors.map((tutor) => (
                 <div
                   className="mentor-card-friendly"
                   key={tutor.account._id}
@@ -140,7 +142,7 @@ const Tutor = () => {
               ))}
           </div>
           <div className="pagination">
-            <span>Showing {uniqueTutors.length} Mentors</span>
+            <span>Showing {sortedTutors.length} Mentors</span>
           </div>
         </div>
       </div>

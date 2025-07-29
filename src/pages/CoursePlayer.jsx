@@ -40,7 +40,11 @@ const CoursePlayer = () => {
   const navigate = useNavigate();
 
   // Lấy danh sách courses từ API
-  const { data: allCoursesData, isLoading: isLoadingCourses, isError: isErrorCourses } = useGetCourse();
+  const {
+    data: allCoursesData,
+    isLoading: isLoadingCourses,
+    isError: isErrorCourses,
+  } = useGetCourse();
 
   // Tìm course theo id
   const courseObj = allCoursesData?.data?.courses?.find(
@@ -112,7 +116,9 @@ const CoursePlayer = () => {
     comments: 154,
     progress: 15,
     currentLecture: "2. Sign up in Visual Studio Code",
-    videoUrl: courseObj.image || "https://via.placeholder.com/800x400?text=Video+Player",
+    videoUrl:
+      courseObj.image ||
+      "https://via.placeholder.com/800x400?text=Video+Player",
     lectureNotes: [
       "• Install & Set up Visual Studio Code",
       "• Basic HTML & CSS structure",
@@ -163,40 +169,14 @@ const CoursePlayer = () => {
   };
 
   // Replace courseSections with chapters from API if available
-  const courseSections =
-    chaptersData?.length > 0
-      ? chaptersData.map((chapter, idx) => ({
-          title: chapter.title,
-          lectures: [],
-          lectureCount: 0,
-          totalDuration: "",
-          completed: 0,
-        }))
-      : [
-          // fallback to old static data if no chapters
-          {
-            title: "Getting Started",
-            lectures: [
-              { id: 1, title: "1. What is C#?", duration: "07:31" },
-              {
-                id: 2,
-                title: "2. Sign up in Visual Studio Code",
-                duration: "07:31",
-              },
-              { id: 3, title: "3. Teaser of Razor Page", duration: "07:31" },
-              { id: 4, title: "4. Razor Page Introduction", duration: "07:31" },
-            ],
-            lectureCount: 4,
-            totalDuration: "25m",
-            completed: 1,
-          },
-        ];
 
   return (
     <div className="course-player-container">
       <div className="top-bar">
         <div className="course-title">
-          <span className="back-arrow" onClick={() => navigate("/courses")}>←</span>
+          <span className="back-arrow" onClick={() => navigate("/courses")}>
+            ←
+          </span>
           <span>{courseData.name}</span>
           <div className="metadata">
             <span>
@@ -508,7 +488,10 @@ const CoursePlayer = () => {
                       ) : chapterContentsMap[chapter._id]?.length > 0 ? (
                         <ul style={{ paddingLeft: 20, margin: 0 }}>
                           {chapterContentsMap[chapter._id].map((content) => (
-                            <li key={content._id} style={{ marginBottom: 8 }}>
+                            <li
+                              key={content._id}
+                              style={{ marginBottom: 8, marginTop: 8 }}
+                            >
                               {content.contentDescription}
                             </li>
                           ))}
