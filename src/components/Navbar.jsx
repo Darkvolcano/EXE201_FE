@@ -133,7 +133,7 @@ const Navbar = () => {
         ) : (
           <>
             <div className="navbar-icons">
-              <Badge dot color="blue" className="navbar-badge">
+              {/* <Badge dot color="blue" className="navbar-badge">
                 <BellOutlined className="navbar-icon" />
               </Badge>
               <Badge className="navbar-badge">
@@ -145,7 +145,7 @@ const Navbar = () => {
                 className="navbar-badge"
               >
                 <ShoppingCartOutlined className="navbar-icon" />
-              </Badge>
+              </Badge> */}
             </div>
             <div className="user-profile">
               <Dropdown
