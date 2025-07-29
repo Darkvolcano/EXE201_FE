@@ -25,13 +25,13 @@ const Register = () => {
             message.success(data.message);
             navigate("/verify-otp", { state: { email } });
           } else {
-            message.error(data.message || "Registration failed");
+            message.error(data.message || "Đăng ký thất bại");
           }
         },
         onError: (error) => {
           message.error(
             error.response?.data?.message ||
-              "Registration failed: " + error.message
+              "Đăng ký thất bại: " + error.message
           );
         },
       }
@@ -43,10 +43,10 @@ const Register = () => {
       <div className="auth-card">
         <div className="auth-decoration"></div>
         <Title level={2} className="auth-title">
-          Join Tutorify
+          Tham gia Tutorify
         </Title>
         <Text className="auth-subtitle">
-          Create an account to start your learning or teaching journey.
+          Tạo tài khoản để bắt đầu hành trình học tập hoặc giảng dạy của bạn.
         </Text>
         <Form
           name="register"
@@ -55,15 +55,15 @@ const Register = () => {
           className="auth-form"
         >
           <Form.Item
-            label="Full Name"
+            label="Họ và tên"
             name="fullName"
             rules={[
-              { required: true, message: "Please input your full name!" },
+              { required: true, message: "Vui lòng nhập họ và tên của bạn!" },
             ]}
             style={{ marginBottom: 10 }}
           >
             <Input
-              placeholder="Enter your full name"
+              placeholder="Nhập họ và tên của bạn"
               className="auth-input"
               size="large"
             />
@@ -72,69 +72,75 @@ const Register = () => {
             label="Email"
             name="email"
             rules={[
-              { required: true, message: "Please input your email!" },
-              { type: "email", message: "Please enter a valid email!" },
+              { required: true, message: "Vui lòng nhập email của bạn!" },
+              { type: "email", message: "Vui lòng nhập email hợp lệ!" },
             ]}
             style={{ marginBottom: 10 }}
           >
             <Input
-              placeholder="Enter your email"
+              placeholder="Nhập email của bạn"
               className="auth-input"
               size="large"
             />
           </Form.Item>
           <Form.Item
-            label="Phone Number"
+            label="Số điện thoại"
             name="phone"
             rules={[
-              { required: true, message: "Please input your phone number!" },
+              {
+                required: true,
+                message: "Vui lòng nhập số điện thoại của bạn!",
+              },
               {
                 pattern: /^[0-9]{10,15}$/,
-                message: "Please enter a valid phone number!",
+                message: "Vui lòng nhập số điện thoại hợp lệ!",
               },
             ]}
             style={{ marginBottom: 10 }}
           >
             <Input
-              placeholder="Enter your phone number"
+              placeholder="Nhập số điện thoại của bạn"
               className="auth-input"
               size="large"
             />
           </Form.Item>
           <Form.Item
-            label="Password"
+            label="Mật khẩu"
             name="password"
             rules={[
-              { required: true, message: "Please input your password!" },
-              { min: 8, message: "Password must be at least 8 characters!" },
+              { required: true, message: "Vui lòng nhập mật khẩu của bạn!" },
+              { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự!" },
             ]}
             style={{ marginBottom: 10 }}
           >
             <Input.Password
-              placeholder="Enter your password"
+              placeholder="Nhập mật khẩu của bạn"
               className="auth-input"
               size="large"
             />
           </Form.Item>
           <Form.Item
-            label="Confirm Password"
+            label="Xác nhận mật khẩu"
             name="confirmPassword"
             dependencies={["password"]}
             rules={[
-              { required: true, message: "Please confirm your password!" },
+              {
+                required: true,
+                message: "Vui lòng xác nhận mật khẩu của bạn!",
+              },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("password") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject("Passwords do not match!");
+                  return Promise.reject("Mật khẩu không khớp!");
                 },
               }),
             ]}
             style={{ marginBottom: 20 }}
           >
             <Input.Password
-              placeholder="Confirm your password"
+              placeholder="Xác nhận mật khẩu của bạn"
               className="auth-input"
               size="large"
             />
@@ -148,14 +154,14 @@ const Register = () => {
               loading={isPending}
               block
             >
-              Sign Up
+              Đăng ký
             </Button>
           </Form.Item>
         </Form>
         <div className="auth-footer">
           <Text className="auth-link">
-            Already have an account?{" "}
-            <a onClick={() => navigate("/login")}>Login here</a>
+            Đã có tài khoản?{" "}
+            <a onClick={() => navigate("/login")}>Đăng nhập tại đây</a>
           </Text>
           <Button
             type="primary"
@@ -164,7 +170,7 @@ const Register = () => {
             onClick={() => navigate("/register-user")}
             style={{ marginTop: 10 }}
           >
-            Register as a User
+            Đăng ký với tư cách Người dùng
           </Button>
         </div>
       </div>

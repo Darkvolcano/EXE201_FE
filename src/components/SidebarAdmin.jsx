@@ -39,7 +39,7 @@ export default function Sidebar({ title = "Tutorify" }) {
     },
     {
       icon: <Layers size={18} />,
-      label: "Certificate",
+      label: "Quản lý chứng chỉ",
       onClick: () => {
         navigate("/certificate");
       },
@@ -47,7 +47,7 @@ export default function Sidebar({ title = "Tutorify" }) {
     },
     {
       icon: <NotebookText size={18} />,
-      label: "Course",
+      label: "Quản lý khóa học",
       onClick: () => {
         navigate("/course-management");
       },
@@ -55,7 +55,7 @@ export default function Sidebar({ title = "Tutorify" }) {
     },
     {
       icon: <UserOutlined size={18} />,
-      label: "Account",
+      label: "Quản lý tài khoản",
       onClick: () => {
         navigate("/account-management");
       },
@@ -74,18 +74,18 @@ export default function Sidebar({ title = "Tutorify" }) {
   const settingsLogoutItems = [
     {
       icon: <Settings size={18} />,
-      label: "Settings",
+      label: "Cài đặt",
       onClick: () => {
         navigate("/profile-admin");
       },
     },
     {
       icon: <LogOut size={18} />,
-      label: "Logout",
+      label: "Đăng xuất",
       onClick: () => {
         logout();
         navigate("/login");
-        message.success("Logout successfully");
+        message.success("Đăng xuất thành công");
       },
     },
   ];
@@ -101,7 +101,7 @@ export default function Sidebar({ title = "Tutorify" }) {
     if (!user) {
       setMainNavItems((prevItems) =>
         prevItems.map((item) =>
-          item.label === "Dashboard"
+          item.label === "Bảng điều khiển"
             ? { ...item, active: true }
             : { ...item, active: false }
         )

@@ -16,20 +16,18 @@ import { useGetCourse } from "../hooks/coursesApi";
 import dayjs from "dayjs";
 
 const CourseManagement = () => {
-  const { data, isLoading, error } = useGetCourse(); // Updated hook
+  const { data, isLoading, error } = useGetCourse();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 10000000]); // Default range: 0 to 10,000,000 VND
-  const [statusFilter, setStatusFilter] = useState("all"); // "all", "active", "inactive"
+  const [priceRange, setPriceRange] = useState([0, 10000000]);
+  const [statusFilter, setStatusFilter] = useState("all");
 
-  // Access the courses array under data.data.courses
   const coursesData = Array.isArray(data?.data?.courses)
     ? data?.data?.courses
     : [];
 
-  // Filter courses based on search term, price range, and status
   const filteredCourses = coursesData.filter((course) => {
     const matchesSearch =
       course.course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,7 +46,7 @@ const CourseManagement = () => {
 
   const columns = [
     {
-      title: "Tutor Name",
+      title: "Gia Sư",
       dataIndex: ["account", "fullName"],
       key: "tutorName",
       sorter: (a, b) => a.account.fullName.localeCompare(b.account.fullName),
@@ -60,6 +58,7 @@ const CourseManagement = () => {
       }) => (
         <div style={{ padding: 8 }}>
           <Input
+            placeholder="Tìm tên gia sư"
             value={selectedKeys[0]}
             onChange={(e) =>
               setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -72,10 +71,10 @@ const CourseManagement = () => {
             size="small"
             style={{ width: 90, marginRight: 8 }}
           >
-            Search
+            Tìm kiếm
           </Button>
           <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-            Reset
+            Đặt lại
           </Button>
         </div>
       ),
@@ -83,35 +82,35 @@ const CourseManagement = () => {
         record.account.fullName.toLowerCase().includes(value.toLowerCase()),
     },
     {
-      title: "Course Name",
+      title: "Khóa Học",
       dataIndex: ["course", "name"],
       key: "courseName",
       sorter: (a, b) => a.course.name.localeCompare(b.course.name),
     },
     {
-      title: "Description",
+      title: "Mô Tả",
       dataIndex: ["course", "description"],
       key: "description",
     },
     {
-      title: "Price",
+      title: "Giá",
       dataIndex: ["course", "price"],
       key: "price",
       sorter: (a, b) => a.course.price - b.course.price,
       render: (price) => `${price.toLocaleString()} VND`,
     },
     {
-      title: "Status",
+      title: "Trạng Thái",
       dataIndex: ["course", "isActive"],
       key: "isActive",
       render: (isActive) => (
         <Tag color={isActive ? "green" : "volcano"}>
-          {isActive ? "Active" : "Inactive"}
+          {isActive ? "Đang hoạt động" : "Ngừng hoạt động"}
         </Tag>
       ),
     },
     {
-      title: "Created At",
+      title: "Ngày Tạo",
       dataIndex: ["course", "createdAt"],
       key: "createdAt",
       sorter: (a, b) =>
@@ -119,18 +118,18 @@ const CourseManagement = () => {
       render: (date) => dayjs(date).format("DD/MM/YYYY"),
     },
     {
-      title: "Image",
+      title: "Hình Ảnh",
       dataIndex: ["course", "image"],
       key: "image",
       render: (image) => (
-        <img src={image} alt="Course" style={{ maxWidth: "100px" }} />
+        <img src={image} alt="Khóa học" style={{ maxWidth: "100px" }} />
       ),
     },
     {
-      title: "Action",
+      title: "Hành Động",
       key: "action",
       render: (_, record) => (
-        <Tooltip title="View Details">
+        <Tooltip title="Xem Chi Tiết">
           <Button
             icon={<EyeOutlined />}
             onClick={() => {
@@ -147,13 +146,13 @@ const CourseManagement = () => {
   return (
     <div style={{ display: "flex", width: "-webkit-fill-available" }}>
       <div style={{ width: "-webkit-fill-available", padding: 24 }}>
-        <h2>Course Management</h2>
-        {error && <p style={{ color: "red" }}>Error: {error.message}</p>}
+        <h2>Quản Lý Khóa Học</h2>
+        {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
         <div
           style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
         >
           <Input
-            placeholder="Search course name, description"
+            placeholder="Tìm kiếm tên hoặc mô tả khóa học"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             style={{ width: 500 }}
@@ -162,7 +161,7 @@ const CourseManagement = () => {
             icon={<FilterOutlined />}
             onClick={() => setIsFilterModalVisible(true)}
           >
-            Filter
+            Bộ lọc
           </Button>
         </div>
         <Table
@@ -173,51 +172,51 @@ const CourseManagement = () => {
           pagination={{ pageSize: 5 }}
         />
         <Modal
-          title="Course Details"
+          title="Chi Tiết Khóa Học"
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={null}
           width={1000}
+          style={{ marginTop: "-73px" }}
         >
           {selectedCourse ? (
             <Card>
               <Descriptions column={2} bordered>
-                <Descriptions.Item label="Tutor Name">
+                <Descriptions.Item label="Tên Gia Sư">
                   {selectedCourse.account.fullName}
                 </Descriptions.Item>
-                <Descriptions.Item label="Course Name">
+                <Descriptions.Item label="Tên Khóa Học">
                   {selectedCourse.course.name}
                 </Descriptions.Item>
-                <Descriptions.Item
-                  label="Description"
-                  style={{ maxWidth: "280px" }}
-                >
+                <Descriptions.Item label="Mô Tả" style={{ maxWidth: "280px" }}>
                   {selectedCourse.course.description}
                 </Descriptions.Item>
-                <Descriptions.Item label="Price">
+                <Descriptions.Item label="Giá">
                   {selectedCourse.course.price.toLocaleString()} VND
                 </Descriptions.Item>
-                <Descriptions.Item label="Status">
-                  {selectedCourse.course.isActive ? "Active" : "Inactive"}
+                <Descriptions.Item label="Trạng Thái">
+                  {selectedCourse.course.isActive
+                    ? "Đang hoạt động"
+                    : "Ngừng hoạt động"}
                 </Descriptions.Item>
-                <Descriptions.Item label="Created At">
+                <Descriptions.Item label="Ngày Tạo">
                   {dayjs(selectedCourse.course.createdAt).format("DD/MM/YYYY")}
                 </Descriptions.Item>
-                <Descriptions.Item label="Image" span={2}>
+                <Descriptions.Item label="Hình Ảnh" span={2}>
                   <img
                     src={selectedCourse.course.image}
-                    alt="Course"
+                    alt="Khóa học"
                     style={{ maxWidth: "500px" }}
                   />
                 </Descriptions.Item>
               </Descriptions>
             </Card>
           ) : (
-            <p>No details available.</p>
+            <p>Không có thông tin chi tiết.</p>
           )}
         </Modal>
         <Modal
-          title="Filter Courses"
+          title="Lọc Khóa Học"
           open={isFilterModalVisible}
           onCancel={() => setIsFilterModalVisible(false)}
           footer={[
@@ -226,7 +225,7 @@ const CourseManagement = () => {
               type="primary"
               onClick={() => setIsFilterModalVisible(false)}
             >
-              Apply
+              Áp dụng
             </Button>,
             <Button
               key="reset"
@@ -236,12 +235,12 @@ const CourseManagement = () => {
                 setIsFilterModalVisible(false);
               }}
             >
-              Reset
+              Đặt lại
             </Button>,
           ]}
         >
           <div style={{ marginBottom: 16 }}>
-            <h3>Price Range (VND)</h3>
+            <h3>Khoảng Giá (VND)</h3>
             <Slider
               range
               min={0}
@@ -251,20 +250,20 @@ const CourseManagement = () => {
               tipFormatter={(value) => `${value.toLocaleString()} VND`}
             />
             <p>
-              Range: {priceRange[0].toLocaleString()} -{" "}
+              Từ {priceRange[0].toLocaleString()} đến{" "}
               {priceRange[1].toLocaleString()} VND
             </p>
           </div>
           <div>
-            <h3>Status</h3>
+            <h3>Trạng Thái</h3>
             <Select
               value={statusFilter}
               onChange={setStatusFilter}
               style={{ width: 200 }}
             >
-              <Select.Option value="all">All</Select.Option>
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="inactive">Inactive</Select.Option>
+              <Select.Option value="all">Tất cả</Select.Option>
+              <Select.Option value="active">Đang hoạt động</Select.Option>
+              <Select.Option value="inactive">Ngừng hoạt động</Select.Option>
             </Select>
           </div>
         </Modal>
