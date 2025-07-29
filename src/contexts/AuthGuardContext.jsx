@@ -56,6 +56,7 @@ export function AuthGuardProvider(props) {
       "/verify-otp-user",
       "/courses",
       "/about",
+      "/tutor",
       "/pricing",
       "/courses/:id",
       "/tutors/:accountId",
@@ -99,7 +100,13 @@ export function AuthGuardProvider(props) {
 
     const restrictedPages = {
       User: ["/profile", "/courses/:id", "/tutor", "/ai-chat", "/forum"],
-      Tutor: ["/profile-tutor", "/upload-certificate", "tutor-certifications", "/forum", "course-detail"],
+      Tutor: [
+        "/profile-tutor",
+        "/upload-certificate",
+        "tutor-certifications",
+        "/forum",
+        "course-detail",
+      ],
       Admin: [
         "/profile-admin",
         "/dashboard",

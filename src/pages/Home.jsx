@@ -18,9 +18,6 @@ import {
 } from "lucide-react";
 import "../style/Home.css";
 import heroImage from "../assets/home-first.png";
-import mentor1Image from "../assets/mentor-first.jpg";
-import mentor2Image from "../assets/mentor-second.png";
-import mentor3Image from "../assets/mentor-third.jpeg";
 import aboutImage from "../assets/home-second.png";
 import testimonialImage from "../assets/home-first.png";
 import testimonial1Image from "../assets/home-second.png";
@@ -79,60 +76,60 @@ const ModernHomepage = () => {
     },
   ];
 
-  const pricingPlans = [
-    {
-      name: "Khởi đầu",
-      price: 29,
-      description: "Phù hợp cho học sinh bắt đầu hành trình học tập",
-      features: [
-        "4 buổi học/tháng",
-        "Hỗ trợ bài tập cơ bản",
-        "Theo dõi tiến độ",
-        "Hỗ trợ qua email",
-      ],
-      popular: false,
-    },
-    {
-      name: "Phát triển",
-      price: 59,
-      description: "Lý tưởng cho học sinh cần hỗ trợ học tập toàn diện",
-      features: [
-        "8 buổi học/tháng",
-        "Chuẩn bị thi cử",
-        "Tài liệu học tập tùy chỉnh",
-        "Hỗ trợ ưu tiên",
-        "Phân tích hiệu suất",
-      ],
-      popular: true,
-    },
-    {
-      name: "Xuất sắc",
-      price: 89,
-      description: "Dành cho học sinh hướng tới thành tích học tập hàng đầu",
-      features: [
-        "12 buổi học/tháng",
-        "Chiến lược nâng cao",
-        "Nhiều môn học",
-        "Hướng dẫn 1-1",
-        "Hướng dẫn chuẩn bị đại học",
-      ],
-      popular: false,
-    },
-    {
-      name: "Cao cấp",
-      price: 149,
-      description:
-        "Truy cập không giới hạn cho học sinh nghiêm túc đạt thành tích cao",
-      features: [
-        "Buổi học không giới hạn",
-        "Chuẩn bị thi đấu",
-        "Người hướng dẫn cao cấp",
-        "Hỗ trợ 24/7",
-        "Tư vấn nghề nghiệp",
-      ],
-      popular: false,
-    },
-  ];
+  // const pricingPlans = [
+  //   {
+  //     name: "Khởi đầu",
+  //     price: 29,
+  //     description: "Phù hợp cho học sinh bắt đầu hành trình học tập",
+  //     features: [
+  //       "4 buổi học/tháng",
+  //       "Hỗ trợ bài tập cơ bản",
+  //       "Theo dõi tiến độ",
+  //       "Hỗ trợ qua email",
+  //     ],
+  //     popular: false,
+  //   },
+  //   {
+  //     name: "Phát triển",
+  //     price: 59,
+  //     description: "Lý tưởng cho học sinh cần hỗ trợ học tập toàn diện",
+  //     features: [
+  //       "8 buổi học/tháng",
+  //       "Chuẩn bị thi cử",
+  //       "Tài liệu học tập tùy chỉnh",
+  //       "Hỗ trợ ưu tiên",
+  //       "Phân tích hiệu suất",
+  //     ],
+  //     popular: true,
+  //   },
+  //   {
+  //     name: "Xuất sắc",
+  //     price: 89,
+  //     description: "Dành cho học sinh hướng tới thành tích học tập hàng đầu",
+  //     features: [
+  //       "12 buổi học/tháng",
+  //       "Chiến lược nâng cao",
+  //       "Nhiều môn học",
+  //       "Hướng dẫn 1-1",
+  //       "Hướng dẫn chuẩn bị đại học",
+  //     ],
+  //     popular: false,
+  //   },
+  //   {
+  //     name: "Cao cấp",
+  //     price: 149,
+  //     description:
+  //       "Truy cập không giới hạn cho học sinh nghiêm túc đạt thành tích cao",
+  //     features: [
+  //       "Buổi học không giới hạn",
+  //       "Chuẩn bị thi đấu",
+  //       "Người hướng dẫn cao cấp",
+  //       "Hỗ trợ 24/7",
+  //       "Tư vấn nghề nghiệp",
+  //     ],
+  //     popular: false,
+  //   },
+  // ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -912,7 +909,7 @@ const ModernHomepage = () => {
       </section>
 
       {/* Phần Giá cả */}
-      <section className="pricing-section">
+      {/* <section className="pricing-section">
         <div className="pricing-container">
           <div className="section-header">
             <h2 className="section-title">
@@ -965,7 +962,7 @@ const ModernHomepage = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Phần Nhận xét nâng cao */}
       <section
