@@ -26,6 +26,7 @@ const useAuthStore = create((set) => {
         const data = response.data;
         if (data.token && data.user) {
           const user = {
+            accountId: data.user.id, //account id
             fullName: data.user.fullName,
             email: data.user.email,
             phone: data.user.phone,

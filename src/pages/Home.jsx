@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import { Search, Star, Clock, Check, Play, ChevronLeft, ChevronRight, Users, Award, TrendingUp, Heart, Quote, Sparkles, Loader2, AlertCircle, Zap, Crown, Trophy, BookOpen, Target} from 'lucide-react';
 import '../style/Home.css';
 import heroImage from '../assets/home-first.png';
 import mentor1Image from '../assets/mentor-first.jpg';
@@ -15,6 +15,7 @@ import { useMentors } from '../hooks/useMentors';
 const ModernHomepage = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
+   const [hoveredPlan, setHoveredPlan] = useState(null);
 
   // Use the custom hook
   const { mentors, loading, error, searchMentors, getTopMentors, refreshMentors } = useMentors();
@@ -31,10 +32,76 @@ const ModernHomepage = () => {
 
 
   const pricingPlans = [
-    { name: "Starter", price: 29, description: "Perfect for students beginning their academic journey", features: ["4 sessions/month", "Basic homework help", "Progress tracking", "Email support"], popular: false },
-    { name: "Growth", price: 59, description: "Ideal for students seeking comprehensive academic support", features: ["8 sessions/month", "Test preparation", "Custom study materials", "Priority support", "Performance analytics"], popular: true },
-    { name: "Excellence", price: 89, description: "For students aiming for top-tier academic performance", features: ["12 sessions/month", "Advanced strategies", "Multiple subjects", "1-on-1 mentoring", "College prep guidance"], popular: false },
-    { name: "Elite", price: 149, description: "Unlimited access for serious academic achievers", features: ["Unlimited sessions", "Competition prep", "Premium mentors", "24/7 support", "Career counseling"], popular: false }
+    {
+      name: "Basic",
+      price: "19",
+      description: "Perfect for getting started with your learning journey",
+      icon: BookOpen,
+      color: "gradient-blue",
+      bgColor: "bg-white-10",
+      features: [
+        "Access to 10+ courses",
+        "Basic study materials",
+        "Email support",
+        "Mobile app access",
+        "Progress tracking"
+      ],
+      popular: false
+    },
+    {
+      name: "Pro",
+      price: "39",
+      description: "Best for serious learners who want comprehensive resources",
+      icon: Target,
+      color: "gradient-green",
+      bgColor: "bg-white-20",
+      features: [
+        "Access to 50+ courses",
+        "Advanced study materials",
+        "Priority support",
+        "Offline downloads",
+        "Personalized learning path",
+        "Live webinars",
+        "Certificate of completion"
+      ],
+      popular: true
+    },
+    {
+      name: "Premium",
+      price: "59",
+      description: "For professionals seeking advanced skills and certifications",
+      icon: Star,
+      color: "gradient-purple",
+      bgColor: "bg-white-30",
+      features: [
+        "Access to 100+ courses",
+        "Premium study materials",
+        "1-on-1 tutoring sessions",
+        "Career guidance",
+        "Industry certifications",
+        "Exclusive workshops",
+        "Job placement assistance"
+      ],
+      popular: false
+    },
+    {
+      name: "Enterprise",
+      price: "99",
+      description: "Complete solution for teams and organizations",
+      icon: Crown,
+      color: "gradient-pink",
+      bgColor: "bg-white-20",
+      features: [
+        "Unlimited course access",
+        "Custom content creation",
+        "Dedicated account manager",
+        "Team analytics",
+        "API integrations",
+        "White-label solution",
+        "24/7 premium support"
+      ],
+      popular: false
+    }
   ];
 
   useEffect(() => {
@@ -683,49 +750,699 @@ const ModernHomepage = () => {
       </section>
 
       {/* Pricing Section */}
-      <section className="pricing-section">
-        <div className="pricing-container">
-          <div className="section-header">
-            <h2 className="section-title">
-              Choose Your <span className="pricing-highlight">Learning Plan</span>
-            </h2>
-            <p className="section-description">
-              Flexible pricing designed to fit every student's budget and learning goals. Start your journey to academic excellence today.
-            </p>
-          </div>
-
-          <div className="pricing-grid">
-            {pricingPlans.map((plan, index) => (
-              <div key={index} className={`pricing-card ${plan.popular ? 'popular' : ''}`}>
-                {plan.popular && <div className="popular-badge">Most Popular</div>}
+      <section class="pricing-section">
+        <div class="pricing-container">
+            {/* Header */}
+            <div class="pricing-header">
+                <div class="pricing-badge">
+                    <span class="pulse-dot"></span>
+                    <span class="badge-text">Pricing Plans</span>
+                </div>
                 
-                <div className="pricing-header">
-                  <h3 className="plan-name">{plan.name}</h3>
-                  <p className="plan-description">{plan.description}</p>
-                  <div className="plan-price">
-                    ${plan.price}
-                    <span className="price-period">/month</span>
-                  </div>
-                </div>
+                <h2 class="pricing-title">
+                    
+                    <span class="gradient-text">Choose Your Learning Plan</span>
+                </h2>
+                
+                <p class="pricing-subtitle">
+                    Flexible pricing designed to fit every student's budget and learning goals. 
+                    Start your journey to academic excellence today.
+                </p>
+            </div>
 
-                <div className="plan-features">
-                  {plan.features.map((feature, featureIndex) => (
-                    <div key={featureIndex} className="feature-item">
-                      <Check className="feature-check-icon" />
-                      <span>{feature}</span>
+
+            <div class="pricing-grid">
+                
+                <div class="pricing-card">
+                    <div class="card-container">
+                        <div class="card-content">
+                            <div class="plan-icon bg-blue">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="9" y1="9" x2="15" y2="15"/>
+                                    <line x1="15" y1="9" x2="9" y2="15"/>
+                                </svg>
+                            </div>
+
+                            <div class="plan-header">
+                                <h3 class="plan-name">Basic</h3>
+                                <p class="plan-description">Perfect for getting started with your learning journey</p>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-display">
+                                    <span class="price-amount">$19</span>
+                                    <span class="price-period">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="features-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-blue">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Access to 10+ courses</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-blue">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Basic study materials</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-blue">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Email support</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-blue">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Mobile app access</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-blue">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Progress tracking</span>
+                                </div>
+                            </div>
+
+                            <button class="plan-button standard">Choose Plan</button>
+                        </div>
                     </div>
-                  ))}
                 </div>
 
-                <button className={`plan-btn ${plan.popular ? 'btn-primary' : 'btn-outline'}`}>
-                  Get Started
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+               
+                <div class="pricing-card popular">
+                    <div class="popular-badge">
+                        <div class="popular-badge-inner">⭐ Most Popular</div>
+                    </div>
+                    <div class="card-container">
+                        <div class="card-content">
+                            <div class="plan-icon bg-green">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <circle cx="12" cy="12" r="3"/>
+                                    <path d="M12 1v6m0 6v6"/>
+                                    <path d="m15.5 4.5-3 3m0 0-3-3m3 3v6"/>
+                                </svg>
+                            </div>
 
+                            <div class="plan-header">
+                                <h3 class="plan-name">Pro</h3>
+                                <p class="plan-description">Best for serious learners who want comprehensive resources</p>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-display">
+                                    <span class="price-amount">$39</span>
+                                    <span class="price-period">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="features-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Access to 50+ courses</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Advanced study materials</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Priority support</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Offline downloads</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Personalized learning path</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Live webinars</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-green">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Certificate of completion</span>
+                                </div>
+                            </div>
+
+                            <button class="plan-button popular bg-green">Get Started Now</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="pricing-card">
+                    <div class="card-container">
+                        <div class="card-content">
+                            <div class="plan-icon bg-purple">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                                </svg>
+                            </div>
+
+                            <div class="plan-header">
+                                <h3 class="plan-name">Premium</h3>
+                                <p class="plan-description">For professionals seeking advanced skills and certifications</p>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-display">
+                                    <span class="price-amount">$59</span>
+                                    <span class="price-period">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="features-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Access to 100+ courses</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Premium study materials</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">1-on-1 tutoring sessions</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Career guidance</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Industry certifications</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Exclusive workshops</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-purple">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Job placement assistance</span>
+                                </div>
+                            </div>
+
+                            <button class="plan-button standard">Choose Plan</button>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="pricing-card">
+                    <div class="card-container">
+                        <div class="card-content">
+                            <div class="plan-icon bg-pink">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+
+                            <div class="plan-header">
+                                <h3 class="plan-name">Enterprise</h3>
+                                <p class="plan-description">Complete solution for teams and organizations</p>
+                            </div>
+
+                            <div class="price-container">
+                                <div class="price-display">
+                                    <span class="price-amount">$99</span>
+                                    <span class="price-period">/month</span>
+                                </div>
+                            </div>
+
+                            <div class="features-list">
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Unlimited course access</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Custom content creation</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Dedicated account manager</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">Team analytics</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">API integrations</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">White-label solution</span>
+                                </div>
+                                <div class="feature-item">
+                                    <div class="feature-icon bg-pink">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3">
+                                            <polyline points="20,6 9,17 4,12"/>
+                                        </svg>
+                                    </div>
+                                    <span class="feature-text">24/7 premium support</span>
+                                </div>
+                            </div>
+
+                            <button class="plan-button standard">Choose Plan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+      <style jsx>{`
+        
+
+        /* Pricing Section */
+        .pricing-section {
+            position: relative;
+            padding: 3rem 1.5rem;
+        }
+
+        .pricing-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .pulse-dot {
+            width: 0.5rem;
+            height: 0.5rem;
+            background: #4ade80;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .badge-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .pricing-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #22d3ee, #a855f7, #ec4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradient-pulse 3s ease-in-out infinite;
+        }
+
+        .pricing-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 28rem;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Grid Layout */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .pricing-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.25rem;
+            }
+        }
+
+        /* Card Styles */
+        .pricing-card {
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            transform-origin: center;
+            height: 100%;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.03);
+        }
+
+        .pricing-card.popular {
+            transform: scale(1.05);
+        }
+
+        .pricing-card.popular:hover {
+            transform: scale(1.08);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -0.75rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 20;
+        }
+
+        .popular-badge-inner {
+            background: linear-gradient(to right, #facc15, #f97316);
+            color: white;
+            padding: 0.25rem 0.875rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: bounce 2s infinite;
+        }
+
+        .card-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.25rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            background: rgba(255, 255, 255, 0.95);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-container:hover {
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .card-content {
+            position: relative;
+            padding: 1.75rem 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Icon Styles */
+        .plan-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 1rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+
+        /* Plan Header */
+        .plan-header {
+            margin-bottom: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .plan-name {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* Price */
+        .price-container {
+            margin-bottom: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .price-display {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .price-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .price-period {
+            color: #6b7280;
+            margin-left: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Features */
+        .features-list {
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .feature-item:hover .feature-text {
+            color: #111827;
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-text {
+            margin-left: 0.75rem;
+            color: #374151;
+            transition: color 0.2s ease;
+            font-size: 0.875rem;
+            line-height: 1.4;
+        }
+
+        /* Button */
+        .plan-button {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border-radius: 0.875rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .plan-button.popular {
+            color: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .plan-button.popular:hover {
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .plan-button.standard {
+            background: rgba(255, 255, 255, 0.8);
+            color: #111827;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .plan-button.standard:hover {
+            background: white;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        /* Background Colors */
+        .bg-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
+        .bg-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+        .bg-pink { background: linear-gradient(135deg, #ec4899, #be185d); }
+
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        @keyframes gradient-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+                animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+            }
+            50% {
+                transform: translateY(-25%);
+                animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (min-width: 768px) {
+            .pricing-title {
+                font-size: 3rem;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+            
+            .pricing-title {
+                font-size: 2rem;
+            }
+        }
+      `}</style>
       {/* Enhanced Testimonials Section */}
 <section style={{
   background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
