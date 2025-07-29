@@ -17,88 +17,88 @@ const ModernHomepage = () => {
   const [searchQuery, setSearchQuery] = useState('');
    const [hoveredPlan, setHoveredPlan] = useState(null);
 
-  // Use the custom hook
+  // Sử dụng hook tùy chỉnh
   const { mentors, loading, error, searchMentors, getTopMentors, refreshMentors } = useMentors();
   
-  // Get filtered mentors based on search query
+  // Lấy danh sách cố vấn đã lọc dựa trên truy vấn tìm kiếm
   const filteredMentors = searchQuery ? searchMentors(searchQuery) : getTopMentors(3);
 
   const testimonials = [
-    { text: "Tutorify completely transformed my academic performance! My mentor helped me understand complex mathematics concepts that I struggled with for months.", author: "Sarah Chen", role: "High School Student", rating: 5, image: testimonial1Image },
-    { text: "The quality of teaching here is exceptional. My physics grades improved dramatically after just a few sessions.", author: "Michael Rodriguez", role: "College Student", rating: 5, image: testimonial2Image },
-    { text: "I was struggling with chemistry until I found Tutorify. My mentor made complex reactions seem simple and fun.", author: "Emma Thompson", role: "High School Senior", rating: 5, image: testimonial3Image },
-    { text: "The best investment I made for my education. The personalized study plans helped me achieve my dream SAT score.", author: "David Kim", role: "High School Junior", rating: 5, image: testimonial4Image }
+    { text: "Tutorify đã thay đổi hoàn toàn kết quả học tập của tôi! Cố vấn của tôi đã giúp tôi hiểu các khái niệm toán học phức tạp mà tôi đã phải vật lộn trong nhiều tháng.", author: "Trần Thị Sarah", role: "Học sinh Trung học", rating: 5, image: testimonial1Image },
+    { text: "Chất lượng giảng dạy ở đây thật đặc biệt. Điểm số môn vật lý của tôi đã cải thiện đáng kể chỉ sau một vài buổi học.", author: "Nguyễn Văn Michael", role: "Sinh viên Đại học", rating: 5, image: testimonial2Image },
+    { text: "Tôi đã phải vật lộn với môn hóa học cho đến khi tôi tìm thấy Tutorify. Cố vấn của tôi đã làm cho các phản ứng phức tạp có vẻ đơn giản và thú vị.", author: "Lê Thị Emma", role: "Học sinh cuối cấp", rating: 5, image: testimonial3Image },
+    { text: "Khoản đầu tư tốt nhất mà tôi đã thực hiện cho việc học của mình. Các kế hoạch học tập được cá nhân hóa đã giúp tôi đạt được điểm SAT mơ ước.", author: "Phạm Văn David", role: "Học sinh trung học cơ sở", rating: 5, image: testimonial4Image }
   ];
 
 
   const pricingPlans = [
     {
-      name: "Basic",
+      name: "Cơ bản",
       price: "19",
-      description: "Perfect for getting started with your learning journey",
+      description: "Hoàn hảo để bắt đầu hành trình học tập của bạn",
       icon: BookOpen,
       color: "gradient-blue",
       bgColor: "bg-white-10",
       features: [
-        "Access to 10+ courses",
-        "Basic study materials",
-        "Email support",
-        "Mobile app access",
-        "Progress tracking"
+        "Truy cập hơn 10 khóa học",
+        "Tài liệu học tập cơ bản",
+        "Hỗ trợ qua email",
+        "Truy cập ứng dụng di động",
+        "Theo dõi tiến độ"
       ],
       popular: false
     },
     {
-      name: "Pro",
+      name: "Chuyên nghiệp",
       price: "39",
-      description: "Best for serious learners who want comprehensive resources",
+      description: "Tốt nhất cho những người học nghiêm túc muốn có nguồn tài nguyên toàn diện",
       icon: Target,
       color: "gradient-green",
       bgColor: "bg-white-20",
       features: [
-        "Access to 50+ courses",
-        "Advanced study materials",
-        "Priority support",
-        "Offline downloads",
-        "Personalized learning path",
-        "Live webinars",
-        "Certificate of completion"
+        "Truy cập hơn 50 khóa học",
+        "Tài liệu học tập nâng cao",
+        "Hỗ trợ ưu tiên",
+        "Tải xuống ngoại tuyến",
+        "Lộ trình học tập được cá nhân hóa",
+        "Hội thảo trực tuyến trực tiếp",
+        "Chứng chỉ hoàn thành"
       ],
       popular: true
     },
     {
-      name: "Premium",
+      name: "Cao cấp",
       price: "59",
-      description: "For professionals seeking advanced skills and certifications",
+      description: "Dành cho các chuyên gia tìm kiếm các kỹ năng và chứng chỉ nâng cao",
       icon: Star,
       color: "gradient-purple",
       bgColor: "bg-white-30",
       features: [
-        "Access to 100+ courses",
-        "Premium study materials",
-        "1-on-1 tutoring sessions",
-        "Career guidance",
-        "Industry certifications",
-        "Exclusive workshops",
-        "Job placement assistance"
+        "Truy cập hơn 100 khóa học",
+        "Tài liệu học tập cao cấp",
+        "Các buổi dạy kèm 1 kèm 1",
+        "Hướng nghiệp",
+        "Chứng chỉ ngành",
+        "Hội thảo độc quyền",
+        "Hỗ trợ tìm việc làm"
       ],
       popular: false
     },
     {
-      name: "Enterprise",
+      name: "Doanh nghiệp",
       price: "99",
-      description: "Complete solution for teams and organizations",
+      description: "Giải pháp hoàn chỉnh cho các nhóm và tổ chức",
       icon: Crown,
       color: "gradient-pink",
       bgColor: "bg-white-20",
       features: [
-        "Unlimited course access",
-        "Custom content creation",
-        "Dedicated account manager",
-        "Team analytics",
-        "API integrations",
-        "White-label solution",
-        "24/7 premium support"
+        "Truy cập khóa học không giới hạn",
+        "Tạo nội dung tùy chỉnh",
+        "Quản lý tài khoản chuyên dụng",
+        "Phân tích nhóm",
+        "Tích hợp API",
+        "Giải pháp nhãn trắng",
+        "Hỗ trợ cao cấp 24/7"
       ],
       popular: false
     }
@@ -111,20 +111,20 @@ const ModernHomepage = () => {
     return () => clearInterval(interval);
   }, []);
 
- // Handle booking session
+ // Xử lý đặt lịch học
   const handleBookSession = (mentor) => {
-    // You can implement navigation to booking page or open modal
-    console.log('Booking session with:', mentor);
-    // Example: navigate to booking page
+    // Bạn có thể triển khai điều hướng đến trang đặt lịch hoặc mở modal
+    console.log('Đặt lịch học với:', mentor);
+    // Ví dụ: điều hướng đến trang đặt lịch
     // navigate(`/booking/${mentor.courseId}`);
   };
 
-  // Handle search
+  // Xử lý tìm kiếm
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Render mentor card with loading state
+  // Hiển thị thẻ cố vấn với trạng thái đang tải
   const renderMentorCard = (mentor, index) => (
     <div key={mentor.id || index} className="mentor-card">
       <img 
@@ -148,14 +148,14 @@ const ModernHomepage = () => {
           <div className="mentor-stat">
             <Star className="icon-sm star-icon" />
             <span>
-              {mentor.rating > 0 ? `${mentor.rating} (${mentor.reviews})` : 'New Tutor'}
+              {mentor.rating > 0 ? `${mentor.rating} (${mentor.reviews})` : 'Gia sư mới'}
             </span>
           </div>
         </div>
 
         {mentor.price && (
           <div className="mentor-price">
-            <span>${mentor.price}/session</span>
+            <span>${mentor.price}/buổi học</span>
           </div>
         )}
 
@@ -163,30 +163,30 @@ const ModernHomepage = () => {
           className="mentor-btn"
           onClick={() => handleBookSession(mentor)}
         >
-          Book Session
+          Đặt lịch học
         </button>
       </div>
     </div>
   );
 
-  // Render loading state
+  // Hiển thị trạng thái đang tải
   const renderLoadingState = () => (
     <div className="mentors-loading">
       <Loader2 className="icon-lg animate-spin" />
-      <p>Loading our amazing mentors...</p>
+      <p>Đang tải các cố vấn tuyệt vời của chúng tôi...</p>
     </div>
   );
 
-  // Render error state
+  // Hiển thị trạng thái lỗi
   const renderErrorState = () => (
     <div className="mentors-error">
       <AlertCircle className="icon-lg text-red-500" />
-      <p>Failed to load mentors. Please try again.</p>
+      <p>Không thể tải cố vấn. Vui lòng thử lại.</p>
       <button 
         className="retry-btn"
         onClick={refreshMentors}
       >
-        Retry
+        Thử lại
       </button>
     </div>
   );
@@ -210,7 +210,7 @@ const ModernHomepage = () => {
           }
         `}
       </style>
-      {/* Hero Section - Improved Layout */}
+      {/* Phần Hero - Bố cục được cải thiện */}
       <section style={{ 
         background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
         minHeight: '100vh', 
@@ -219,7 +219,7 @@ const ModernHomepage = () => {
         position: 'relative',
         overflow: 'hidden'
       }}>
-        {/* Animated Background Elements */}
+        {/* Các yếu tố nền hoạt hình */}
         <div style={{
           position: 'absolute',
           top: '10%',
@@ -267,7 +267,7 @@ const ModernHomepage = () => {
                 border: '1px solid rgba(61, 90, 219, 0.2)'
               }}>
                 <Heart size={16} />
-                Transform Your Learning Journey
+                Chuyển đổi hành trình học tập của bạn
               </div>
               
               <h1 style={{ 
@@ -277,14 +277,14 @@ const ModernHomepage = () => {
                 lineHeight: 1.1,
                 color: '#1a202c'
               }}>
-                Unlock Your{' '}
+                Mở khóa{' '}
                 <span style={{ 
                   background: 'linear-gradient(45deg, rgb(61, 90, 219) 0%, rgb(45, 70, 180) 100%)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
                   display: 'block'
                 }}>
-                  Academic Potential
+                  Tiềm năng học tập của bạn
                 </span>
               </h1>
               
@@ -294,10 +294,10 @@ const ModernHomepage = () => {
                 color: '#64748b',
                 maxWidth: '500px'
               }}>
-                Connect with world-class mentors who provide personalized, one-on-one tutoring designed to accelerate your learning and achieve excellence in every subject.
+                Kết nối với các cố vấn đẳng cấp thế giới, những người cung cấp dịch vụ dạy kèm 1 kèm 1 được cá nhân hóa được thiết kế để đẩy nhanh việc học của bạn và đạt được sự xuất sắc trong mọi môn học.
               </p>
 
-              {/* Stats Grid - Enhanced with Gradients and Animations */}
+              {/* Lưới thống kê - Nâng cao với Gradient và hoạt hình */}
               <div style={{ 
                 display: 'grid', 
                 gridTemplateColumns: 'repeat(3, 1fr)', 
@@ -305,9 +305,9 @@ const ModernHomepage = () => {
                 marginBottom: '3rem'
               }}>
                 {[
-                  { number: "500+", label: "Expert Mentors", icon: Users },
-                  { number: "25K+", label: "Success Stories", icon: Award },
-                  { number: "98%", label: "Success Rate", icon: TrendingUp }
+                  { number: "500+", label: "Cố vấn chuyên gia", icon: Users },
+                  { number: "25K+", label: "Câu chuyện thành công", icon: Award },
+                  { number: "98%", label: "Tỷ lệ thành công", icon: TrendingUp }
                 ].map((stat, index) => (
                   <div 
                     key={index} 
@@ -373,7 +373,7 @@ const ModernHomepage = () => {
                 ))}
               </div>
 
-              {/* Enhanced Search Container with Modern Effects */}
+              {/* Hộp tìm kiếm nâng cao với các hiệu ứng hiện đại */}
               <div style={{ 
                 background: 'white', 
                 borderRadius: '20px', 
@@ -415,7 +415,7 @@ const ModernHomepage = () => {
                     <Search size={22} style={{ color: '#6b7280', marginRight: '1rem' }} />
                     <input
                       type="text"
-                      placeholder="Search for subjects, mentors, or topics..."
+                      placeholder="Tìm kiếm môn học, cố vấn hoặc chủ đề..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
                       style={{
@@ -453,7 +453,7 @@ const ModernHomepage = () => {
                       e.currentTarget.style.boxShadow = '0 8px 25px rgba(61, 90, 219, 0.4)';
                     }}
                   >
-                    <span style={{ position: 'relative', zIndex: 1 }}>Find Mentor</span>
+                    <span style={{ position: 'relative', zIndex: 1 }}>Tìm cố vấn</span>
                     <div style={{
                       position: 'absolute',
                       top: '50%',
@@ -501,7 +501,7 @@ const ModernHomepage = () => {
                 }}></div>
                 <img 
                   src={heroImage} 
-                  alt="Students learning" 
+                  alt="Học sinh đang học" 
                   style={{ 
                     width: '100%', 
                     height: '400px', 
@@ -517,7 +517,7 @@ const ModernHomepage = () => {
       </section>
 
       
-{/* About Section - Fixed */}
+{/* Phần Giới thiệu - Đã sửa */}
 <section style={{
   background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
   padding: '6rem 0',
@@ -535,7 +535,7 @@ const ModernHomepage = () => {
       gap: '6rem',
       alignItems: 'center'
     }}>
-      {/* Image Side */}
+      {/* Phía hình ảnh */}
       <div style={{
         position: 'relative'
       }}>
@@ -548,7 +548,7 @@ const ModernHomepage = () => {
         }}>
           <img 
             src={aboutImage} 
-            alt="Learning experience" 
+            alt="Trải nghiệm học tập" 
             style={{
               width: '100%',
               height: '300px 80%',
@@ -565,7 +565,7 @@ const ModernHomepage = () => {
             marginBottom: '1.5rem',
             textAlign: 'center'
           }}>
-            Why Students Choose Tutorify
+            Tại sao học sinh chọn Tutorify
           </h3>
           
           <div style={{
@@ -574,10 +574,10 @@ const ModernHomepage = () => {
             gap: '1rem'
           }}>
             {[
-              "Personalized 1-on-1 learning experience",
-              "Expert mentors with proven track records", 
-              "Flexible scheduling that fits your lifestyle",
-              "Advanced learning analytics and progress tracking"
+              "Trải nghiệm học tập 1 kèm 1 được cá nhân hóa",
+              "Cố vấn chuyên gia với thành tích đã được chứng minh", 
+              "Lịch học linh hoạt phù hợp với lối sống của bạn",
+              "Phân tích học tập và theo dõi tiến độ nâng cao"
             ].map((feature, index) => (
               <div key={index} style={{
                 display: 'flex',
@@ -611,7 +611,7 @@ const ModernHomepage = () => {
         </div>
       </div>
 
-      {/* Content Side */}
+      {/* Phía nội dung */}
       <div style={{
         paddingLeft: '2rem'
       }}>
@@ -629,7 +629,7 @@ const ModernHomepage = () => {
           boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
         }}>
           <Heart size={16} />
-          About Tutorify
+          Về Tutorify
         </div>
 
         <h2 style={{
@@ -639,7 +639,7 @@ const ModernHomepage = () => {
           marginBottom: '2rem',
           lineHeight: '1.2'
         }}>
-          Empowering Students to
+          Trao quyền cho học sinh
           <span style={{
             background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
             WebkitBackgroundClip: 'text',
@@ -647,7 +647,7 @@ const ModernHomepage = () => {
             display: 'block',
             marginTop: '0.5rem'
           }}>
-            Excel in Every Subject
+            Xuất sắc trong mọi môn học
           </span>
         </h2>
 
@@ -658,7 +658,7 @@ const ModernHomepage = () => {
           marginBottom: '3rem',
           maxWidth: '500px'
         }}>
-          At Tutorify, we believe every student has the potential to achieve greatness. Our platform connects you with world-class mentors who provide personalized learning experiences tailored to your unique needs and goals.
+          Tại Tutorify, chúng tôi tin rằng mỗi học sinh đều có tiềm năng để đạt được thành công. Nền tảng của chúng tôi kết nối bạn với các cố vấn đẳng cấp thế giới, những người cung cấp trải nghiệm học tập được cá nhân hóa phù hợp với nhu cầu và mục tiêu riêng của bạn.
         </p>
 
         <div style={{
@@ -678,7 +678,7 @@ const ModernHomepage = () => {
             transition: 'all 0.3s ease',
             boxShadow: '0 4px 15px rgba(102, 126, 234, 0.4)'
           }}>
-            Get Started Today
+            Bắt đầu ngay hôm nay
           </button>
           
           <button style={{
@@ -696,7 +696,7 @@ const ModernHomepage = () => {
             gap: '0.5rem'
           }}>
             <Play size={16} />
-            Watch Demo
+            Xem Demo
           </button>
         </div>
       </div>
@@ -704,24 +704,24 @@ const ModernHomepage = () => {
   </div>
 </section>
 
-{/* Mentors Section */}
+{/* Phần Cố vấn */}
       <section className="mentors-section">
         <div className="mentors-container">
           <div className="section-header">
             <h2 className="section-title">
-              Meet Our <span className="title-highlight">Elite Mentors</span>
+              Gặp gỡ <span className="title-highlight">Các cố vấn ưu tú</span> của chúng tôi
             </h2>
             <p className="section-description">
-              Learn from the best. Our mentors are carefully selected experts who are passionate about helping students achieve their academic dreams.
+              Học hỏi từ những người giỏi nhất. Các cố vấn của chúng tôi là những chuyên gia được lựa chọn cẩn thận, những người đam mê giúp đỡ sinh viên đạt được ước mơ học tập của mình.
             </p>
             
-            {/* Search bar for mentors */}
+            {/* Thanh tìm kiếm cố vấn */}
             <div className="mentor-search">
               <div className="search-input-container">
                 <Search className="search-icon" />
                 <input
                   type="text"
-                  placeholder="Search mentors by name or subject..."
+                  placeholder="Tìm kiếm cố vấn theo tên hoặc môn học..."
                   value={searchQuery}
                   onChange={handleSearch}
                   className="search-input"
@@ -737,7 +737,7 @@ const ModernHomepage = () => {
             
             {!loading && !error && filteredMentors.length === 0 && (
               <div className="no-mentors">
-                <p>No mentors found matching your search.</p>
+                <p>Không tìm thấy cố vấn nào phù hợp với tìm kiếm của bạn.</p>
               </div>
             )}
             
@@ -749,24 +749,24 @@ const ModernHomepage = () => {
         </div>
       </section>
 
-      {/* Pricing Section */}
+      {/* Phần Giá cả */}
       <section class="pricing-section">
         <div class="pricing-container">
-            {/* Header */}
+            {/* Tiêu đề */}
             <div class="pricing-header">
                 <div class="pricing-badge">
                     <span class="pulse-dot"></span>
-                    <span class="badge-text">Pricing Plans</span>
+                    <span class="badge-text">Các gói giá</span>
                 </div>
                 
                 <h2 class="pricing-title">
                     
-                    <span class="gradient-text">Choose Your Learning Plan</span>
+                    <span class="gradient-text">Chọn gói học tập của bạn</span>
                 </h2>
                 
                 <p class="pricing-subtitle">
-                    Flexible pricing designed to fit every student's budget and learning goals. 
-                    Start your journey to academic excellence today.
+                    Giá cả linh hoạt được thiết kế để phù hợp với ngân sách và mục tiêu học tập của mọi sinh viên. 
+                    Hãy bắt đầu hành trình đến với sự xuất sắc trong học tập ngay hôm nay.
                 </p>
             </div>
 
@@ -785,14 +785,14 @@ const ModernHomepage = () => {
                             </div>
 
                             <div class="plan-header">
-                                <h3 class="plan-name">Basic</h3>
-                                <p class="plan-description">Perfect for getting started with your learning journey</p>
+                                <h3 class="plan-name">Cơ bản</h3>
+                                <p class="plan-description">Hoàn hảo để bắt đầu hành trình học tập của bạn</p>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-display">
                                     <span class="price-amount">$19</span>
-                                    <span class="price-period">/month</span>
+                                    <span class="price-period">/tháng</span>
                                 </div>
                             </div>
 
@@ -803,7 +803,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Access to 10+ courses</span>
+                                    <span class="feature-text">Truy cập hơn 10 khóa học</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-blue">
@@ -811,7 +811,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Basic study materials</span>
+                                    <span class="feature-text">Tài liệu học tập cơ bản</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-blue">
@@ -819,7 +819,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Email support</span>
+                                    <span class="feature-text">Hỗ trợ qua email</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-blue">
@@ -827,7 +827,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Mobile app access</span>
+                                    <span class="feature-text">Truy cập ứng dụng di động</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-blue">
@@ -835,11 +835,11 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Progress tracking</span>
+                                    <span class="feature-text">Theo dõi tiến độ</span>
                                 </div>
                             </div>
 
-                            <button class="plan-button standard">Choose Plan</button>
+                            <button class="plan-button standard">Chọn gói</button>
                         </div>
                     </div>
                 </div>
@@ -847,7 +847,7 @@ const ModernHomepage = () => {
                
                 <div class="pricing-card popular">
                     <div class="popular-badge">
-                        <div class="popular-badge-inner">⭐ Most Popular</div>
+                        <div class="popular-badge-inner">⭐ Phổ biến nhất</div>
                     </div>
                     <div class="card-container">
                         <div class="card-content">
@@ -860,14 +860,14 @@ const ModernHomepage = () => {
                             </div>
 
                             <div class="plan-header">
-                                <h3 class="plan-name">Pro</h3>
-                                <p class="plan-description">Best for serious learners who want comprehensive resources</p>
+                                <h3 class="plan-name">Chuyên nghiệp</h3>
+                                <p class="plan-description">Tốt nhất cho những người học nghiêm túc muốn có nguồn tài nguyên toàn diện</p>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-display">
                                     <span class="price-amount">$39</span>
-                                    <span class="price-period">/month</span>
+                                    <span class="price-period">/tháng</span>
                                 </div>
                             </div>
 
@@ -878,7 +878,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Access to 50+ courses</span>
+                                    <span class="feature-text">Truy cập hơn 50 khóa học</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -886,7 +886,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Advanced study materials</span>
+                                    <span class="feature-text">Tài liệu học tập nâng cao</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -894,7 +894,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Priority support</span>
+                                    <span class="feature-text">Hỗ trợ ưu tiên</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -902,7 +902,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Offline downloads</span>
+                                    <span class="feature-text">Tải xuống ngoại tuyến</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -910,7 +910,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Personalized learning path</span>
+                                    <span class="feature-text">Lộ trình học tập được cá nhân hóa</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -918,7 +918,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Live webinars</span>
+                                    <span class="feature-text">Hội thảo trực tuyến trực tiếp</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-green">
@@ -926,11 +926,11 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Certificate of completion</span>
+                                    <span class="feature-text">Chứng chỉ hoàn thành</span>
                                 </div>
                             </div>
 
-                            <button class="plan-button popular bg-green">Get Started Now</button>
+                            <button class="plan-button popular bg-green">Bắt đầu ngay</button>
                         </div>
                     </div>
                 </div>
@@ -946,14 +946,14 @@ const ModernHomepage = () => {
                             </div>
 
                             <div class="plan-header">
-                                <h3 class="plan-name">Premium</h3>
-                                <p class="plan-description">For professionals seeking advanced skills and certifications</p>
+                                <h3 class="plan-name">Cao cấp</h3>
+                                <p class="plan-description">Dành cho các chuyên gia tìm kiếm các kỹ năng và chứng chỉ nâng cao</p>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-display">
                                     <span class="price-amount">$59</span>
-                                    <span class="price-period">/month</span>
+                                    <span class="price-period">/tháng</span>
                                 </div>
                             </div>
 
@@ -964,7 +964,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Access to 100+ courses</span>
+                                    <span class="feature-text">Truy cập hơn 100 khóa học</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -972,7 +972,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Premium study materials</span>
+                                    <span class="feature-text">Tài liệu học tập cao cấp</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -980,7 +980,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">1-on-1 tutoring sessions</span>
+                                    <span class="feature-text">Các buổi dạy kèm 1 kèm 1</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -988,7 +988,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Career guidance</span>
+                                    <span class="feature-text">Hướng nghiệp</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -996,7 +996,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Industry certifications</span>
+                                    <span class="feature-text">Chứng chỉ ngành</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -1004,7 +1004,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Exclusive workshops</span>
+                                    <span class="feature-text">Hội thảo độc quyền</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-purple">
@@ -1012,11 +1012,11 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Job placement assistance</span>
+                                    <span class="feature-text">Hỗ trợ tìm việc làm</span>
                                 </div>
                             </div>
 
-                            <button class="plan-button standard">Choose Plan</button>
+                            <button class="plan-button standard">Chọn gói</button>
                         </div>
                     </div>
                 </div>
@@ -1032,14 +1032,14 @@ const ModernHomepage = () => {
                             </div>
 
                             <div class="plan-header">
-                                <h3 class="plan-name">Enterprise</h3>
-                                <p class="plan-description">Complete solution for teams and organizations</p>
+                                <h3 class="plan-name">Doanh nghiệp</h3>
+                                <p class="plan-description">Giải pháp hoàn chỉnh cho các nhóm và tổ chức</p>
                             </div>
 
                             <div class="price-container">
                                 <div class="price-display">
                                     <span class="price-amount">$99</span>
-                                    <span class="price-period">/month</span>
+                                    <span class="price-period">/tháng</span>
                                 </div>
                             </div>
 
@@ -1050,7 +1050,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Unlimited course access</span>
+                                    <span class="feature-text">Truy cập khóa học không giới hạn</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1058,7 +1058,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Custom content creation</span>
+                                    <span class="feature-text">Tạo nội dung tùy chỉnh</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1066,7 +1066,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Dedicated account manager</span>
+                                    <span class="feature-text">Quản lý tài khoản chuyên dụng</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1074,7 +1074,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">Team analytics</span>
+                                    <span class="feature-text">Phân tích nhóm</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1082,7 +1082,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">API integrations</span>
+                                    <span class="feature-text">Tích hợp API</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1090,7 +1090,7 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">White-label solution</span>
+                                    <span class="feature-text">Giải pháp nhãn trắng</span>
                                 </div>
                                 <div class="feature-item">
                                     <div class="feature-icon bg-pink">
@@ -1098,11 +1098,11 @@ const ModernHomepage = () => {
                                             <polyline points="20,6 9,17 4,12"/>
                                         </svg>
                                     </div>
-                                    <span class="feature-text">24/7 premium support</span>
+                                    <span class="feature-text">Hỗ trợ cao cấp 24/7</span>
                                 </div>
                             </div>
 
-                            <button class="plan-button standard">Choose Plan</button>
+                            <button class="plan-button standard">Chọn gói</button>
                         </div>
                     </div>
                 </div>
@@ -1113,7 +1113,7 @@ const ModernHomepage = () => {
       <style jsx>{`
         
 
-        /* Pricing Section */
+        /* Phần Giá cả */
         .pricing-section {
             position: relative;
             padding: 3rem 1.5rem;
@@ -1124,7 +1124,7 @@ const ModernHomepage = () => {
             margin: 0 auto;
         }
 
-        /* Header Styles */
+        /* Kiểu Tiêu đề */
         .pricing-header {
             text-align: center;
             margin-bottom: 3rem;
@@ -1180,7 +1180,7 @@ const ModernHomepage = () => {
             line-height: 1.6;
         }
 
-        /* Grid Layout */
+        /* Bố cục Lưới */
         .pricing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1202,7 +1202,7 @@ const ModernHomepage = () => {
             }
         }
 
-        /* Card Styles */
+        /* Kiểu Thẻ */
         .pricing-card {
             position: relative;
             cursor: pointer;
@@ -1269,7 +1269,7 @@ const ModernHomepage = () => {
             flex-direction: column;
         }
 
-        /* Icon Styles */
+        /* Kiểu Biểu tượng */
         .plan-icon {
             display: inline-flex;
             align-items: center;
@@ -1282,7 +1282,7 @@ const ModernHomepage = () => {
             flex-shrink: 0;
         }
 
-        /* Plan Header */
+        /* Tiêu đề Gói */
         .plan-header {
             margin-bottom: 1.25rem;
             flex-shrink: 0;
@@ -1301,7 +1301,7 @@ const ModernHomepage = () => {
             line-height: 1.5;
         }
 
-        /* Price */
+        /* Giá */
         .price-container {
             margin-bottom: 1.5rem;
             flex-shrink: 0;
@@ -1324,7 +1324,7 @@ const ModernHomepage = () => {
             font-size: 0.875rem;
         }
 
-        /* Features */
+        /* Tính năng */
         .features-list {
             margin-bottom: 1.5rem;
             flex: 1;
@@ -1360,7 +1360,7 @@ const ModernHomepage = () => {
             line-height: 1.4;
         }
 
-        /* Button */
+        /* Nút */
         .plan-button {
             width: 100%;
             padding: 0.875rem 1rem;
@@ -1397,13 +1397,13 @@ const ModernHomepage = () => {
             transform: translateY(-1px);
         }
 
-        /* Background Colors */
+        /* Màu nền */
         .bg-blue { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
         .bg-green { background: linear-gradient(135deg, #10b981, #059669); }
         .bg-purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
         .bg-pink { background: linear-gradient(135deg, #ec4899, #be185d); }
 
-        /* Animations */
+        /* Hoạt ảnh */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.5; }
@@ -1425,7 +1425,7 @@ const ModernHomepage = () => {
             }
         }
 
-        /* Responsive Design */
+        /* Thiết kế đáp ứng */
         @media (min-width: 768px) {
             .pricing-title {
                 font-size: 3rem;
@@ -1443,7 +1443,7 @@ const ModernHomepage = () => {
             }
         }
       `}</style>
-      {/* Enhanced Testimonials Section */}
+      {/* Phần đánh giá nâng cao */}
 <section style={{
   background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
   minHeight: '100vh',
@@ -1453,7 +1453,7 @@ const ModernHomepage = () => {
   position: 'relative',
   overflow: 'hidden'
 }}>
-  {/* Decorative Circles */}
+  {/* Các vòng tròn trang trí */}
   <div style={{
     position: 'absolute',
     top: '15%',
@@ -1498,7 +1498,7 @@ const ModernHomepage = () => {
     position: 'relative',
     zIndex: 2
   }}>
-    {/* Section Header */}
+    {/* Tiêu đề phần */}
     <div style={{
       textAlign: 'center',
       marginBottom: '4rem'
@@ -1516,7 +1516,7 @@ const ModernHomepage = () => {
         boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
       }}>
         <Heart size={16} />
-        Student Success Stories
+        Câu chuyện thành công của học sinh
       </div>
 
       <h2 style={{
@@ -1526,13 +1526,13 @@ const ModernHomepage = () => {
         color: '#1a202c',
         lineHeight: 1.1
       }}>
-        What Our{' '}
+        Học sinh của chúng tôi{' '}
         <span style={{
           background: 'linear-gradient(45deg, #667eea 0%, #764ba2 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent'
         }}>
-          Students Say
+          nói gì
         </span>
       </h2>
 
@@ -1543,11 +1543,11 @@ const ModernHomepage = () => {
         margin: '0 auto',
         lineHeight: 1.6
       }}>
-        Real stories from students who transformed their academic journey with Tutorify.
+        Những câu chuyện có thật từ những học sinh đã thay đổi hành trình học tập của mình với Tutorify.
       </p>
     </div>
 
-    {/* Main Testimonial Content */}
+    {/* Nội dung đánh giá chính */}
     <div style={{
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
@@ -1555,7 +1555,7 @@ const ModernHomepage = () => {
       alignItems: 'center',
       marginBottom: '4rem'
     }}>
-      {/* Testimonial Text Side */}
+      {/* Phần văn bản đánh giá */}
       <div style={{
         background: 'white',
         borderRadius: '24px',
@@ -1564,7 +1564,7 @@ const ModernHomepage = () => {
         position: 'relative',
         border: '1px solid rgba(0,0,0,0.05)'
       }}>
-        {/* Quote Icon */}
+        {/* Biểu tượng trích dẫn */}
         <div style={{
           position: 'absolute',
           top: '2rem',
@@ -1581,7 +1581,7 @@ const ModernHomepage = () => {
           <Quote size={24} color="white" />
         </div>
 
-        {/* Subject Badge */}
+        {/* Huy hiệu môn học */}
         <div style={{
           display: 'inline-flex',
           alignItems: 'center',
@@ -1595,10 +1595,10 @@ const ModernHomepage = () => {
           marginBottom: '1.5rem'
         }}>
           <Sparkles size={12} />
-          {testimonials[currentTestimonial].subject || 'Academic Success'}
+          {testimonials[currentTestimonial].subject || 'Thành công trong học tập'}
         </div>
 
-        {/* Quote Text */}
+        {/* Văn bản trích dẫn */}
         <blockquote style={{
           fontSize: '1.25rem',
           lineHeight: 1.7,
@@ -1609,7 +1609,7 @@ const ModernHomepage = () => {
           "{testimonials[currentTestimonial].text}"
         </blockquote>
 
-        {/* Author Info */}
+        {/* Thông tin tác giả */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -1661,13 +1661,13 @@ const ModernHomepage = () => {
         </div>
       </div>
 
-      {/* Visual Side */}
+      {/* Phần hình ảnh */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
         gap: '2rem'
       }}>
-        {/* Success Metric Card */}
+        {/* Thẻ chỉ số thành công */}
         <div style={{
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
           borderRadius: '20px',
@@ -1697,17 +1697,17 @@ const ModernHomepage = () => {
             fontWeight: 'bold',
             marginBottom: '0.5rem'
           }}>
-            +40% Grade
+            +40% Điểm
           </div>
           <div style={{
             opacity: 0.9,
             fontSize: '1rem'
           }}>
-            Average Improvement
+            Cải thiện trung bình
           </div>
         </div>
 
-        {/* Student Image */}
+        {/* Hình ảnh học sinh */}
         <div style={{
           background: 'white',
           borderRadius: '20px',
@@ -1717,7 +1717,7 @@ const ModernHomepage = () => {
         }}>
           <img 
             src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop"
-            alt="Success story" 
+            alt="Câu chuyện thành công" 
             style={{
               width: '100%',
               height: '200px',
@@ -1731,26 +1731,26 @@ const ModernHomepage = () => {
             color: '#1a202c',
             marginBottom: '0.25rem'
           }}>
-            Success Story
+            Câu chuyện thành công
           </div>
           <div style={{
             color: '#64748b',
             fontSize: '0.875rem'
           }}>
-            From struggling to excelling
+            Từ khó khăn đến xuất sắc
           </div>
         </div>
       </div>
     </div>
 
-    {/* Enhanced Navigation */}
+    {/* Điều hướng nâng cao */}
     <div style={{
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       gap: '2rem'
     }}>
-      {/* Previous Button */}
+      {/* Nút Quay lại */}
       <button 
         onClick={() => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
         style={{
@@ -1770,7 +1770,7 @@ const ModernHomepage = () => {
         <ChevronLeft size={20} color="#64748b" />
       </button>
 
-      {/* Circular Dots Navigation */}
+      {/* Điều hướng bằng các chấm tròn */}
       <div style={{
         display: 'flex',
         gap: '1rem',
@@ -1832,7 +1832,7 @@ const ModernHomepage = () => {
         ))}
       </div>
 
-      {/* Next Button */}
+      {/* Nút Tiếp theo */}
       <button 
         onClick={() => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length)}
         style={{
@@ -1854,7 +1854,7 @@ const ModernHomepage = () => {
     </div>
   </div>
 
-  {/* CSS Animations */}
+  {/* Hoạt ảnh CSS */}
   <style jsx>{`
     @keyframes float {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -1873,19 +1873,19 @@ const ModernHomepage = () => {
   `}</style>
 </section>
 
-      {/* CTA Section */}
+      {/* Phần Kêu gọi hành động */}
       <section className="cta-section">
         <div className="cta-container">
           <h2 className="cta-title">
-            Ready to Transform Your
-            <span className="cta-title-gradient">Academic Journey?</span>
+            Sẵn sàng chuyển đổi hành trình
+            <span className="cta-title-gradient">học tập của bạn?</span>
           </h2>
           <p className="cta-description">
-            Join thousands of students who have already discovered the power of personalized learning. Your success story starts here.
+            Tham gia cùng hàng nghìn sinh viên đã khám phá sức mạnh của việc học tập được cá nhân hóa. Câu chuyện thành công của bạn bắt đầu từ đây.
           </p>
           <div className="cta-buttons">
-            <button className="cta-btn-primary">Start Free Trial</button>
-            <button className="cta-btn-secondary">Schedule Consultation</button>
+            <button className="cta-btn-primary">Bắt đầu dùng thử miễn phí</button>
+            <button className="cta-btn-secondary">Lên lịch tư vấn</button>
           </div>
         </div>
       </section>

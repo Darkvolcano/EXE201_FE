@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
   UserOutlined,
   MailOutlined,
@@ -35,7 +35,8 @@ import { useProfileUser } from "../hooks/ProfileApi";
 import { useCourseApi } from '../hooks/coursesAPIExtend';
 import { useChapterApi } from '../hooks/chapterApiExtend';
 import { useContentApi } from '../hooks/contentApiExtend';
-import useAuthStore from "../hooks/authenStoreApi"; // Import useAuthStore
+import { useOrderApi } from '../hooks/useOrderApi';
+import useAuthStore from "../hooks/authenStoreApi"; 
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -43,26 +44,33 @@ import "../style/ProfileTutor.css";
 
 const { Meta } = Card;
 const { TextArea } = Input;
-const { TabPane } = Tabs;
 
 const TutorProfile = () => {
-  const { user } = useAuthStore(); // Lấy user từ auth store
-  const accountId = user?.accountId; // Lấy accountId từ user
+  const { user } = useAuthStore();
+  const accountId = user?.accountId;
   
   const { data: userData, isLoading, error } = useProfileUser();
   const { courses, isLoading: coursesLoading, error: coursesError, createCourse, getTutorCourses } = useCourseApi();
   const { chapters, isLoading: chaptersLoading, createChapter, getChaptersByCourse } = useChapterApi();
   const { contents, isLoading: contentsLoading, createContent, getContentsByChapter } = useContentApi();
   
+  const { 
+    orders, 
+    isLoading: ordersLoading, 
+    error: ordersError, 
+    getTutorOrders, 
+    getOrderStats, 
+    getUpcomingSessions 
+  } = useOrderApi();
+
   const location = useLocation();
   const [activeSection, setActiveSection] = useState("OVERVIEW");
-  const [courseView, setCourseView] = useState("list"); // 'list', 'chapters', 'contents'
+  const [courseView, setCourseView] = useState("list");
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [courseChapters, setCourseChapters] = useState([]);
   const [chapterContents, setChapterContents] = useState([]);
   
-  // Modal states
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isChapterModalVisible, setIsChapterModalVisible] = useState(false);
   const [isContentModalVisible, setIsContentModalVisible] = useState(false);
@@ -71,33 +79,20 @@ const TutorProfile = () => {
   const [contentForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
 
-  const tutorData = {
-    fullName: "Prashant",
-    schedule: [
-      {
-        studentName: "Prashant Kumar Singh",
-        date: "25/2/2023",
-        subject: "LẬP TRÌNH",
-        content: "Hiểu khái niệm về React",
-      },
-      {
-        studentName: "John Doe",
-        date: "26/2/2023",
-        subject: "TOÁN HỌC",
-        content: "Cơ bản về đại số",
-      },
-    ],
-    support: [
+  const orderStats = useMemo(() => getOrderStats(orders), [orders, getOrderStats]);
+  const upcomingSessions = useMemo(() => getUpcomingSessions(orders), [orders, getUpcomingSessions]);
+
+  const supportData = [
       { name: "Prashant Kumar Singh", role: "Hỗ trợ IT" },
       { name: "Michael Lee", role: "Gia sư Toán & Tiếng Anh" },
-    ],
-    stats: {
-      totalBookings: 25,
-      totalStudents: 120,
-      earnings: 1500000,
-    },
-  };
+  ];
 
+  // Effect to fetch order data ONCE on component mount
+  useEffect(() => {
+    getTutorOrders();
+  }, []); // Empty array ensures this runs only once
+
+  // Effect to handle navigation changes
   useEffect(() => {
     if (location.pathname === "/profile-tutor") {
       setActiveSection("OVERVIEW");
@@ -108,12 +103,14 @@ const TutorProfile = () => {
     }
   }, [location.pathname]);
 
+  // Effect to handle course fetching
   useEffect(() => {
     if (activeSection === "Course" && accountId) {
       getTutorCourses(accountId);
     }
-  }, [activeSection, accountId]);
+  }, [activeSection, accountId, getTutorCourses]);
 
+  // ... (All other functions like viewCourseChapters, handleSubmit, etc. remain unchanged) ...
   // Navigation functions
   const viewCourseChapters = async (course) => {
     setSelectedCourse(course);
@@ -230,6 +227,7 @@ const TutorProfile = () => {
   };
 
   const formatPrice = (price) => {
+    if (typeof price !== 'number') return '0 VND';
     return new Intl.NumberFormat('vi-VN', {
       style: 'currency',
       currency: 'VND'
@@ -593,24 +591,26 @@ const TutorProfile = () => {
             Orders
           </Link>
         </div>
-        <h2 className="sidebar-title">HỌC VIÊN</h2>
+        <h2 className="sidebar-title">HỌC VIÊN SẮP TỚI</h2>
         <div className="student-list">
-          <div className="student-item">
-            <Avatar size={40} src="https://via.placeholder.com/40" />
-            <div className="student-info">
-              <span>Prashant</span>
-              <span>Buổi học sắp tới 2/2023</span>
-              <span>Toán & Tiếng Anh</span>
+          {ordersLoading ? (
+            <LoadingSpinner />
+          ) : upcomingSessions.length > 0 ? (
+            upcomingSessions.map((session) => (
+              <div key={session.id} className="student-item">
+                <Avatar size={40} src={`https://i.pravatar.cc/40?u=${session.email}`} />
+                <div className="student-info">
+                  <span>{session.studentName}</span>
+                  <span>Ngày đặt: {session.date}</span>
+                  <span>{session.subject}</span>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div style={{ padding: '10px', textAlign: 'center', color: '#888' }}>
+              Không có buổi học nào sắp tới.
             </div>
-          </div>
-          <div className="student-item">
-            <Avatar size={40} src="https://via.placeholder.com/40" />
-            <div className="student-info">
-              <span>John Doe</span>
-              <span>Buổi học sắp tới 3/2023</span>
-              <span>Lập trình</span>
-            </div>
-          </div>
+          )}
         </div>
         <div className="sidebar-footer">
           <button className="profile-settings-button">Cài đặt hồ sơ</button>
@@ -618,17 +618,87 @@ const TutorProfile = () => {
         </div>
       </div>
 
-      {/* Enhanced Course Section with Separate Views */}
-      {activeSection === "Course" && (
-        <div className="course-page-container">
-          {renderBreadcrumb()}
-          
-          {courseView === "list" && renderCoursesList()}
-          {courseView === "chapters" && renderChaptersView()}
-          {courseView === "contents" && renderContentsView()}
+      {/* Main Content */}
+      <main className="main-content-tutor">
+        {activeSection === "Course" && (
+          <div className="course-page-container">
+            {renderBreadcrumb()}
+            {courseView === "list" ? renderCoursesList() : courseView === "chapters" ? renderChaptersView() : renderContentsView()}
+          </div>
+        )}
 
-          {/* Course Modal */}
-          <Modal
+        <Outlet />
+      </main>
+
+      {/* Right Sidebar */}
+      <div className="right-sidebar">
+        <div className="profile-info">
+          <Avatar
+            size={60}
+            src={userData?.avatar || "https://via.placeholder.com/60"}
+            className="profile-avatar"
+          />
+          <div className="profile-details">
+            <h3>
+              <UserOutlined /> Chào buổi sáng {userData?.fullName || user?.fullName || "Người dùng"}
+            </h3>
+            <p>Tiếp tục hành trình và đạt được mục tiêu của bạn</p>
+            <p>
+              <MailOutlined /> Email: {userData?.email || user?.email || "N/A"}
+            </p>
+            <p>
+              <PhoneOutlined /> Điện thoại: {userData?.phone || user?.phone || "N/A"}
+            </p>
+            <p>
+              <DollarOutlined /> Số dư: {formatPrice(userData?.balance)}
+            </p>
+          </div>
+        </div>
+
+        <div className="stats-section">
+          <h2>Thống kê của bạn</h2>
+          <div className="stat-item">
+            <span>Tổng đặt lịch tháng này</span>
+            <span className="stat-value">{orderStats.monthlyBookings}</span>
+            <button className="see-more">Xem thêm</button>
+          </div>
+          <div className="stat-item">
+            <span>Tổng số học viên</span>
+            <span className="stat-value">{orderStats.totalStudents}</span>
+            <button className="see-more">Xem thêm</button>
+          </div>
+          <div className="stat-item">
+            <span>Thu nhập tháng này</span>
+            <span className="stat-value">
+              {formatPrice(orderStats.monthlyRevenue)}
+            </span>
+            <button className="see-more">Xem thêm</button>
+          </div>
+        </div>
+
+        <div className="support-section">
+          <h2>Hỗ trợ</h2>
+          <div className="support-table">
+            <div className="support-header">
+              <span>Tên</span>
+              <span>Vai trò</span>
+              <span>Hành động</span>
+            </div>
+            {supportData.map((item, index) => (
+              <div key={index} className="support-row">
+                <span>{item.name}</span>
+                <span>{item.role}</span>
+                <button className="follow-button">Theo dõi</button>
+              </div>
+            ))}
+          </div>
+          <button className="see-all">Xem tất cả</button>
+        </div>
+      </div>
+
+      {/* Modals */}
+      {/* Course Modal */}
+      <Modal
             title="Tạo khóa học mới"
             visible={isModalVisible}
             onCancel={handleCancel}
@@ -729,76 +799,6 @@ const TutorProfile = () => {
               </Form.Item>
             </Form>
           </Modal>
-        </div>
-      )}
-
-      <Outlet />
-
-      {/* Right Sidebar */}
-      <div className="right-sidebar">
-        <div className="profile-info">
-          <Avatar
-            size={60}
-            src={userData?.avatar || "https://via.placeholder.com/60"}
-            className="profile-avatar"
-          />
-          <div className="profile-details">
-            <h3>
-              <UserOutlined /> Chào buổi sáng {userData?.fullName || user?.fullName || "Người dùng"}
-            </h3>
-            <p>Tiếp tục hành trình và đạt được mục tiêu của bạn</p>
-            <p>
-              <MailOutlined /> Email: {userData?.email || user?.email || "N/A"}
-            </p>
-            <p>
-              <PhoneOutlined /> Điện thoại: {userData?.phone || user?.phone || "N/A"}
-            </p>
-            <p>
-              <DollarOutlined /> Số dư: {userData?.balance || 0} VND
-            </p>
-          </div>
-        </div>
-
-        <div className="stats-section">
-          <h2>Thống kê của bạn</h2>
-          <div className="stat-item">
-            <span>Tổng đặt lịch tháng này</span>
-            <span className="stat-value">{tutorData.stats.totalBookings}</span>
-            <button className="see-more">Xem thêm</button>
-          </div>
-          <div className="stat-item">
-            <span>Tổng học viên năm này</span>
-            <span className="stat-value">{tutorData.stats.totalStudents}</span>
-            <button className="see-more">Xem thêm</button>
-          </div>
-          <div className="stat-item">
-            <span>Thu nhập tháng này</span>
-            <span className="stat-value">
-              {tutorData.stats.earnings.toLocaleString()} VND
-            </span>
-            <button className="see-more">Xem thêm</button>
-          </div>
-        </div>
-
-        <div className="support-section">
-          <h2>Hỗ trợ</h2>
-          <div className="support-table">
-            <div className="support-header">
-              <span>Tên</span>
-              <span>Vai trò</span>
-              <span>Hành động</span>
-            </div>
-            {tutorData.support.map((item, index) => (
-              <div key={index} className="support-row">
-                <span>{item.name}</span>
-                <span>{item.role}</span>
-                <button className="follow-button">Theo dõi</button>
-              </div>
-            ))}
-          </div>
-          <button className="see-all">Xem tất cả</button>
-        </div>
-      </div>
     </div>
   );
 };
