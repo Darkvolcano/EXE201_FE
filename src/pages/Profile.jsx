@@ -223,11 +223,11 @@ const Profile = () => {
           style={{
             background: "#f5f7fa",
             minHeight: 600,
-            padding: "40px 40px 40px 0",
+            padding: "40px",
             width: "100%",
             maxWidth: "100vw",
             display: "flex",
-            justifyContent: "center",
+            // justifyContent: "center",
             alignItems: selectedMenu === "settings" ? "center" : "flex-start",
           }}
         >
@@ -270,7 +270,8 @@ const Profile = () => {
                               <Avatar
                                 size={100}
                                 src={
-                                  profile.avatar || "https://via.placeholder.com/150"
+                                  profile.avatar ||
+                                  "https://via.placeholder.com/150"
                                 }
                                 icon={!profile.avatar && <UserOutlined />}
                                 className="profile-avatars"
@@ -311,7 +312,8 @@ const Profile = () => {
                                 }}
                               >
                                 <DollarOutlined /> Balance:{" "}
-                                {profile.balance?.toLocaleString("vi-VN") || 0} VNĐ
+                                {profile.balance?.toLocaleString("vi-VN") || 0}{" "}
+                                VNĐ
                               </Text>
                             </Col>
                           </Row>
@@ -377,7 +379,9 @@ const Profile = () => {
                       >
                         {totalMoneySpent.toLocaleString("vi-VN")} VNĐ
                       </div>
-                      <div style={{ color: "#888" }}>Total spent on courses</div>
+                      <div style={{ color: "#888" }}>
+                        Total spent on courses
+                      </div>
                     </Card>
                   </Col>
                   <Col xs={24} sm={8}>
@@ -498,8 +502,8 @@ const Profile = () => {
                               className="order-detail"
                               style={{ display: "block" }}
                             >
-                              Amount: {order.totalAmount.toLocaleString("vi-VN")}{" "}
-                              VNĐ
+                              Amount:{" "}
+                              {order.totalAmount.toLocaleString("vi-VN")} VNĐ
                             </Text>
                             <Tag
                               color={getStatusColor(order.status)}
@@ -571,7 +575,8 @@ const Profile = () => {
                   <Divider />
                   <div>
                     <Text type="secondary">
-                      Update your account information or change your password here.
+                      Update your account information or change your password
+                      here.
                     </Text>
                   </div>
                   {/* Show edit form if editing */}
