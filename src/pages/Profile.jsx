@@ -93,7 +93,7 @@ const Profile = () => {
       },
       onError: (error) => {
         message.error(
-          error.response?.data?.message || "Failed to update profile"
+          error.response?.data?.message || "Cập nhật tài khoản thất bại"
         );
       },
     });
@@ -102,10 +102,10 @@ const Profile = () => {
   // Handle avatar upload change
   const handleAvatarUpload = (info) => {
     if (info.file.status === "done") {
-      message.success(`${info.file.name} uploaded successfully`);
+      message.success(`${info.file.name} tải lên thành công`);
       form.setFieldsValue({ avatar: info.file });
     } else if (info.file.status === "error") {
-      message.error(`${info.file.name} upload failed`);
+      message.error(`${info.file.name} tải lên thất bại`);
     }
   };
 
@@ -121,7 +121,7 @@ const Profile = () => {
   };
 
   const handleChangePassword = () => {
-    message.success("Password changed successfully!");
+    message.success("Đổi mật khẩu thành công!");
     setShowChangePassword(false);
   };
 
@@ -171,7 +171,7 @@ const Profile = () => {
       >
         <Avatar
           size={110}
-          src={profile.avatar || "https://via.placeholder.com/150"}
+          src={profile.avatar || "https://placehold.co/150x150"}
           icon={!profile.avatar && <UserOutlined />}
           style={{
             border: "4px solid #e6f7ff",
@@ -179,10 +179,10 @@ const Profile = () => {
           }}
         />
         <Title level={4} style={{ margin: 0 }}>
-          {profile.fullName || "N/A"}
+          {profile.fullName || "Chưa cập nhật tên"}
         </Title>
         <Text type="secondary" style={{ fontSize: 15 }}>
-          {profile.email || "N/A"}
+          {profile.email || "Chưa cập nhật email"}
         </Text>
         <Divider style={{ margin: "18px 0" }} />
         <Menu
@@ -197,13 +197,13 @@ const Profile = () => {
           }}
         >
           <Menu.Item key="profile" icon={<UserOutlined />}>
-            Profile Overview
+            Thông tin cá nhân
           </Menu.Item>
           <Menu.Item key="orderHistory" icon={<HistoryOutlined />}>
-            Order History
+            Lịch sử đơn hàng
           </Menu.Item>
           <Menu.Item key="settings" icon={<SettingOutlined />}>
-            Account Settings
+            Cài đặt tài khoản
           </Menu.Item>
         </Menu>
         <Divider style={{ margin: "18px 0" }} />
@@ -214,7 +214,7 @@ const Profile = () => {
           onClick={() => setShowLogout(true)}
           style={{ width: "80%" }}
         >
-          Logout
+          Đăng xuất
         </Button>
       </Sider>
       <Layout>
@@ -227,7 +227,6 @@ const Profile = () => {
             width: "100%",
             maxWidth: "100vw",
             display: "flex",
-            // justifyContent: "center",
             alignItems: selectedMenu === "settings" ? "center" : "flex-start",
           }}
         >
@@ -253,9 +252,9 @@ const Profile = () => {
                     }}
                   >
                     {profileLoading ? (
-                      <div>Loading...</div>
+                      <div>Đang tải...</div>
                     ) : profileError ? (
-                      <div>Error: {profileError.message}</div>
+                      <div>Lỗi: {profileError.message}</div>
                     ) : (
                       <>
                         <div
@@ -271,7 +270,7 @@ const Profile = () => {
                                 size={100}
                                 src={
                                   profile.avatar ||
-                                  "https://via.placeholder.com/150"
+                                  "https://placehold.co/150x150"
                                 }
                                 icon={!profile.avatar && <UserOutlined />}
                                 className="profile-avatars"
@@ -284,7 +283,7 @@ const Profile = () => {
                                 className="profile-name"
                                 style={{ marginBottom: 8 }}
                               >
-                                {profile.fullName || "N/A"}
+                                {profile.fullName || "Chưa cập nhật tên"}
                               </Title>
                               <Text
                                 className="profile-detail"
@@ -293,7 +292,7 @@ const Profile = () => {
                                   marginBottom: 4,
                                 }}
                               >
-                                <MailOutlined /> {profile.email || "N/A"}
+                                <MailOutlined /> {profile.email || "Chưa cập nhật email"}
                               </Text>
                               <Text
                                 className="profile-detail"
@@ -302,7 +301,7 @@ const Profile = () => {
                                   marginBottom: 4,
                                 }}
                               >
-                                <PhoneOutlined /> {profile.phone || "N/A"}
+                                <PhoneOutlined /> {profile.phone || "Chưa cập nhật số điện thoại"}
                               </Text>
                               <Text
                                 className="profile-detail"
@@ -311,7 +310,7 @@ const Profile = () => {
                                   marginBottom: 4,
                                 }}
                               >
-                                <DollarOutlined /> Balance:{" "}
+                                <DollarOutlined /> Số dư:{" "}
                                 {profile.balance?.toLocaleString("vi-VN") || 0}{" "}
                                 VNĐ
                               </Text>
@@ -321,7 +320,7 @@ const Profile = () => {
                       </>
                     )}
                   </Card>
-                  {/* Decorative/statistics card */}
+                  {/* Statistics Card */}
                   <Card
                     style={{
                       flex: 1,
@@ -339,7 +338,7 @@ const Profile = () => {
                         marginBottom: 8,
                       }}
                     >
-                      Days Logged In
+                      Số ngày đăng nhập
                     </div>
                     <div
                       style={{
@@ -350,10 +349,10 @@ const Profile = () => {
                     >
                       42
                     </div>
-                    <div style={{ color: "#888" }}>days active on Tutorify</div>
+                    <div style={{ color: "#888" }}>ngày hoạt động trên Tutorify</div>
                   </Card>
                 </div>
-                {/* --- New Stats Section --- */}
+                {/* --- Stats Section --- */}
                 <Row gutter={24} style={{ marginBottom: 32 }}>
                   <Col xs={24} sm={8}>
                     <Card
@@ -361,14 +360,13 @@ const Profile = () => {
                         borderRadius: 12,
                         textAlign: "center",
                         background: "#fffbe6",
-                        boxShadow: "0 2px 12px rgba(255,193,7,0.06)",
                       }}
                     >
                       <Title
                         level={4}
                         style={{ color: "#faad14", marginBottom: 0 }}
                       >
-                        Money Spent
+                        Đã chi
                       </Title>
                       <div
                         style={{
@@ -380,7 +378,7 @@ const Profile = () => {
                         {totalMoneySpent.toLocaleString("vi-VN")} VNĐ
                       </div>
                       <div style={{ color: "#888" }}>
-                        Total spent on courses
+                        Tổng tiền mua khóa học
                       </div>
                     </Card>
                   </Col>
@@ -390,14 +388,13 @@ const Profile = () => {
                         borderRadius: 12,
                         textAlign: "center",
                         background: "#e6fffb",
-                        boxShadow: "0 2px 12px rgba(24,144,255,0.06)",
                       }}
                     >
                       <Title
                         level={4}
                         style={{ color: "#13c2c2", marginBottom: 0 }}
                       >
-                        Education
+                        Giáo dục
                       </Title>
                       <div
                         style={{
@@ -406,11 +403,11 @@ const Profile = () => {
                           color: "#13c2c2",
                         }}
                       >
-                        {totalCourses} Courses
+                        {totalCourses} khoá học
                         <br />
-                        {totalTutors} Tutors
+                        {totalTutors} gia sư
                       </div>
-                      <div style={{ color: "#888" }}>You have studied with</div>
+                      <div style={{ color: "#888" }}>Bạn đã học cùng</div>
                     </Card>
                   </Col>
                   <Col xs={24} sm={8}>
@@ -419,14 +416,13 @@ const Profile = () => {
                         borderRadius: 12,
                         textAlign: "center",
                         background: "#f9f0ff",
-                        boxShadow: "0 2px 12px rgba(114,46,209,0.06)",
                       }}
                     >
                       <Title
                         level={4}
                         style={{ color: "#722ed1", marginBottom: 0 }}
                       >
-                        Friends
+                        Bạn bè
                       </Title>
                       <div
                         style={{
@@ -437,7 +433,7 @@ const Profile = () => {
                       >
                         {totalFriends}
                       </div>
-                      <div style={{ color: "#888" }}>Friends added</div>
+                      <div style={{ color: "#888" }}>Bạn bè đã thêm</div>
                     </Card>
                   </Col>
                 </Row>
@@ -445,7 +441,7 @@ const Profile = () => {
             )}
             {selectedMenu === "orderHistory" && (
               <Card
-                title="Order History"
+                title="Lịch sử đơn hàng"
                 className="order-card"
                 style={{
                   maxWidth: 900,
@@ -454,11 +450,11 @@ const Profile = () => {
                 }}
               >
                 {orderLoading ? (
-                  <div>Loading...</div>
+                  <div>Đang tải...</div>
                 ) : orderError ? (
-                  <div>Error: {orderError.message}</div>
+                  <div>Lỗi: {orderError.message}</div>
                 ) : orders.length === 0 ? (
-                  <div>No orders found.</div>
+                  <div>Chưa có đơn hàng nào.</div>
                 ) : (
                   <div className="order-list">
                     {orders.map((order) => (
@@ -478,7 +474,7 @@ const Profile = () => {
                             <img
                               src={
                                 order.orderDetails[0]?.course?.image ||
-                                "https://via.placeholder.com/100"
+                                "https://placehold.co/100x100"
                               }
                               alt={order.orderDetails[0]?.course?.name}
                               width={100}
@@ -496,26 +492,30 @@ const Profile = () => {
                               className="order-title"
                               style={{ marginBottom: 4 }}
                             >
-                              {order.orderDetails[0]?.course?.name || "N/A"}
+                              {order.orderDetails[0]?.course?.name || "Không xác định"}
                             </Title>
                             <Text
                               className="order-detail"
                               style={{ display: "block" }}
                             >
-                              Amount:{" "}
+                              Số tiền:{" "}
                               {order.totalAmount.toLocaleString("vi-VN")} VNĐ
                             </Text>
                             <Tag
                               color={getStatusColor(order.status)}
                               className="order-status"
                             >
-                              {order.status}
+                              {order.status === "Completed"
+                                ? "Hoàn thành"
+                                : order.status === "Pending"
+                                ? "Đang xử lý"
+                                : order.status}
                             </Tag>
                             <Text
                               className="order-detail"
                               style={{ display: "block" }}
                             >
-                              Date:{" "}
+                              Ngày đặt:{" "}
                               {new Date(order.createdAt).toLocaleDateString(
                                 "vi-VN"
                               )}
@@ -524,10 +524,10 @@ const Profile = () => {
                               className="order-detail"
                               style={{ display: "block" }}
                             >
-                              Completed:{" "}
+                              Đã hoàn thành:{" "}
                               {order.orderDetails[0]?.isFinishCourse
-                                ? "Yes"
-                                : "No"}
+                                ? "Có"
+                                : "Chưa"}
                             </Text>
                           </Col>
                         </Row>
@@ -547,7 +547,7 @@ const Profile = () => {
                 }}
               >
                 <Card
-                  title="Account Settings"
+                  title="Cài đặt tài khoản"
                   style={{
                     width: 420,
                     borderRadius: 16,
@@ -562,21 +562,20 @@ const Profile = () => {
                       onClick={() => setIsEditing(true)}
                       style={{ marginRight: 12, width: 150 }}
                     >
-                      Edit Profile
+                      Sửa thông tin
                     </Button>
                     <Button
                       icon={<LockOutlined />}
                       onClick={() => setShowChangePassword(true)}
                       style={{ width: 180 }}
                     >
-                      Change Password
+                      Đổi mật khẩu
                     </Button>
                   </div>
                   <Divider />
                   <div>
                     <Text type="secondary">
-                      Update your account information or change your password
-                      here.
+                      Cập nhật thông tin tài khoản hoặc đổi mật khẩu tại đây.
                     </Text>
                   </div>
                   {/* Show edit form if editing */}
@@ -597,17 +596,17 @@ const Profile = () => {
                     >
                       <Form.Item
                         name="fullName"
-                        label="Full Name"
+                        label="Họ và tên"
                         rules={[
                           {
                             required: true,
-                            message: "Please input your full name!",
+                            message: "Vui lòng nhập họ tên!",
                           },
                         ]}
                       >
                         <Input
                           prefix={<UserOutlined />}
-                          placeholder="Enter full name"
+                          placeholder="Nhập họ tên"
                         />
                       </Form.Item>
                       <Form.Item
@@ -617,31 +616,31 @@ const Profile = () => {
                           {
                             required: true,
                             type: "email",
-                            message: "Please input a valid email!",
+                            message: "Vui lòng nhập đúng email!",
                           },
                         ]}
                       >
                         <Input
                           prefix={<MailOutlined />}
-                          placeholder="Enter email"
+                          placeholder="Nhập email"
                         />
                       </Form.Item>
                       <Form.Item
                         name="phone"
-                        label="Phone"
+                        label="Số điện thoại"
                         rules={[
                           {
                             required: true,
-                            message: "Please input your phone number!",
+                            message: "Vui lòng nhập số điện thoại!",
                           },
                         ]}
                       >
                         <Input
                           prefix={<PhoneOutlined />}
-                          placeholder="Enter phone number"
+                          placeholder="Nhập số điện thoại"
                         />
                       </Form.Item>
-                      <Form.Item name="avatar" label="Avatar">
+                      <Form.Item name="avatar" label="Ảnh đại diện">
                         <Upload
                           name="avatar"
                           listType="picture-card"
@@ -658,7 +657,7 @@ const Profile = () => {
                           ) : (
                             <div>
                               <UploadOutlined />
-                              <div style={{ marginTop: 8 }}>Upload</div>
+                              <div style={{ marginTop: 8 }}>Tải lên</div>
                             </div>
                           )}
                         </Upload>
@@ -670,9 +669,9 @@ const Profile = () => {
                           loading={editProfileMutation.isLoading}
                           style={{ marginRight: "10px" }}
                         >
-                          Save
+                          Lưu lại
                         </Button>
-                        <Button onClick={handleCancelEdit}>Cancel</Button>
+                        <Button onClick={handleCancelEdit}>Hủy</Button>
                       </Form.Item>
                     </Form>
                   )}
@@ -683,21 +682,21 @@ const Profile = () => {
         </Content>
       </Layout>
 
-      {/* Modal: Logout confirmation */}
+      {/* Modal: Xác nhận đăng xuất */}
       <Modal
-        title="Confirm Logout"
+        title="Xác nhận đăng xuất"
         open={showLogout}
         onOk={handleLogout}
         onCancel={() => setShowLogout(false)}
-        okText="Logout"
+        okText="Đăng xuất"
         okButtonProps={{ danger: true }}
       >
-        <p>Are you sure you want to logout?</p>
+        <p>Bạn chắc chắn muốn đăng xuất?</p>
       </Modal>
 
-      {/* Modal: Change Password */}
+      {/* Modal: Đổi mật khẩu */}
       <Modal
-        title="Change Password"
+        title="Đổi mật khẩu"
         open={showChangePassword}
         onOk={() => form.submit()}
         onCancel={() => setShowChangePassword(false)}
@@ -710,52 +709,54 @@ const Profile = () => {
         >
           <Form.Item
             name="oldPassword"
-            label="Old Password"
+            label="Mật khẩu cũ"
             rules={[
-              { required: true, message: "Please enter your old password" },
+              { required: true, message: "Vui lòng nhập mật khẩu cũ" },
             ]}
           >
             <Input.Password
               prefix={<LockOutlined />}
-              placeholder="Old password"
+              placeholder="Mật khẩu cũ"
             />
           </Form.Item>
           <Form.Item
             name="newPassword"
-            label="New Password"
+            label="Mật khẩu mới"
             rules={[
-              { required: true, message: "Please enter your new password" },
+              { required: true, message: "Vui lòng nhập mật khẩu mới" },
             ]}
           >
             <Input.Password
               prefix={<LockOutlined />}
-              placeholder="New password"
+              placeholder="Mật khẩu mới"
             />
           </Form.Item>
           <Form.Item
             name="confirmPassword"
-            label="Confirm New Password"
+            label="Xác nhận mật khẩu mới"
             dependencies={["newPassword"]}
             rules={[
-              { required: true, message: "Please confirm your new password" },
+              { required: true, message: "Vui lòng xác nhận mật khẩu mới" },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   if (!value || getFieldValue("newPassword") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("Passwords do not match!"));
+                  return Promise.reject(
+                    new Error("Mật khẩu không khớp!")
+                  );
                 },
               }),
             ]}
           >
             <Input.Password
               prefix={<LockOutlined />}
-              placeholder="Confirm new password"
+              placeholder="Xác nhận mật khẩu mới"
             />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" block>
-              Change Password
+              Đổi mật khẩu
             </Button>
           </Form.Item>
         </Form>

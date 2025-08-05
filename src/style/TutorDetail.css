@@ -1,34 +1,128 @@
 .tutor-detail-container {
-  max-width: 900px;
+  max-width: 960px;
   margin: 40px auto;
   padding: 24px;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tutor-info-header {
   display: flex;
   align-items: center;
-  margin-bottom: 32px;
+  gap: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.tutor-info-header .ant-avatar {
-  margin-right: 24px;
+.tutor-main-info {
+  flex: 1;
+}
+
+.tutor-role {
+  color: #666;
+  display: block;
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.contact-info {
+  margin-bottom: 8px;
+  color: #444;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.certification-image {
+  width: 100%;
+  max-height: 140px;
+  object-fit: contain;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+  padding: 10px;
+}
+
+.tutor-certification-card {
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.3s;
+}
+
+.tutor-certification-card:hover {
+  box-shadow: 0 12px 24px rgb(0 0 0 / 0.1);
+}
+
+.certification-name {
+  margin-bottom: 8px;
+  color: #1890ff;
+}
+
+.certification-desc,
+.certification-exp {
+  color: #555;
+  display: block;
+}
+
+.tutor-courses-section {
+  margin-top: 40px;
 }
 
 .tutor-courses-list {
   display: flex;
-  gap: 24px;
   flex-wrap: wrap;
+  gap: 24px;
 }
 
 .tutor-course-card {
-  width: 260px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(24,144,255,0.08);
-  transition: box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.05);
+  transition: box-shadow 0.3s;
+  cursor: pointer;
 }
+
 .tutor-course-card:hover {
-  box-shadow: 0 4px 16px rgba(24,144,255,0.16);
+  box-shadow: 0 8px 28px rgb(0 0 0 / 0.15);
+}
+
+.course-cover-image {
+  height: 160px;
+  object-fit: cover;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.course-title {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.course-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.course-price {
+  font-size: 1.05rem;
+  color: #1890ff;
+}
+
+.contact-tutor-btn-container {
+  margin-top: 32px;
+  text-align: center;
+}
+
+.contact-tutor-btn-container .ant-btn {
+  width: 200px;
+  font-weight: 600;
+  font-size: 1.1rem;
 }
