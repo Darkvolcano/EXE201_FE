@@ -6,6 +6,8 @@ import {
   Progress,
   Collapse,
   Avatar,
+  message,
+  Modal,
 } from "antd";
 import {
   PlayCircleOutlined,
@@ -25,6 +27,7 @@ import {
 } from "../hooks/coursesApi";
 import { useQueries } from "@tanstack/react-query";
 import "../style/CoursePlayer.css";
+import { useCreateOrder } from "../hooks/ordersApi";
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -83,6 +86,9 @@ const CoursePlayer = () => {
 
   const [activeChapterKey, setActiveChapterKey] = useState(null);
 
+  const [isPaymentModalVisible, setIsPaymentModalVisible] = useState(false);
+  const { mutate: createOrder, isLoading: isCreatingOrder } = useCreateOrder();
+
   // Handle loading and error
   if (isLoadingCourses)
     return <div style={{ padding: 32 }}>Đang tải khóa học...</div>;
@@ -106,6 +112,31 @@ const CoursePlayer = () => {
     : 0;
   const lastUpdated = courseObj.updatedAt || courseObj.createdAt;
   const progressPercent = 15;
+
+  const showPaymentModal = () => {
+    setIsPaymentModalVisible(true);
+  };
+
+  const handlePayment = () => {
+    createOrder(
+      { courseId: id },
+      {
+        onSuccess: (response) => {
+          message.success(response.message);
+          if (response.data?.url) {
+            window.location.href = response.data.url; // Chuyển hướng sang URL trong response
+          }
+        },
+        onError: (error) => {
+          message.error("Thanh toán thất bại: " + error.message);
+        },
+      }
+    );
+  };
+
+  const handleCancelPayment = () => {
+    setIsPaymentModalVisible(false);
+  };
 
   return (
     <div className="course-player-container">
@@ -175,30 +206,56 @@ const CoursePlayer = () => {
                 </div>
                 {/* Tutor and certifications */}
                 <div style={{ margin: "16px 0" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                  <div
+                    style={{ display: "flex", alignItems: "center", gap: 16 }}
+                  >
                     <Avatar src={tutor?.avatar} size={40} />
                     <div>
                       <b>{tutor?.fullName}</b>
-                      <div style={{ color: "#888", fontSize: 13 }}>{tutor?.email}</div>
+                      <div style={{ color: "#888", fontSize: 13 }}>
+                        {tutor?.email}
+                      </div>
                     </div>
                   </div>
                   {certifications.length > 0 && (
                     <div style={{ marginTop: 16 }}>
-                      <span style={{ fontSize: 15, fontWeight: 500 }}>Chứng chỉ giảng viên:</span>
-                      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 6 }}>
+                      <span style={{ fontSize: 15, fontWeight: 500 }}>
+                        Chứng chỉ giảng viên:
+                      </span>
+                      <div
+                        style={{
+                          display: "flex",
+                          gap: 12,
+                          flexWrap: "wrap",
+                          marginTop: 6,
+                        }}
+                      >
                         {certifications.map((cert) => (
-                          <div key={cert._id} style={{
-                            background: "#f6f6f6",
-                            padding: 8,
-                            borderRadius: 6,
-                            minWidth: 110,
-                            textAlign: "center"
-                          }}>
-                            {cert.image?.[0] &&
-                              <img src={cert.image[0]} style={{ width: 32, height: 32, borderRadius: "50%" }} alt={cert.name} />
-                            }
+                          <div
+                            key={cert._id}
+                            style={{
+                              background: "#f6f6f6",
+                              padding: 8,
+                              borderRadius: 6,
+                              minWidth: 110,
+                              textAlign: "center",
+                            }}
+                          >
+                            {cert.image?.[0] && (
+                              <img
+                                src={cert.image[0]}
+                                style={{
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: "50%",
+                                }}
+                                alt={cert.name}
+                              />
+                            )}
                             <div style={{ fontSize: 12 }}>{cert.name}</div>
-                            <div style={{ color: "#888", fontSize: 11 }}>{cert.experience} năm</div>
+                            <div style={{ color: "#888", fontSize: 11 }}>
+                              {cert.experience} năm
+                            </div>
                           </div>
                         ))}
                       </div>
@@ -213,60 +270,63 @@ const CoursePlayer = () => {
                   </div>
                   {isLoadingFeedback && <div>Đang tải phản hồi...</div>}
                   {isErrorFeedback && <div>Tải phản hồi thất bại.</div>}
-                  {feedbackData?.data?.length === 0 && <div>Chưa có phản hồi.</div>}
-                  {feedbackData?.data?.length > 0 && feedbackData.data.map((fb) => (
-                    <div
-                      key={fb._id}
-                      style={{
-                        marginBottom: 18,
-                        borderBottom: "1px solid #eee",
-                        paddingBottom: 12,
-                      }}
-                    >
+                  {feedbackData?.data?.length === 0 && (
+                    <div>Chưa có phản hồi.</div>
+                  )}
+                  {feedbackData?.data?.length > 0 &&
+                    feedbackData.data.map((fb) => (
                       <div
+                        key={fb._id}
                         style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 12,
+                          marginBottom: 18,
+                          borderBottom: "1px solid #eee",
+                          paddingBottom: 12,
                         }}
                       >
-                        <img
-                          src={fb.accountId.avatar}
-                          alt={fb.accountId.fullName}
+                        <div
                           style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 12,
                           }}
-                        />
-                        <div>
-                          <b>{fb.accountId.fullName}</b>
-                          <div
+                        >
+                          <img
+                            src={fb.accountId.avatar}
+                            alt={fb.accountId.fullName}
                             style={{
-                              fontSize: 13,
-                              color: "#888",
+                              width: 40,
+                              height: 40,
+                              borderRadius: "50%",
                             }}
-                          >
-                            {new Date(fb.createdAt).toLocaleDateString()}
+                          />
+                          <div>
+                            <b>{fb.accountId.fullName}</b>
+                            <div
+                              style={{
+                                fontSize: 13,
+                                color: "#888",
+                              }}
+                            >
+                              {new Date(fb.createdAt).toLocaleDateString()}
+                            </div>
                           </div>
                         </div>
+                        <div style={{ margin: "8px 0" }}>
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <span
+                              key={i}
+                              style={{
+                                color: i < fb.rating ? "#FFB400" : "#e0e0e0",
+                                fontSize: 18,
+                              }}
+                            >
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                        <div>{fb.comment}</div>
                       </div>
-                      <div style={{ margin: "8px 0" }}>
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <span
-                            key={i}
-                            style={{
-                              color: i < fb.rating ? "#FFB400" : "#e0e0e0",
-                              fontSize: 18,
-                            }}
-                          >
-                            ★
-                          </span>
-                        ))}
-                      </div>
-                      <div>{fb.comment}</div>
-                    </div>
-                  ))}
+                    ))}
                 </div>
               </TabPane>
             </Tabs>
@@ -278,7 +338,9 @@ const CoursePlayer = () => {
             <div className="header-course">
               <div className="progress">
                 <h3>Nội dung Khóa học</h3>
-                <span className="progress-text">{progressPercent}% Hoàn thành</span>
+                <span className="progress-text">
+                  {progressPercent}% Hoàn thành
+                </span>
               </div>
               <Progress
                 percent={progressPercent}
@@ -290,7 +352,9 @@ const CoursePlayer = () => {
             {isLoadingChapters ? (
               <div style={{ padding: 16 }}>Đang tải chương...</div>
             ) : isErrorChapters ? (
-              <div style={{ padding: 16, color: "red" }}>Tải chương thất bại.</div>
+              <div style={{ padding: 16, color: "red" }}>
+                Tải chương thất bại.
+              </div>
             ) : (
               <Collapse
                 accordion
@@ -306,7 +370,8 @@ const CoursePlayer = () => {
                       extra={
                         <span>
                           <span className="lecture-count">
-                            {(chapterContentsMap[chapter._id]?.length || 0)} bài giảng
+                            {chapterContentsMap[chapter._id]?.length || 0} bài
+                            giảng
                           </span>
                           <span className="duration">
                             <ClockCircleOutlined /> N/A
@@ -316,7 +381,9 @@ const CoursePlayer = () => {
                     >
                       {chapterContentQueries.length === 0 ||
                       chapterContentQueries.some((q) => q.isLoading) ? (
-                        <div style={{ color: "#888" }}>Đang tải nội dung...</div>
+                        <div style={{ color: "#888" }}>
+                          Đang tải nội dung...
+                        </div>
                       ) : chapterContentsMap[chapter._id]?.length > 0 ? (
                         <ul style={{ paddingLeft: 20, margin: 0 }}>
                           {chapterContentsMap[chapter._id].map((content) => (
@@ -337,9 +404,99 @@ const CoursePlayer = () => {
                   ))}
               </Collapse>
             )}
+            <Button
+              type="primary"
+              block
+              style={{ marginTop: 16 }}
+              onClick={showPaymentModal}
+            >
+              Thanh toán
+            </Button>
           </Card>
         </div>
       </div>
+
+      <Modal
+        title="Xác nhận Thanh toán"
+        visible={isPaymentModalVisible}
+        onOk={handlePayment}
+        onCancel={handleCancelPayment}
+        okText={`Thanh toán ${courseObj.price?.toLocaleString() || "0"}đ`}
+        okButtonProps={{ loading: isCreatingOrder }}
+        cancelText="Hủy"
+        width={450}
+        style={{ top: 50 }}
+        footer={[
+          <Button
+            key="cancel"
+            onClick={handleCancelPayment}
+            style={{ marginRight: 8 }}
+          >
+            Hủy
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={isCreatingOrder}
+            onClick={handlePayment}
+            style={{
+              background: "#52c41a",
+              borderColor: "#52c41a",
+              color: "#fff",
+            }}
+          >
+            Thanh toán {courseObj.price?.toLocaleString() || "0"}đ
+          </Button>,
+        ]}
+      >
+        <div
+          style={{
+            padding: 24,
+            background: "#fff",
+            borderRadius: 10,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+            textAlign: "left",
+          }}
+        >
+          <div style={{ marginBottom: 20 }}>
+            <h3
+              style={{
+                color: "#1890ff",
+                margin: 0,
+                fontSize: 20,
+                fontWeight: 500,
+              }}
+            >
+              Chi tiết Thanh toán
+            </h3>
+          </div>
+          <div
+            style={{ display: "flex", alignItems: "center", marginBottom: 16 }}
+          >
+            {courseObj.image && (
+              <Avatar
+                src={courseObj.image}
+                size={72}
+                style={{ marginRight: 16, border: "3px solid #1890ff" }}
+              />
+            )}
+            <div>
+              <p style={{ fontSize: 18, fontWeight: 600, color: "#333" }}>
+                {courseObj.name || "Khóa học không xác định"}
+              </p>
+              <p style={{ color: "#595959", fontSize: 16 }}>
+                <strong>Giá:</strong> {courseObj.price?.toLocaleString() || "0"}
+                đ
+              </p>
+            </div>
+          </div>
+          <p style={{ color: "#666", fontSize: 14, lineHeight: 1.6 }}>
+            Bạn có chắc chắn muốn thanh toán khóa học này? Vui lòng kiểm tra kỹ
+            thông tin trước khi xác nhận. Sau khi thanh toán, bạn sẽ được chuyển
+            hướng đến trang thanh toán.
+          </p>
+        </div>
+      </Modal>
     </div>
   );
 };
