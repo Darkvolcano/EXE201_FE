@@ -11,7 +11,8 @@ const TutorDetail = () => {
   const { accountId } = useParams();
   const { data, isLoading, isError } = useGetCoursesByAccountId(accountId);
 
-  if (isLoading) return <Spin size="large" style={{ marginTop: 100, display: "block" }} />;
+  if (isLoading)
+    return <Spin size="large" style={{ marginTop: 100, display: "block" }} />;
   if (isError) return <div>Không thể tải chi tiết gia sư.</div>;
   if (!data?.data?.account) return <div>Không tìm thấy gia sư.</div>;
 
@@ -44,15 +45,23 @@ const TutorDetail = () => {
         <Row gutter={[24, 24]}>
           {certifications.map((cert) => (
             <Col xs={24} sm={12} md={8} key={cert._id}>
-              <Card className="tutor-certification-card" bordered={false} hoverable>
+              <Card
+                className="tutor-certification-card"
+                bordered={false}
+                hoverable
+              >
                 <img
                   src={cert.image?.[0] || ""}
                   alt={cert.name}
                   className="certification-image"
                 />
-                <Title level={4} className="certification-name">{cert.name}</Title>
+                <Title level={4} className="certification-name">
+                  {cert.name}
+                </Title>
                 <Text className="certification-desc">{cert.description}</Text>
-                <Text className="certification-exp">Kinh nghiệm: {cert.experience} năm</Text>
+                <Text className="certification-exp">
+                  Kinh nghiệm: {cert.experience} năm
+                </Text>
               </Card>
             </Col>
           ))}
@@ -64,16 +73,24 @@ const TutorDetail = () => {
         <Row gutter={[24, 24]} className="tutor-courses-list">
           {courses.map((course) => (
             <Col xs={24} sm={12} md={8} key={course._id}>
-              <Card className="tutor-course-card" hoverable cover={
-                <img
-                  alt={course.name}
-                  src={course.image || ""}
-                  className="course-cover-image"
-                />
-              }>
-                <Title level={4} className="course-title">{course.name}</Title>
+              <Card
+                className="tutor-course-card"
+                hoverable
+                cover={
+                  <img
+                    alt={course.name}
+                    src={course.image || ""}
+                    className="course-cover-image"
+                  />
+                }
+              >
+                <Title level={4} className="course-title">
+                  {course.name}
+                </Title>
                 <Text className="course-desc">{course.description}</Text>
-                <Text strong className="course-price">{course.price} VND</Text>
+                <Text strong className="course-price">
+                  {course.price.toLocaleString()} VND
+                </Text>
               </Card>
             </Col>
           ))}
@@ -81,7 +98,9 @@ const TutorDetail = () => {
       </section>
 
       <div className="contact-tutor-btn-container">
-        <Button type="primary" size="large">Liên hệ gia sư</Button>
+        <Button type="primary" size="large">
+          Liên hệ gia sư
+        </Button>
       </div>
     </div>
   );

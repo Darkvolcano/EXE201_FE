@@ -291,8 +291,8 @@
 
 .sidebar-course {
   flex: 1;
-  /* padding: 16px;
-  background: #fff;
+  padding: 16px 0;
+  /* background: #fff;
   border-left: 1px solid #d9d9d9; */
 }
 
@@ -304,7 +304,7 @@
 
 .header-course {
   padding: 16px;
-  border-bottom: 1px solid #d9d9d9;
+  /* border-bottom: 1px solid #d9d9d9; */
 }
 
 .header-course h3 {
@@ -337,7 +337,7 @@
 }
 
 .section-collapse .ant-collapse-content-box {
-  padding: 0 16px 16px !important;
+  padding: 16px 16px 16px !important;
 }
 
 .lecture-item {
