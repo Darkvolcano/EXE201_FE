@@ -1,16 +1,6 @@
 import React, { useState } from "react";
+import { Card, Tabs, Button, Collapse, Avatar, message, Modal } from "antd";
 import {
-  Card,
-  Tabs,
-  Button,
-  Progress,
-  Collapse,
-  Avatar,
-  message,
-  Modal,
-} from "antd";
-import {
-  PlayCircleOutlined,
   UserOutlined,
   ClockCircleOutlined,
   CommentOutlined,
@@ -28,6 +18,7 @@ import {
 import { useQueries } from "@tanstack/react-query";
 import "../style/CoursePlayer.css";
 import { useCreateOrder } from "../hooks/ordersApi";
+import dayjs from "dayjs";
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
@@ -111,7 +102,7 @@ const CoursePlayer = () => {
       )
     : 0;
   const lastUpdated = courseObj.updatedAt || courseObj.createdAt;
-  const progressPercent = 15;
+  // const progressPercent = 15;
 
   const showPaymentModal = () => {
     setIsPaymentModalVisible(true);
@@ -152,7 +143,7 @@ const CoursePlayer = () => {
               <FolderOutlined /> {totalSections} Phần
             </span>
             <span>
-              <VideoCameraOutlined /> {totalLectures} Bài giảng
+              <VideoCameraOutlined /> {totalLectures} Nội dung
             </span>
             {courseObj.duration && (
               <span>
@@ -160,14 +151,6 @@ const CoursePlayer = () => {
               </span>
             )}
           </div>
-        </div>
-        <div className="top-actions">
-          <Button type="default" className="review-button">
-            Viết Đánh giá
-          </Button>
-          <Button type="primary" className="next-button">
-            Bài giảng Tiếp theo
-          </Button>
         </div>
       </div>
       <div style={{ display: "flex" }}>
@@ -187,7 +170,7 @@ const CoursePlayer = () => {
               {lastUpdated && (
                 <span>
                   <ClockCircleOutlined /> Cập nhật lần cuối:{" "}
-                  {new Date(lastUpdated).toLocaleDateString()}
+                  {dayjs(lastUpdated).format("DD/MM/YYYY")}
                 </span>
               )}
               {courseObj.comments && (
@@ -304,7 +287,7 @@ const CoursePlayer = () => {
                                 color: "#888",
                               }}
                             >
-                              {new Date(fb.createdAt).toLocaleDateString()}
+                              {dayjs(fb.createdAt).format("DD/MM/YYYY")}
                             </div>
                           </div>
                         </div>
@@ -335,16 +318,16 @@ const CoursePlayer = () => {
             <div className="header-course">
               <div className="progress">
                 <h3>Nội dung Khóa học</h3>
-                <span className="progress-text">
+                {/* <span className="progress-text">
                   {progressPercent}% Hoàn thành
-                </span>
+                </span> */}
               </div>
-              <Progress
+              {/* <Progress
                 percent={progressPercent}
                 showInfo={false}
                 strokeColor="#52c41a"
                 className="progress-bar"
-              />
+              /> */}
             </div>
             {isLoadingChapters ? (
               <div style={{ padding: 16 }}>Đang tải chương...</div>
@@ -370,9 +353,9 @@ const CoursePlayer = () => {
                             {chapterContentsMap[chapter._id]?.length || 0} bài
                             giảng
                           </span>
-                          <span className="duration">
+                          {/* <span className="duration">
                             <ClockCircleOutlined /> N/A
-                          </span>
+                          </span> */}
                         </span>
                       }
                     >
