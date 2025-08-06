@@ -17,9 +17,14 @@ const About = () => {
         <div className="about-info-content">
           <h1 className="about-card-title">Về Tutorify</h1>
           <p className="about-card-desc">
-            Tutorify là một nền tảng hiện đại kết nối học sinh với những người hướng dẫn nhiệt huyết và các khóa học chất lượng cao.<br />
-            Sứ mệnh của chúng tôi là làm cho việc học trở nên dễ tiếp cận, thú vị và hiệu quả cho mọi người.<br />
-            Chúng tôi tin vào sức mạnh của giáo dục cá nhân hóa và một cộng đồng hỗ trợ.
+            Tutorify là một nền tảng hiện đại kết nối học sinh với những người
+            hướng dẫn nhiệt huyết và các khóa học chất lượng cao.
+            <br />
+            Sứ mệnh của chúng tôi là làm cho việc học trở nên dễ tiếp cận, thú
+            vị và hiệu quả cho mọi người.
+            <br />
+            Chúng tôi tin vào sức mạnh của giáo dục cá nhân hóa và một cộng đồng
+            hỗ trợ.
           </p>
           <div className="about-info-stats">
             <div>
@@ -45,7 +50,9 @@ const About = () => {
             <Button
               className="cta-btn fanpage"
               size="large"
-              icon={<FacebookFilled style={{ fontSize: 20, color: "#1877f3" }}/>}
+              icon={
+                <FacebookFilled style={{ fontSize: 20, color: "#1877f3" }} />
+              }
               onClick={handleFanpage}
             >
               Fanpage Facebook
@@ -71,15 +78,23 @@ const About = () => {
         <div className="about-info-content">
           <h2 className="about-card-title sub">Chúng tôi là ai</h2>
           <p className="about-card-desc sub">
-            Chúng tôi là đội ngũ gồm các nhà giáo dục, nhà phát triển và những người mơ mộng muốn trao quyền cho người học trên khắp thế giới.<br />
-            Tutorify cung cấp nhiều môn học, từ Tiếng Anh và Toán đến Lập trình và Điện toán Đám mây.<br />
-            Các gia sư của chúng tôi được chọn lọc kỹ lưỡng dựa trên chuyên môn và đam mê giảng dạy.
+            Chúng tôi là đội ngũ gồm các nhà giáo dục, nhà phát triển và những
+            người mơ mộng muốn trao quyền cho người học trên khắp thế giới.
+            <br />
+            Tutorify cung cấp nhiều môn học, từ Tiếng Anh và Toán đến Lập trình
+            và Điện toán Đám mây.
+            <br />
+            Các gia sư của chúng tôi được chọn lọc kỹ lưỡng dựa trên chuyên môn
+            và đam mê giảng dạy.
           </p>
           <ul className="about-list">
-            <li>✓ Đường dẫn học tập cá nhân hóa cho mỗi học sinh</li>
-            <li>✓ Gia sư thân thiện, giàu kinh nghiệm và hỗ trợ</li>
-            <li>✓ Khóa học trực tuyến linh hoạt, bất cứ lúc nào và bất cứ đâu</li>
-            <li>✓ Hỗ trợ và tài nguyên từ cộng đồng</li>
+            <li> Đường dẫn học tập cá nhân hóa cho mỗi học sinh</li>
+            <li> Gia sư thân thiện, giàu kinh nghiệm và hỗ trợ</li>
+            <li>
+              {" "}
+              Khóa học trực tuyến linh hoạt, bất cứ lúc nào và bất cứ đâu
+            </li>
+            <li> Hỗ trợ và tài nguyên từ cộng đồng</li>
           </ul>
           <div className="about-info-actions bottom">
             <Button type="primary" className="cta-btn main" size="large">
