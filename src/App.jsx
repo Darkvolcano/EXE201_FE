@@ -39,6 +39,8 @@ import TutorOrder from "./pages/TutorOrderDetail";
 import AccountManagement from "./pages/AccountManagement";
 import CourseDetailPage from './pages/CourseDetailPage';
 
+import PaymentSuccess from "./pages/PaymentSuccess";
+
 const LayoutWithNavFooter = () => (
   <>
     <Navbar />
@@ -84,7 +86,7 @@ function App() {
             <Route path="/tutors/:accountId" element={<TutorDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/forum" element={<Forum />} />
-            
+            <Route path="/payment-success/:orderId" element={<PaymentSuccess />} />  
           </Route>
 
           <Route element={<LayoutWithoutNavFooter />}>

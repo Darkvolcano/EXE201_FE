@@ -19,3 +19,13 @@ export const useCreateOrder = () => {
     },
   });
 };
+
+export const usePayOrder = () => {
+  return useMutation({
+    mutationFn: async (orderId) => {
+      const response = await axiosInstance.patch(`orders/${orderId}/pay`);
+      return response.data;
+    },
+  });
+};
+
