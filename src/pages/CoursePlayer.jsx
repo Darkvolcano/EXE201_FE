@@ -118,21 +118,38 @@ const CoursePlayer = () => {
   };
 
   const handlePayment = () => {
-    createOrder(
-      { courseId: id },
-      {
-        onSuccess: (response) => {
-          message.success(response.message);
-          if (response.data?.url) {
-            window.location.href = response.data.url; // Chuyển hướng sang URL trong response
-          }
-        },
-        onError: (error) => {
-          message.error("Thanh toán thất bại: " + error.message);
-        },
-      }
-    );
-  };
+  createOrder(
+    { courseId: id },
+    {
+      onSuccess: (response) => {
+        message.success(response.message);
+        // Navigate to success page with known orderId
+        if (response.data?.orderId) {
+          navigate(`/payment-success/${response.data.orderId}`);
+        } else if (response.data?._id) {
+          navigate(`/payment-success/${response.data._id}`);
+        } else {
+          // fallback: navigate without ID or handle differently
+          navigate(`/payment-success/unknown`);
+        }
+      },
+      onError: (error) => {
+        message.error("Thanh toán thất bại: " + (error.response?.data?.message || error.message));
+        // Try to extract orderId from error response if possible
+        const orderId =
+          error.response?.data?.orderId || error.response?.data?._id || null;
+
+        if (orderId) {
+          navigate(`/payment-success/${orderId}`);
+        } else {
+          // No orderId available, still navigate to payment success page but with 'unknown' or a dedicated failure route
+          navigate(`/payment-success/unknown`);
+        }
+      },
+    }
+  );
+};
+
 
   const handleCancelPayment = () => {
     setIsPaymentModalVisible(false);
