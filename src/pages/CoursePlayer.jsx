@@ -176,9 +176,6 @@ const CoursePlayer = () => {
           <Card className="video-card">
             <div className="video-placeholder">
               <img src={courseObj.image} alt={courseObj.name} />
-              <div className="play-overlay">
-                <PlayCircleOutlined className="play-icon" />
-              </div>
             </div>
             <h2 className="lecture-title">{courseObj.name}</h2>
             <div className="metadata">
@@ -424,7 +421,7 @@ const CoursePlayer = () => {
         okText={`Thanh toán ${courseObj.price?.toLocaleString() || "0"}đ`}
         okButtonProps={{ loading: isCreatingOrder }}
         cancelText="Hủy"
-        width={450}
+        width={700}
         style={{ top: 50 }}
         footer={[
           <Button
