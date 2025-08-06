@@ -60,7 +60,7 @@ export function AuthGuardProvider(props) {
       "/pricing",
       "/courses/:id",
       "/tutors/:accountId",
-      "/payment-success/:orderId",
+      "/payment-success",
     ];
 
     const matchDynamicRoute = (route, path) => {
