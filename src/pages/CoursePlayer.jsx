@@ -424,7 +424,7 @@ const CoursePlayer = () => {
         okText={`Thanh toán ${courseObj.price?.toLocaleString() || "0"}đ`}
         okButtonProps={{ loading: isCreatingOrder }}
         cancelText="Hủy"
-        width={450}
+        width={700}
         style={{ top: 50 }}
         footer={[
           <Button
