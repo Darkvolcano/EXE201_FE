@@ -114,32 +114,35 @@ const CoursePlayer = () => {
     {
       onSuccess: (response) => {
         message.success(response.message);
-        // Navigate to success page with known orderId
-        if (response.data?.orderId) {
-          navigate(`/payment-success/${response.data.orderId}`);
-        } else if (response.data?._id) {
-          navigate(`/payment-success/${response.data._id}`);
+        const paymentUrl = response.data?.url;
+        if (paymentUrl) {
+          // Redirect user to VNPay payment page to do payment
+          window.location.href = paymentUrl;
         } else {
-          // fallback: navigate without ID or handle differently
-          navigate(`/payment-success/unknown`);
+          // fallback - handle no payment url returned
+          message.error("Không nhận được URL thanh toán.");
+          // Optional: fallback navigation like before if orderId exists
+          const orderId = response.data?.orderId || response.data?._id;
+          if (orderId) {
+            navigate(`/payment-success/${orderId}`);
+          }
         }
       },
       onError: (error) => {
-        message.error("Thanh toán thất bại: " + (error.response?.data?.message || error.message));
-        // Try to extract orderId from error response if possible
-        const orderId =
-          error.response?.data?.orderId || error.response?.data?._id || null;
-
+        message.error(
+          "Thanh toán thất bại: " +
+            (error.response?.data?.message || error.message)
+        );
+        // Optional fallback if error response contains orderId
+        const orderId = error.response?.data?.orderId || error.response?.data?._id;
         if (orderId) {
           navigate(`/payment-success/${orderId}`);
-        } else {
-          // No orderId available, still navigate to payment success page but with 'unknown' or a dedicated failure route
-          navigate(`/payment-success/unknown`);
         }
       },
     }
   );
 };
+
 
 
   const handleCancelPayment = () => {

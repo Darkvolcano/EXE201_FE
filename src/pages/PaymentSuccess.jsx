@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Card, Result, Button, Spin, message } from "antd";
 import { CheckCircleTwoTone, FrownTwoTone } from "@ant-design/icons";
 import { usePayOrder } from "../hooks/ordersApi";
 
 const PaymentSuccess = () => {
-  const { orderId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  const { mutate: payOrder, isLoading } = usePayOrder();
-  const [paymentStatus, setPaymentStatus] = useState("pending"); // 'pending' | 'success' | 'error'
+  const queryParams = new URLSearchParams(location.search);
+  const orderId = queryParams.get("orderId");
+
+  const [paymentStatus, setPaymentStatus] = useState("pending"); // pending, success, error
   const [errorText, setErrorText] = useState("");
+  const { mutate: payOrder, isLoading } = usePayOrder();
 
   useEffect(() => {
     if (!orderId) {
@@ -20,8 +23,7 @@ const PaymentSuccess = () => {
 
     const confirmPayment = async () => {
       payOrder(orderId, {
-        onSuccess: (res) => {
-          // Consider onSuccess means success; avoid relying strictly on res.status
+        onSuccess: () => {
           setPaymentStatus("success");
         },
         onError: (error) => {
