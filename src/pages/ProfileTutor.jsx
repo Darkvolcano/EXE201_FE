@@ -14,29 +14,29 @@ import {
   VideoCameraOutlined,
   PlayCircleOutlined,
 } from "@ant-design/icons";
-import { 
-  Avatar, 
-  Modal, 
-  Form, 
-  Input, 
-  InputNumber, 
-  Button, 
-  Card, 
-  message, 
-  List, 
-  Breadcrumb, 
-  Tabs, 
+import {
+  Avatar,
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Card,
+  message,
+  List,
+  Breadcrumb,
+  Tabs,
   Empty,
   Tag,
   Space,
-  Tooltip
+  Tooltip,
 } from "antd";
 import { useProfileUser } from "../hooks/ProfileApi";
-import { useCourseApi } from '../hooks/coursesAPIExtend';
-import { useChapterApi } from '../hooks/chapterApiExtend';
-import { useContentApi } from '../hooks/contentApiExtend';
-import { useOrderApi } from '../hooks/useOrderApi';
-import useAuthStore from "../hooks/authenStoreApi"; 
+import { useCourseApi } from "../hooks/coursesAPIExtend";
+import { useChapterApi } from "../hooks/chapterApiExtend";
+import { useContentApi } from "../hooks/contentApiExtend";
+import { useOrderApi } from "../hooks/useOrderApi";
+import useAuthStore from "../hooks/authenStoreApi";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ErrorMessage from "../components/ErrorMessage";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -48,19 +48,35 @@ const { TextArea } = Input;
 const TutorProfile = () => {
   const { user } = useAuthStore();
   const accountId = user?.accountId;
-  
+
   const { data: userData, isLoading, error } = useProfileUser();
-  const { courses, isLoading: coursesLoading, error: coursesError, createCourse, getTutorCourses } = useCourseApi();
-  const { chapters, isLoading: chaptersLoading, createChapter, getChaptersByCourse } = useChapterApi();
-  const { contents, isLoading: contentsLoading, createContent, getContentsByChapter } = useContentApi();
-  
-  const { 
-    orders, 
-    isLoading: ordersLoading, 
-    error: ordersError, 
-    getTutorOrders, 
-    getOrderStats, 
-    getUpcomingSessions 
+  const {
+    courses,
+    isLoading: coursesLoading,
+    error: coursesError,
+    createCourse,
+    getTutorCourses,
+  } = useCourseApi();
+  const {
+    chapters,
+    isLoading: chaptersLoading,
+    createChapter,
+    getChaptersByCourse,
+  } = useChapterApi();
+  const {
+    contents,
+    isLoading: contentsLoading,
+    createContent,
+    getContentsByChapter,
+  } = useContentApi();
+
+  const {
+    orders,
+    isLoading: ordersLoading,
+    error: ordersError,
+    getTutorOrders,
+    getOrderStats,
+    getUpcomingSessions,
   } = useOrderApi();
 
   const location = useLocation();
@@ -70,7 +86,7 @@ const TutorProfile = () => {
   const [selectedChapter, setSelectedChapter] = useState(null);
   const [courseChapters, setCourseChapters] = useState([]);
   const [chapterContents, setChapterContents] = useState([]);
-  
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isChapterModalVisible, setIsChapterModalVisible] = useState(false);
   const [isContentModalVisible, setIsContentModalVisible] = useState(false);
@@ -79,12 +95,18 @@ const TutorProfile = () => {
   const [contentForm] = Form.useForm();
   const [submitting, setSubmitting] = useState(false);
 
-  const orderStats = useMemo(() => getOrderStats(orders), [orders, getOrderStats]);
-  const upcomingSessions = useMemo(() => getUpcomingSessions(orders), [orders, getUpcomingSessions]);
+  const orderStats = useMemo(
+    () => getOrderStats(orders),
+    [orders, getOrderStats]
+  );
+  const upcomingSessions = useMemo(
+    () => getUpcomingSessions(orders),
+    [orders, getUpcomingSessions]
+  );
 
   const supportData = [
-      { name: "Prashant Kumar Singh", role: "Hỗ trợ IT" },
-      { name: "Michael Lee", role: "Gia sư Toán & Tiếng Anh" },
+    { name: "Prashant Kumar Singh", role: "Hỗ trợ IT" },
+    { name: "Michael Lee", role: "Gia sư Toán & Tiếng Anh" },
   ];
 
   // Effect to fetch order data ONCE on component mount
@@ -119,8 +141,8 @@ const TutorProfile = () => {
       const chaptersData = await getChaptersByCourse(course.courseId);
       setCourseChapters(chaptersData);
     } catch (error) {
-      console.error('Error loading chapters:', error);
-      message.error('Không thể tải danh sách chương');
+      console.error("Error loading chapters:", error);
+      message.error("Không thể tải danh sách chương");
     }
   };
 
@@ -131,8 +153,8 @@ const TutorProfile = () => {
       const contentsData = await getContentsByChapter(chapter._id);
       setChapterContents(contentsData);
     } catch (error) {
-      console.error('Error loading contents:', error);
-      message.error('Không thể tải nội dung');
+      console.error("Error loading contents:", error);
+      message.error("Không thể tải nội dung");
     }
   };
 
@@ -161,11 +183,11 @@ const TutorProfile = () => {
     setSubmitting(true);
     try {
       await createCourse(values);
-      message.success('Tạo khóa học thành công!');
+      message.success("Tạo khóa học thành công!");
       setIsModalVisible(false);
       form.resetFields();
     } catch (error) {
-      message.error('Tạo khóa học thất bại. Vui lòng thử lại.');
+      message.error("Tạo khóa học thất bại. Vui lòng thử lại.");
     } finally {
       setSubmitting(false);
     }
@@ -183,16 +205,16 @@ const TutorProfile = () => {
     try {
       await createChapter({
         ...values,
-        courseId: selectedCourse.courseId
+        courseId: selectedCourse.courseId,
       });
-      message.success('Tạo chương thành công!');
+      message.success("Tạo chương thành công!");
       setIsChapterModalVisible(false);
       chapterForm.resetFields();
       // Reload chapters
       const chaptersData = await getChaptersByCourse(selectedCourse.courseId);
       setCourseChapters(chaptersData);
     } catch (error) {
-      message.error('Tạo chương thất bại. Vui lòng thử lại.');
+      message.error("Tạo chương thất bại. Vui lòng thử lại.");
     } finally {
       setSubmitting(false);
     }
@@ -211,47 +233,45 @@ const TutorProfile = () => {
       await createContent({
         ...values,
         chapterId: selectedChapter._id,
-        createdBy: accountId
+        createdBy: accountId,
       });
-      message.success('Tạo nội dung thành công!');
+      message.success("Tạo nội dung thành công!");
       setIsContentModalVisible(false);
       contentForm.resetFields();
       // Reload contents
       const contentsData = await getContentsByChapter(selectedChapter._id);
       setChapterContents(contentsData);
     } catch (error) {
-      message.error('Tạo nội dung thất bại. Vui lòng thử lại.');
+      message.error("Tạo nội dung thất bại. Vui lòng thử lại.");
     } finally {
       setSubmitting(false);
     }
   };
 
   const formatPrice = (price) => {
-    if (typeof price !== 'number') return '0 VND';
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    if (typeof price !== "number") return "0 VND";
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(price);
   };
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('vi-VN', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
   // Render Breadcrumb
   const renderBreadcrumb = () => {
-    const items = [
-      { title: 'Khóa học', onClick: goBackToCourses }
-    ];
-    
+    const items = [{ title: "Khóa học", onClick: goBackToCourses }];
+
     if (selectedCourse) {
       items.push({ title: selectedCourse.name });
     }
-    
+
     if (selectedChapter) {
       items.push({ title: selectedChapter.title });
     }
@@ -261,7 +281,11 @@ const TutorProfile = () => {
         {items.map((item, index) => (
           <Breadcrumb.Item key={index}>
             {item.onClick ? (
-              <Button type="link" onClick={item.onClick} className="breadcrumb-link">
+              <Button
+                type="link"
+                onClick={item.onClick}
+                className="breadcrumb-link"
+              >
                 {item.title}
               </Button>
             ) : (
@@ -281,9 +305,9 @@ const TutorProfile = () => {
           <h1>Khóa học của tôi</h1>
           <p>Quản lý khóa học, chương và nội dung của bạn</p>
         </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
           onClick={showModal}
           size="large"
         >
@@ -298,12 +322,16 @@ const TutorProfile = () => {
         </div>
         <div className="stat-card">
           <h3>Khóa học đang hoạt động</h3>
-          <span className="stat-number">{courses.filter(course => course.isActive).length}</span>
+          <span className="stat-number">
+            {courses.filter((course) => course.isActive).length}
+          </span>
         </div>
         <div className="stat-card">
           <h3>Tổng doanh thu</h3>
           <span className="stat-number">
-            {formatPrice(courses.reduce((total, course) => total + course.price, 0))}
+            {formatPrice(
+              courses.reduce((total, course) => total + course.price, 0)
+            )}
           </span>
         </div>
       </div>
@@ -324,7 +352,8 @@ const TutorProfile = () => {
                   src={course.image}
                   className="course-image"
                   onError={(e) => {
-                    e.target.src = '/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png';
+                    e.target.src =
+                      "/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png";
                   }}
                 />
               }
@@ -339,11 +368,11 @@ const TutorProfile = () => {
                   <DeleteOutlined key="delete" />
                 </Tooltip>,
                 <Tooltip title="Quản lý chương">
-                  <BookOutlined 
-                    key="chapters" 
+                  <BookOutlined
+                    key="chapters"
                     onClick={() => viewCourseChapters(course)}
                   />
-                </Tooltip>
+                </Tooltip>,
               ]}
             >
               <Meta
@@ -352,9 +381,11 @@ const TutorProfile = () => {
                   <div className="course-details-clean">
                     <p className="course-description">{course.description}</p>
                     <div className="course-info">
-                      <span className="course-price">{formatPrice(course.price)}</span>
-                      <Tag color={course.isActive ? 'green' : 'red'}>
-                        {course.isActive ? 'Hoạt động' : 'Không hoạt động'}
+                      <span className="course-price">
+                        {formatPrice(course.price)}
+                      </span>
+                      <Tag color={course.isActive ? "green" : "red"}>
+                        {course.isActive ? "Hoạt động" : "Không hoạt động"}
                       </Tag>
                     </div>
                     <div className="course-dates">
@@ -388,9 +419,9 @@ const TutorProfile = () => {
     <div className="chapters-view">
       <div className="view-header">
         <div className="header-left">
-          <Button 
-            type="text" 
-            icon={<ArrowLeftOutlined />} 
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
             onClick={goBackToCourses}
             className="back-button"
           >
@@ -401,9 +432,9 @@ const TutorProfile = () => {
             <p>Quản lý chương cho khóa học này</p>
           </div>
         </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
           onClick={showChapterModal}
         >
           Thêm chương mới
@@ -419,7 +450,11 @@ const TutorProfile = () => {
               description="Chưa có chương nào"
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             >
-              <Button type="primary" icon={<PlusOutlined />} onClick={showChapterModal}>
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={showChapterModal}
+              >
                 Thêm chương đầu tiên
               </Button>
             </Empty>
@@ -433,8 +468,8 @@ const TutorProfile = () => {
                 hoverable
                 actions={[
                   <Tooltip title="Xem nội dung">
-                    <FileTextOutlined 
-                      key="contents" 
+                    <FileTextOutlined
+                      key="contents"
                       onClick={() => viewChapterContents(chapter)}
                     />
                   </Tooltip>,
@@ -443,7 +478,7 @@ const TutorProfile = () => {
                   </Tooltip>,
                   <Tooltip title="Xóa chương">
                     <DeleteOutlined key="delete" />
-                  </Tooltip>
+                  </Tooltip>,
                 ]}
               >
                 <div className="chapter-header">
@@ -451,11 +486,13 @@ const TutorProfile = () => {
                   <Tag color="blue">{chapterContents.length || 0} Nội dung</Tag>
                 </div>
                 <h3 className="chapter-title">{chapter.title}</h3>
-                <p className="chapter-date">Tạo ngày: {formatDate(chapter.createdAt)}</p>
-                <Button 
-                  type="primary" 
-                  ghost 
-                  block 
+                <p className="chapter-date">
+                  Tạo ngày: {formatDate(chapter.createdAt)}
+                </p>
+                <Button
+                  type="primary"
+                  ghost
+                  block
                   onClick={() => viewChapterContents(chapter)}
                   icon={<PlayCircleOutlined />}
                 >
@@ -474,9 +511,9 @@ const TutorProfile = () => {
     <div className="contents-view">
       <div className="view-header">
         <div className="header-left">
-          <Button 
-            type="text" 
-            icon={<ArrowLeftOutlined />} 
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
             onClick={goBackToChapters}
             className="back-button"
           >
@@ -487,9 +524,9 @@ const TutorProfile = () => {
             <p>Quản lý nội dung cho chương này</p>
           </div>
         </div>
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />} 
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
           onClick={showContentModal}
         >
           Thêm nội dung mới
@@ -505,7 +542,11 @@ const TutorProfile = () => {
               description="Chưa có nội dung nào"
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             >
-              <Button type="primary" icon={<PlusOutlined />} onClick={showContentModal}>
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={showContentModal}
+              >
                 Thêm nội dung đầu tiên
               </Button>
             </Empty>
@@ -526,7 +567,7 @@ const TutorProfile = () => {
                   </Tooltip>,
                   <Tooltip title="Xóa nội dung">
                     <DeleteOutlined key="delete" />
-                  </Tooltip>
+                  </Tooltip>,
                 ]}
               >
                 <div className="content-header">
@@ -536,7 +577,9 @@ const TutorProfile = () => {
                 <div className="content-description">
                   {content.contentDescription}
                 </div>
-                <p className="content-date">Tạo ngày: {formatDate(content.createdAt)}</p>
+                <p className="content-date">
+                  Tạo ngày: {formatDate(content.createdAt)}
+                </p>
               </Card>
             ))}
           </div>
@@ -545,8 +588,18 @@ const TutorProfile = () => {
     </div>
   );
 
-  if (isLoading) return <div className="profile-container"><LoadingSpinner /></div>;
-  if (error) return <div className="profile-container"><ErrorMessage message="Lỗi khi tải hồ sơ" /></div>;
+  if (isLoading)
+    return (
+      <div className="profile-container">
+        <LoadingSpinner />
+      </div>
+    );
+  if (error)
+    return (
+      <div className="profile-container">
+        <ErrorMessage message="Lỗi khi tải hồ sơ" />
+      </div>
+    );
 
   return (
     <div className="tutor-profile-wrapper">
@@ -555,28 +608,27 @@ const TutorProfile = () => {
         <div className="menu-list-profile-tutor">
           <Link
             to="/profile-tutor"
-            className={`menu-item ${activeSection === "OVERVIEW" ? "active" : ""}`}
+            className={`menu-item ${
+              activeSection === "OVERVIEW" ? "active" : ""
+            }`}
             onClick={() => setActiveSection("OVERVIEW")}
           >
             TỔNG QUAN
           </Link>
           <Link
-            to="/forum"
-            className={`menu-item ${activeSection === "Forum" ? "active" : ""}`}
-            onClick={() => setActiveSection("Forum")}
-          >
-            Diễn đàn
-          </Link>
-          <Link
             to="/profile-tutor"
-            className={`menu-item ${activeSection === "Course" ? "active" : ""}`}
+            className={`menu-item ${
+              activeSection === "Course" ? "active" : ""
+            }`}
             onClick={() => setActiveSection("Course")}
           >
             Khóa học
           </Link>
           <Link
             to="tutor-certifications"
-            className={`menu-item ${activeSection === "Certificate" ? "active" : ""}`}
+            className={`menu-item ${
+              activeSection === "Certificate" ? "active" : ""
+            }`}
             onClick={() => setActiveSection("Certificate")}
           >
             Chứng chỉ
@@ -598,7 +650,10 @@ const TutorProfile = () => {
           ) : upcomingSessions.length > 0 ? (
             upcomingSessions.map((session) => (
               <div key={session.id} className="student-item">
-                <Avatar size={40} src={`https://i.pravatar.cc/40?u=${session.email}`} />
+                <Avatar
+                  size={40}
+                  src={`https://i.pravatar.cc/40?u=${session.email}`}
+                />
                 <div className="student-info">
                   <span>{session.studentName}</span>
                   <span>Ngày đặt: {session.date}</span>
@@ -607,7 +662,9 @@ const TutorProfile = () => {
               </div>
             ))
           ) : (
-            <div style={{ padding: '10px', textAlign: 'center', color: '#888' }}>
+            <div
+              style={{ padding: "10px", textAlign: "center", color: "#888" }}
+            >
               Không có buổi học nào sắp tới.
             </div>
           )}
@@ -623,7 +680,11 @@ const TutorProfile = () => {
         {activeSection === "Course" && (
           <div className="course-page-container">
             {renderBreadcrumb()}
-            {courseView === "list" ? renderCoursesList() : courseView === "chapters" ? renderChaptersView() : renderContentsView()}
+            {courseView === "list"
+              ? renderCoursesList()
+              : courseView === "chapters"
+              ? renderChaptersView()
+              : renderContentsView()}
           </div>
         )}
 
@@ -640,14 +701,16 @@ const TutorProfile = () => {
           />
           <div className="profile-details">
             <h3>
-              <UserOutlined /> Chào buổi sáng {userData?.fullName || user?.fullName || "Người dùng"}
+              <UserOutlined /> Chào buổi sáng{" "}
+              {userData?.fullName || user?.fullName || "Người dùng"}
             </h3>
             <p>Tiếp tục hành trình và đạt được mục tiêu của bạn</p>
             <p>
               <MailOutlined /> Email: {userData?.email || user?.email || "N/A"}
             </p>
             <p>
-              <PhoneOutlined /> Điện thoại: {userData?.phone || user?.phone || "N/A"}
+              <PhoneOutlined /> Điện thoại:{" "}
+              {userData?.phone || user?.phone || "N/A"}
             </p>
             <p>
               <DollarOutlined /> Số dư: {formatPrice(userData?.balance)}
@@ -699,106 +762,135 @@ const TutorProfile = () => {
       {/* Modals */}
       {/* Course Modal */}
       <Modal
-            title="Tạo khóa học mới"
-            visible={isModalVisible}
-            onCancel={handleCancel}
-            footer={null}
-            width={600}
+        title="Tạo khóa học mới"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+        width={600}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+          requiredMark={false}
+        >
+          <Form.Item
+            name="name"
+            label="Tên khóa học"
+            rules={[{ required: true, message: "Vui lòng nhập tên khóa học" }]}
           >
-            <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false}>
-              <Form.Item
-                name="name"
-                label="Tên khóa học"
-                rules={[{ required: true, message: 'Vui lòng nhập tên khóa học' }]}
-              >
-                <Input placeholder="Nhập tên khóa học" />
-              </Form.Item>
-              <Form.Item
-                name="description"
-                label="Mô tả"
-                rules={[{ required: true, message: 'Vui lòng nhập mô tả khóa học' }]}
-              >
-                <TextArea rows={4} placeholder="Nhập mô tả khóa học" />
-              </Form.Item>
-              <Form.Item
-                name="image"
-                label="URL hình ảnh khóa học"
-                rules={[{ required: true, message: 'Vui lòng nhập URL hình ảnh' }]}
-              >
-                <Input placeholder="https://example.com/course.jpg" />
-              </Form.Item>
-              <Form.Item
-                name="price"
-                label="Giá (VND)"
-                rules={[{ required: true, message: 'Vui lòng nhập giá khóa học' }]}
-              >
-                <InputNumber
-                  style={{ width: '100%' }}
-                  placeholder="99000"
-                  min={0}
-                  step={1000}
-                  formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                  parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                />
-              </Form.Item>
-              <Form.Item className="form-buttons">
-                <Button onClick={handleCancel} style={{ marginRight: 8 }}>Hủy</Button>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  Tạo khóa học
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
+            <Input placeholder="Nhập tên khóa học" />
+          </Form.Item>
+          <Form.Item
+            name="description"
+            label="Mô tả"
+            rules={[
+              { required: true, message: "Vui lòng nhập mô tả khóa học" },
+            ]}
+          >
+            <TextArea rows={4} placeholder="Nhập mô tả khóa học" />
+          </Form.Item>
+          <Form.Item
+            name="image"
+            label="URL hình ảnh khóa học"
+            rules={[{ required: true, message: "Vui lòng nhập URL hình ảnh" }]}
+          >
+            <Input placeholder="https://example.com/course.jpg" />
+          </Form.Item>
+          <Form.Item
+            name="price"
+            label="Giá (VND)"
+            rules={[{ required: true, message: "Vui lòng nhập giá khóa học" }]}
+          >
+            <InputNumber
+              style={{ width: "100%" }}
+              placeholder="99000"
+              min={0}
+              step={1000}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+              }
+              parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+            />
+          </Form.Item>
+          <Form.Item className="form-buttons">
+            <Button onClick={handleCancel} style={{ marginRight: 8 }}>
+              Hủy
+            </Button>
+            <Button type="primary" htmlType="submit" loading={submitting}>
+              Tạo khóa học
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
 
-          {/* Chapter Modal */}
-          <Modal
-            title="Tạo chương mới"
-            visible={isChapterModalVisible}
-            onCancel={handleChapterCancel}
-            footer={null}
-            width={500}
+      {/* Chapter Modal */}
+      <Modal
+        title="Tạo chương mới"
+        visible={isChapterModalVisible}
+        onCancel={handleChapterCancel}
+        footer={null}
+        width={500}
+      >
+        <Form
+          form={chapterForm}
+          layout="vertical"
+          onFinish={handleChapterSubmit}
+          requiredMark={false}
+        >
+          <Form.Item
+            name="title"
+            label="Tiêu đề chương"
+            rules={[
+              { required: true, message: "Vui lòng nhập tiêu đề chương" },
+            ]}
           >
-            <Form form={chapterForm} layout="vertical" onFinish={handleChapterSubmit} requiredMark={false}>
-              <Form.Item
-                name="title"
-                label="Tiêu đề chương"
-                rules={[{ required: true, message: 'Vui lòng nhập tiêu đề chương' }]}
-              >
-                <Input placeholder="Nhập tiêu đề chương" />
-              </Form.Item>
-              <Form.Item className="form-buttons">
-                <Button onClick={handleChapterCancel} style={{ marginRight: 8 }}>Hủy</Button>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  Tạo chương
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
+            <Input placeholder="Nhập tiêu đề chương" />
+          </Form.Item>
+          <Form.Item className="form-buttons">
+            <Button onClick={handleChapterCancel} style={{ marginRight: 8 }}>
+              Hủy
+            </Button>
+            <Button type="primary" htmlType="submit" loading={submitting}>
+              Tạo chương
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
 
-          {/* Content Modal */}
-          <Modal
-            title="Tạo nội dung mới"
-            visible={isContentModalVisible}
-            onCancel={handleContentCancel}
-            footer={null}
-            width={600}
+      {/* Content Modal */}
+      <Modal
+        title="Tạo nội dung mới"
+        visible={isContentModalVisible}
+        onCancel={handleContentCancel}
+        footer={null}
+        width={600}
+      >
+        <Form
+          form={contentForm}
+          layout="vertical"
+          onFinish={handleContentSubmit}
+          requiredMark={false}
+        >
+          <Form.Item
+            name="contentDescription"
+            label="Mô tả nội dung"
+            rules={[
+              { required: true, message: "Vui lòng nhập mô tả nội dung" },
+            ]}
           >
-            <Form form={contentForm} layout="vertical" onFinish={handleContentSubmit} requiredMark={false}>
-              <Form.Item
-                name="contentDescription"
-                label="Mô tả nội dung"
-                rules={[{ required: true, message: 'Vui lòng nhập mô tả nội dung' }]}
-              >
-                <TextArea rows={4} placeholder="Nhập mô tả nội dung" />
-              </Form.Item>
-              <Form.Item className="form-buttons">
-                <Button onClick={handleContentCancel} style={{ marginRight: 8 }}>Hủy</Button>
-                <Button type="primary" htmlType="submit" loading={submitting}>
-                  Tạo nội dung
-                </Button>
-              </Form.Item>
-            </Form>
-          </Modal>
+            <TextArea rows={4} placeholder="Nhập mô tả nội dung" />
+          </Form.Item>
+          <Form.Item className="form-buttons">
+            <Button onClick={handleContentCancel} style={{ marginRight: 8 }}>
+              Hủy
+            </Button>
+            <Button type="primary" htmlType="submit" loading={submitting}>
+              Tạo nội dung
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
