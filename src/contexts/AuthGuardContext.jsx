@@ -107,6 +107,7 @@ export function AuthGuardProvider(props) {
         "tutor-certifications",
         "/forum",
         "course-detail",
+        "profile-tutor/courses-management",
       ],
       Admin: [
         "/profile-admin",

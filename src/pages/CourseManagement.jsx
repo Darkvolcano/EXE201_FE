@@ -1,273 +1,605 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Table,
-  Tag,
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  DollarOutlined,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  BookOutlined,
+  FileTextOutlined,
+  ArrowLeftOutlined,
+  VideoCameraOutlined,
+  PlayCircleOutlined,
+} from "@ant-design/icons";
+import {
   Modal,
-  Button,
-  Tooltip,
-  Card,
-  Descriptions,
+  Form,
   Input,
-  Slider,
-  Select,
+  InputNumber,
+  Button,
+  Card,
+  message,
+  Breadcrumb,
+  Empty,
+  Tag,
+  Tooltip,
 } from "antd";
-import { EyeOutlined, FilterOutlined } from "@ant-design/icons";
-import { useGetCourse } from "../hooks/coursesApi";
-import dayjs from "dayjs";
+import { useCourseApi } from "../hooks/coursesAPIExtend";
+import { useChapterApi } from "../hooks/chapterApiExtend";
+import { useContentApi } from "../hooks/contentApiExtend";
+import useAuthStore from "../hooks/authenStoreApi";
+import LoadingSpinner from "../components/LoadingSpinner";
+import ErrorMessage from "../components/ErrorMessage";
+import "../style/CourseManagementPage.css"; // Import file CSS mới
+
+const { Meta } = Card;
+const { TextArea } = Input;
 
 const CourseManagement = () => {
-  const { data, isLoading, error } = useGetCourse();
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { user } = useAuthStore();
+  const accountId = user?.accountId;
+
+  const {
+    courses,
+    isLoading: coursesLoading,
+    error: coursesError,
+    createCourse,
+    getTutorCourses,
+  } = useCourseApi();
+  const {
+    chapters,
+    isLoading: chaptersLoading,
+    createChapter,
+    getChaptersByCourse,
+  } = useChapterApi();
+  const {
+    contents,
+    isLoading: contentsLoading,
+    createContent,
+    getContentsByChapter,
+  } = useContentApi();
+
+  const [courseView, setCourseView] = useState("list");
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isFilterModalVisible, setIsFilterModalVisible] = useState(false);
-  const [priceRange, setPriceRange] = useState([0, 10000000]);
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedChapter, setSelectedChapter] = useState(null);
+  const [courseChapters, setCourseChapters] = useState([]);
+  const [chapterContents, setChapterContents] = useState([]);
 
-  const coursesData = Array.isArray(data?.data?.courses)
-    ? data?.data?.courses
-    : [];
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isChapterModalVisible, setIsChapterModalVisible] = useState(false);
+  const [isContentModalVisible, setIsContentModalVisible] = useState(false);
+  const [form] = Form.useForm();
+  const [chapterForm] = Form.useForm();
+  const [contentForm] = Form.useForm();
+  const [submitting, setSubmitting] = useState(false);
 
-  const filteredCourses = coursesData.filter((course) => {
-    const matchesSearch =
-      course.course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      course.course.description
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
-    const matchesPrice =
-      course.course.price >= priceRange[0] &&
-      course.course.price <= priceRange[1];
-    const matchesStatus =
-      statusFilter === "all" ||
-      (statusFilter === "active" && course.course.isActive) ||
-      (statusFilter === "inactive" && !course.course.isActive);
-    return matchesSearch && matchesPrice && matchesStatus;
-  });
+  // Effect to fetch courses on component mount
+  useEffect(() => {
+    if (accountId) {
+      getTutorCourses(accountId);
+    }
+  }, [accountId, getTutorCourses]);
 
-  const columns = [
-    {
-      title: "Gia Sư",
-      dataIndex: ["account", "fullName"],
-      key: "tutorName",
-      sorter: (a, b) => a.account.fullName.localeCompare(b.account.fullName),
-      filterDropdown: ({
-        setSelectedKeys,
-        selectedKeys,
-        confirm,
-        clearFilters,
-      }) => (
-        <div style={{ padding: 8 }}>
-          <Input
-            placeholder="Tìm tên gia sư"
-            value={selectedKeys[0]}
-            onChange={(e) =>
-              setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            onPressEnter={confirm}
-            style={{ width: "100%", marginBottom: 8, display: "block" }}
-          />
-          <Button
-            onClick={confirm}
-            size="small"
-            style={{ width: 90, marginRight: 8 }}
-          >
-            Tìm kiếm
-          </Button>
-          <Button onClick={clearFilters} size="small" style={{ width: 90 }}>
-            Đặt lại
-          </Button>
+  const viewCourseChapters = async (course) => {
+    setSelectedCourse(course);
+    setCourseView("chapters");
+    try {
+      const chaptersData = await getChaptersByCourse(course.courseId);
+      setCourseChapters(chaptersData);
+    } catch (error) {
+      console.error("Error loading chapters:", error);
+      message.error("Không thể tải danh sách chương");
+    }
+  };
+
+  const viewChapterContents = async (chapter) => {
+    setSelectedChapter(chapter);
+    setCourseView("contents");
+    try {
+      const contentsData = await getContentsByChapter(chapter._id);
+      setChapterContents(contentsData);
+    } catch (error) {
+      console.error("Error loading contents:", error);
+      message.error("Không thể tải nội dung");
+    }
+  };
+
+  const goBackToCourses = () => {
+    setCourseView("list");
+    setSelectedCourse(null);
+    setSelectedChapter(null);
+    setCourseChapters([]);
+    setChapterContents([]);
+  };
+
+  const goBackToChapters = () => {
+    setCourseView("chapters");
+    setSelectedChapter(null);
+    setChapterContents([]);
+  };
+
+  // Course handlers
+  const showModal = () => setIsModalVisible(true);
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleSubmit = async (values) => {
+    setSubmitting(true);
+    try {
+      await createCourse(values);
+      message.success("Tạo khóa học thành công!");
+      setIsModalVisible(false);
+      form.resetFields();
+    } catch (error) {
+      message.error("Tạo khóa học thất bại. Vui lòng thử lại.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Chapter handlers
+  const showChapterModal = () => setIsChapterModalVisible(true);
+  const handleChapterCancel = () => {
+    setIsChapterModalVisible(false);
+    chapterForm.resetFields();
+  };
+
+  const handleChapterSubmit = async (values) => {
+    setSubmitting(true);
+    try {
+      await createChapter({
+        ...values,
+        courseId: selectedCourse.courseId,
+      });
+      message.success("Tạo chương thành công!");
+      setIsChapterModalVisible(false);
+      chapterForm.resetFields();
+      // Reload chapters
+      const chaptersData = await getChaptersByCourse(selectedCourse.courseId);
+      setCourseChapters(chaptersData);
+    } catch (error) {
+      message.error("Tạo chương thất bại. Vui lòng thử lại.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // Content handlers
+  const showContentModal = () => setIsContentModalVisible(true);
+  const handleContentCancel = () => {
+    setIsContentModalVisible(false);
+    contentForm.resetFields();
+  };
+
+  const handleContentSubmit = async (values) => {
+    setSubmitting(true);
+    try {
+      await createContent({
+        ...values,
+        chapterId: selectedChapter._id,
+        createdBy: accountId,
+      });
+      message.success("Tạo nội dung thành công!");
+      setIsContentModalVisible(false);
+      contentForm.resetFields();
+      // Reload contents
+      const contentsData = await getContentsByChapter(selectedChapter._id);
+      setChapterContents(contentsData);
+    } catch (error) {
+      message.error("Tạo nội dung thất bại. Vui lòng thử lại.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const formatPrice = (price) => {
+    if (typeof price !== "number") return "0 VND";
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(price);
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("vi-VN", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  // Render Breadcrumb
+  const renderBreadcrumb = () => {
+    const items = [{ title: "Khóa học", onClick: goBackToCourses }];
+
+    if (selectedCourse) {
+      items.push({ title: selectedCourse.name, onClick: goBackToChapters });
+    }
+
+    if (selectedChapter) {
+        items.push({ title: selectedChapter.title });
+    }
+
+    return (
+      <Breadcrumb className="course-breadcrumb">
+        {items.map((item, index) => (
+          <Breadcrumb.Item key={index}>
+            {item.onClick && index < items.length -1 ? (
+              <Button
+                type="link"
+                onClick={item.onClick}
+                className="breadcrumb-link"
+              >
+                {item.title}
+              </Button>
+            ) : (
+              item.title
+            )}
+          </Breadcrumb.Item>
+        ))}
+      </Breadcrumb>
+    );
+  };
+
+  // Render Courses List
+  const renderCoursesList = () => (
+    <div className="courses-list-view">
+      <div className="course-header">
+        <div className="course-header-content">
+          <h1>Khóa học của tôi</h1>
+          <p>Quản lý khóa học, chương và nội dung của bạn</p>
         </div>
-      ),
-      onFilter: (value, record) =>
-        record.account.fullName.toLowerCase().includes(value.toLowerCase()),
-    },
-    {
-      title: "Khóa Học",
-      dataIndex: ["course", "name"],
-      key: "courseName",
-      sorter: (a, b) => a.course.name.localeCompare(b.course.name),
-    },
-    {
-      title: "Mô Tả",
-      dataIndex: ["course", "description"],
-      key: "description",
-    },
-    {
-      title: "Giá",
-      dataIndex: ["course", "price"],
-      key: "price",
-      sorter: (a, b) => a.course.price - b.course.price,
-      render: (price) => `${price.toLocaleString()} VND`,
-    },
-    {
-      title: "Trạng Thái",
-      dataIndex: ["course", "isActive"],
-      key: "isActive",
-      render: (isActive) => (
-        <Tag color={isActive ? "green" : "volcano"}>
-          {isActive ? "Đang hoạt động" : "Ngừng hoạt động"}
-        </Tag>
-      ),
-    },
-    {
-      title: "Ngày Tạo",
-      dataIndex: ["course", "createdAt"],
-      key: "createdAt",
-      sorter: (a, b) =>
-        new Date(a.course.createdAt) - new Date(b.course.createdAt),
-      render: (date) => dayjs(date).format("DD/MM/YYYY"),
-    },
-    {
-      title: "Hình Ảnh",
-      dataIndex: ["course", "image"],
-      key: "image",
-      render: (image) => (
-        <img src={image} alt="Khóa học" style={{ maxWidth: "100px" }} />
-      ),
-    },
-    {
-      title: "Hành Động",
-      key: "action",
-      render: (_, record) => (
-        <Tooltip title="Xem Chi Tiết">
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showModal}
+          size="large"
+        >
+          Tạo khóa học mới
+        </Button>
+      </div>
+
+      <div className="course-stats">
+        <div className="stat-card">
+          <h3>Tổng khóa học</h3>
+          <span className="stat-number">{courses.length}</span>
+        </div>
+        <div className="stat-card">
+          <h3>Khóa học đang hoạt động</h3>
+          <span className="stat-number">
+            {courses.filter((course) => course.isActive).length}
+          </span>
+        </div>
+        <div className="stat-card">
+          <h3>Tổng doanh thu</h3>
+          <span className="stat-number">
+            {formatPrice(
+              courses.reduce((total, course) => total + course.price, 0)
+            )}
+          </span>
+        </div>
+      </div>
+
+      {coursesLoading && courses.length === 0 ? (
+        <LoadingSpinner />
+      ) : coursesError ? (
+        <ErrorMessage message={coursesError} />
+      ) : (
+        <div className="courses-grid">
+          {courses.map((course) => (
+            <Card
+              key={course.courseId}
+              className="course-card-clean"
+              cover={
+                <img
+                  alt={course.name}
+                  src={course.image}
+                  className="course-image"
+                  onError={(e) => {
+                    e.target.src =
+                      "/src/assets/How-to-Become-a-Front-End-Developer-in-2020.png";
+                  }}
+                />
+              }
+              actions={[
+                <Tooltip title="Xem khóa học">
+                  <EyeOutlined key="view" />
+                </Tooltip>,
+                <Tooltip title="Chỉnh sửa khóa học">
+                  <EditOutlined key="edit" />
+                </Tooltip>,
+                <Tooltip title="Xóa khóa học">
+                  <DeleteOutlined key="delete" />
+                </Tooltip>,
+                <Tooltip title="Quản lý chương">
+                  <BookOutlined
+                    key="chapters"
+                    onClick={() => viewCourseChapters(course)}
+                  />
+                </Tooltip>,
+              ]}
+            >
+              <Meta
+                title={course.name}
+                description={
+                  <div className="course-details-clean">
+                    <p className="course-description">{course.description}</p>
+                    <div className="course-info">
+                      <span className="course-price">
+                        {formatPrice(course.price)}
+                      </span>
+                      <Tag color={course.isActive ? "green" : "red"}>
+                        {course.isActive ? "Hoạt động" : "Không hoạt động"}
+                      </Tag>
+                    </div>
+                    <div className="course-dates">
+                      <small>Tạo ngày: {formatDate(course.createdAt)}</small>
+                    </div>
+                  </div>
+                }
+              />
+            </Card>
+          ))}
+        </div>
+      )}
+
+      {courses.length === 0 && !coursesLoading && (
+        <div className="empty-state">
+          <Empty
+            description="Chưa có khóa học nào"
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          >
+            <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
+              Tạo khóa học
+            </Button>
+          </Empty>
+        </div>
+      )}
+    </div>
+  );
+
+  // Render Chapters View
+  const renderChaptersView = () => (
+    <div className="chapters-view">
+      <div className="view-header">
+        <div className="header-left">
           <Button
-            icon={<EyeOutlined />}
-            onClick={() => {
-              setSelectedCourse(record);
-              setIsModalVisible(true);
-            }}
-            size="small"
-          />
-        </Tooltip>
-      ),
-    },
-  ];
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={goBackToCourses}
+            className="back-button"
+          >
+            Quay lại danh sách khóa học
+          </Button>
+          <div className="header-info">
+            <h1>{selectedCourse?.name} - Chương</h1>
+            <p>Quản lý chương cho khóa học này</p>
+          </div>
+        </div>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showChapterModal}
+        >
+          Thêm chương mới
+        </Button>
+      </div>
+
+      <div className="content-grid">
+        {chaptersLoading ? (
+          <LoadingSpinner />
+        ) : courseChapters.length === 0 ? (
+          <div className="empty-state">
+            <Empty
+              description="Chưa có chương nào"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            >
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={showChapterModal}
+              >
+                Thêm chương đầu tiên
+              </Button>
+            </Empty>
+          </div>
+        ) : (
+          <div className="chapters-grid">
+            {courseChapters.map((chapter, index) => (
+              <Card
+                key={chapter._id}
+                className="chapter-card"
+                hoverable
+                actions={[
+                  <Tooltip title="Xem nội dung">
+                    <FileTextOutlined
+                      key="contents"
+                      onClick={() => viewChapterContents(chapter)}
+                    />
+                  </Tooltip>,
+                  <Tooltip title="Chỉnh sửa chương">
+                    <EditOutlined key="edit" />
+                  </Tooltip>,
+                  <Tooltip title="Xóa chương">
+                    <DeleteOutlined key="delete" />
+                  </Tooltip>,
+                ]}
+              >
+                <div className="chapter-header">
+                  <div className="chapter-number">Chương {index + 1}</div>
+                  <Tag color="blue">{chapterContents.length || 0} Nội dung</Tag>
+                </div>
+                <h3 className="chapter-title">{chapter.title}</h3>
+                <p className="chapter-date">
+                  Tạo ngày: {formatDate(chapter.createdAt)}
+                </p>
+                <Button
+                  type="primary"
+                  ghost
+                  block
+                  onClick={() => viewChapterContents(chapter)}
+                  icon={<PlayCircleOutlined />}
+                >
+                  Xem nội dung
+                </Button>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+  
+  // Render Contents View
+  const renderContentsView = () => (
+    <div className="contents-view">
+      <div className="view-header">
+        <div className="header-left">
+          <Button
+            type="text"
+            icon={<ArrowLeftOutlined />}
+            onClick={goBackToChapters}
+            className="back-button"
+          >
+            Quay lại danh sách chương
+          </Button>
+          <div className="header-info">
+            <h1>{selectedChapter?.title} - Nội dung</h1>
+            <p>Quản lý nội dung cho chương này</p>
+          </div>
+        </div>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={showContentModal}
+        >
+          Thêm nội dung mới
+        </Button>
+      </div>
+
+      <div className="content-grid">
+        {contentsLoading ? (
+          <LoadingSpinner />
+        ) : chapterContents.length === 0 ? (
+          <div className="empty-state">
+            <Empty
+              description="Chưa có nội dung nào"
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            >
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={showContentModal}
+              >
+                Thêm nội dung đầu tiên
+              </Button>
+            </Empty>
+          </div>
+        ) : (
+          <div className="contents-grid">
+            {chapterContents.map((content, index) => (
+              <Card
+                key={content._id}
+                className="content-card"
+                hoverable
+                actions={[
+                  <Tooltip title="Xem nội dung">
+                    <EyeOutlined key="view" />
+                  </Tooltip>,
+                  <Tooltip title="Chỉnh sửa nội dung">
+                    <EditOutlined key="edit" />
+                  </Tooltip>,
+                  <Tooltip title="Xóa nội dung">
+                    <DeleteOutlined key="delete" />
+                  </Tooltip>,
+                ]}
+              >
+                <div className="content-header">
+                  <VideoCameraOutlined className="content-icon" />
+                  <div className="content-number">Nội dung {index + 1}</div>
+                </div>
+                <div className="content-description">
+                  {content.contentDescription}
+                </div>
+                <p className="content-date">
+                  Tạo ngày: {formatDate(content.createdAt)}
+                </p>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
 
   return (
-    <div style={{ display: "flex", width: "-webkit-fill-available" }}>
-      <div style={{ width: "-webkit-fill-available", padding: 24 }}>
-        <h2>Quản Lý Khóa Học</h2>
-        {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
-        <div
-          style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
-        >
-          <Input
-            placeholder="Tìm kiếm tên hoặc mô tả khóa học"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ width: 500 }}
-          />
-          <Button
-            icon={<FilterOutlined />}
-            onClick={() => setIsFilterModalVisible(true)}
-          >
-            Bộ lọc
-          </Button>
-        </div>
-        <Table
-          columns={columns}
-          dataSource={filteredCourses}
-          loading={isLoading}
-          rowKey={(record) => record.course._id}
-          pagination={{ pageSize: 5 }}
-        />
+    <div className="course-management-page">
+        {renderBreadcrumb()}
+        {courseView === "list"
+        ? renderCoursesList()
+        : courseView === "chapters"
+        ? renderChaptersView()
+        : renderContentsView()}
+
+        {/* Course Modal */}
         <Modal
-          title="Chi Tiết Khóa Học"
-          open={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          footer={null}
-          width={1000}
-          style={{ marginTop: "-73px" }}
+            title="Tạo khóa học mới"
+            visible={isModalVisible}
+            onCancel={handleCancel}
+            footer={null}
+            width={600}
         >
-          {selectedCourse ? (
-            <Card>
-              <Descriptions column={2} bordered>
-                <Descriptions.Item label="Tên Gia Sư">
-                  {selectedCourse.account.fullName}
-                </Descriptions.Item>
-                <Descriptions.Item label="Tên Khóa Học">
-                  {selectedCourse.course.name}
-                </Descriptions.Item>
-                <Descriptions.Item label="Mô Tả" style={{ maxWidth: "280px" }}>
-                  {selectedCourse.course.description}
-                </Descriptions.Item>
-                <Descriptions.Item label="Giá">
-                  {selectedCourse.course.price.toLocaleString()} VND
-                </Descriptions.Item>
-                <Descriptions.Item label="Trạng Thái">
-                  {selectedCourse.course.isActive
-                    ? "Đang hoạt động"
-                    : "Ngừng hoạt động"}
-                </Descriptions.Item>
-                <Descriptions.Item label="Ngày Tạo">
-                  {dayjs(selectedCourse.course.createdAt).format("DD/MM/YYYY")}
-                </Descriptions.Item>
-                <Descriptions.Item label="Hình Ảnh" span={2}>
-                  <img
-                    src={selectedCourse.course.image}
-                    alt="Khóa học"
-                    style={{ maxWidth: "500px" }}
-                  />
-                </Descriptions.Item>
-              </Descriptions>
-            </Card>
-          ) : (
-            <p>Không có thông tin chi tiết.</p>
-          )}
+            <Form form={form} layout="vertical" onFinish={handleSubmit} requiredMark={false}>
+                <Form.Item name="name" label="Tên khóa học" rules={[{ required: true, message: "Vui lòng nhập tên khóa học" }]}>
+                    <Input placeholder="Nhập tên khóa học" />
+                </Form.Item>
+                <Form.Item name="description" label="Mô tả" rules={[{ required: true, message: "Vui lòng nhập mô tả khóa học" }]}>
+                    <TextArea rows={4} placeholder="Nhập mô tả khóa học" />
+                </Form.Item>
+                <Form.Item name="image" label="URL hình ảnh khóa học" rules={[{ required: true, message: "Vui lòng nhập URL hình ảnh" }]}>
+                    <Input placeholder="https://example.com/course.jpg" />
+                </Form.Item>
+                <Form.Item name="price" label="Giá (VND)" rules={[{ required: true, message: "Vui lòng nhập giá khóa học" }]}>
+                    <InputNumber style={{ width: "100%" }} placeholder="99000" min={0} step={1000} formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")} parser={(value) => value.replace(/\$\s?|(,*)/g, "")} />
+                </Form.Item>
+                <Form.Item className="form-buttons">
+                    <Button onClick={handleCancel} style={{ marginRight: 8 }}>Hủy</Button>
+                    <Button type="primary" htmlType="submit" loading={submitting}>Tạo khóa học</Button>
+                </Form.Item>
+            </Form>
         </Modal>
-        <Modal
-          title="Lọc Khóa Học"
-          open={isFilterModalVisible}
-          onCancel={() => setIsFilterModalVisible(false)}
-          footer={[
-            <Button
-              key="apply"
-              type="primary"
-              onClick={() => setIsFilterModalVisible(false)}
-            >
-              Áp dụng
-            </Button>,
-            <Button
-              key="reset"
-              onClick={() => {
-                setPriceRange([0, 10000000]);
-                setStatusFilter("all");
-                setIsFilterModalVisible(false);
-              }}
-            >
-              Đặt lại
-            </Button>,
-          ]}
-        >
-          <div style={{ marginBottom: 16 }}>
-            <h3>Khoảng Giá (VND)</h3>
-            <Slider
-              range
-              min={0}
-              max={10000000}
-              value={priceRange}
-              onChange={setPriceRange}
-              tipFormatter={(value) => `${value.toLocaleString()} VND`}
-            />
-            <p>
-              Từ {priceRange[0].toLocaleString()} đến{" "}
-              {priceRange[1].toLocaleString()} VND
-            </p>
-          </div>
-          <div>
-            <h3>Trạng Thái</h3>
-            <Select
-              value={statusFilter}
-              onChange={setStatusFilter}
-              style={{ width: 200 }}
-            >
-              <Select.Option value="all">Tất cả</Select.Option>
-              <Select.Option value="active">Đang hoạt động</Select.Option>
-              <Select.Option value="inactive">Ngừng hoạt động</Select.Option>
-            </Select>
-          </div>
+
+        {/* Chapter Modal */}
+        <Modal title="Tạo chương mới" visible={isChapterModalVisible} onCancel={handleChapterCancel} footer={null} width={500}>
+            <Form form={chapterForm} layout="vertical" onFinish={handleChapterSubmit} requiredMark={false}>
+                <Form.Item name="title" label="Tiêu đề chương" rules={[{ required: true, message: "Vui lòng nhập tiêu đề chương" }]}>
+                    <Input placeholder="Nhập tiêu đề chương" />
+                </Form.Item>
+                <Form.Item className="form-buttons">
+                    <Button onClick={handleChapterCancel} style={{ marginRight: 8 }}>Hủy</Button>
+                    <Button type="primary" htmlType="submit" loading={submitting}>Tạo chương</Button>
+                </Form.Item>
+            </Form>
         </Modal>
-      </div>
+
+        {/* Content Modal */}
+        <Modal title="Tạo nội dung mới" visible={isContentModalVisible} onCancel={handleContentCancel} footer={null} width={600}>
+            <Form form={contentForm} layout="vertical" onFinish={handleContentSubmit} requiredMark={false}>
+                <Form.Item name="contentDescription" label="Mô tả nội dung" rules={[{ required: true, message: "Vui lòng nhập mô tả nội dung" }]}>
+                    <TextArea rows={4} placeholder="Nhập mô tả nội dung" />
+                </Form.Item>
+                <Form.Item className="form-buttons">
+                    <Button onClick={handleContentCancel} style={{ marginRight: 8 }}>Hủy</Button>
+                    <Button type="primary" htmlType="submit" loading={submitting}>Tạo nội dung</Button>
+                </Form.Item>
+            </Form>
+        </Modal>
     </div>
   );
 };

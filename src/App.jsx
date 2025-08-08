@@ -37,8 +37,7 @@ import Forum from "./pages/Forum";
 import TutorCertifications from "./pages/TutorCertification";
 import TutorOrder from "./pages/TutorOrderDetail";
 import AccountManagement from "./pages/AccountManagement";
-import CourseDetailPage from './pages/CourseDetailPage';
-
+import TutorOverview from "./pages/TutorOverview";
 import PaymentSuccess from "./pages/PaymentSuccess";
 
 const LayoutWithNavFooter = () => (
@@ -72,12 +71,14 @@ function App() {
             <Route path="/profile-user" element={<ProfileUser />} />
             <Route path="/edit-profile-user" element={<EditProfileUser />} />
             <Route path="/profile-tutor" element={<TutorProfile />}>
+              <Route index element={<TutorOverview />} />
               <Route
                 path="tutor-certifications"
                 element={<TutorCertifications />}
               />
               <Route path="tutor-orders" element={<TutorOrder />} />
-              <Route path="course-detail" element={<CourseDetailPage />} />
+              <Route path="courses-management" element={<CourseManagement />} />
+              
             </Route>
             {/* <Route path="/ai-chat" element={<AIChat />} /> */}
             <Route path="/pricing" element={<Pricing />} />

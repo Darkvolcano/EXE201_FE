@@ -1,0 +1,95 @@
+/* src/style/TutorOverview.css */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tutor-overview-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Welcome Banner */
+.welcome-banner-overview {
+  background: linear-gradient(135deg, #1d67e0 0%, #4285f4 100%);
+  border: none;
+  color: white;
+  animation: fadeIn 0.5s ease-out;
+  border-radius: 12px;
+}
+
+.welcome-banner-overview .ant-btn-primary.ant-btn-background-ghost {
+    color: white;
+    border-color: white;
+}
+
+.welcome-banner-overview .ant-btn-primary.ant-btn-background-ghost:hover {
+    color: #4285f4;
+    background-color: white !important;
+}
+
+/* Overview Cards */
+.overview-card {
+  border-radius: 12px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: 100%;
+  animation: fadeIn 0.7s ease-out forwards;
+  opacity: 0; /* Start hidden for animation */
+}
+
+/* Delay animation for each row */
+.tutor-overview-page .ant-row:nth-of-type(2) .overview-card {
+    animation-delay: 0.2s;
+}
+.tutor-overview-page .ant-row:nth-of-type(3) .overview-card {
+    animation-delay: 0.4s;
+}
+
+
+.overview-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.overview-card .ant-statistic-title {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.overview-card .ant-statistic-content {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+.overview-card .ant-statistic-content .ant-statistic-content-prefix {
+  font-size: 20px;
+  margin-right: 8px;
+  color: #1a73e8;
+}
+
+.tips-card .ant-timeline-item-content {
+    font-size: 15px;
+}
+
+.call-to-action-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background: #f8fafc;
+}
+
+.call-to-action-card .ant-btn {
+    font-weight: 500;
+}
