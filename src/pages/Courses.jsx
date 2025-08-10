@@ -47,9 +47,9 @@ const Courses = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOrder, setSortOrder] = useState("latest");
 
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -157,13 +157,13 @@ const Courses = () => {
         </Select>
         {user && user.role === "Tutor" ? (
           <>
-            <Button
+            {/* <Button
               type="primary"
               className="create-course-button"
               onClick={showModal}
             >
               Tạo khóa học
-            </Button>
+            </Button> */}
           </>
         ) : (
           <></>

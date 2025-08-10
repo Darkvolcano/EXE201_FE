@@ -19,12 +19,14 @@ import { useQueries } from "@tanstack/react-query";
 import "../style/CoursePlayer.css";
 import { useCreateOrder } from "../hooks/ordersApi";
 import dayjs from "dayjs";
+import useAuthStore from "../hooks/authenStoreApi";
 
 const { TabPane } = Tabs;
 const { Panel } = Collapse;
 
 const CoursePlayer = () => {
   const { id } = useParams();
+  const { user } = useAuthStore();
   const navigate = useNavigate();
 
   // Fetch courses, feedback, chapters
@@ -109,41 +111,40 @@ const CoursePlayer = () => {
   };
 
   const handlePayment = () => {
-  createOrder(
-    { courseId: id },
-    {
-      onSuccess: (response) => {
-        message.success(response.message);
-        const paymentUrl = response.data?.url;
-        if (paymentUrl) {
-          // Redirect user to VNPay payment page to do payment
-          window.location.href = paymentUrl;
-        } else {
-          // fallback - handle no payment url returned
-          message.error("Không nhận được URL thanh toán.");
-          // Optional: fallback navigation like before if orderId exists
-          const orderId = response.data?.orderId || response.data?._id;
+    createOrder(
+      { courseId: id },
+      {
+        onSuccess: (response) => {
+          message.success(response.message);
+          const paymentUrl = response.data?.url;
+          if (paymentUrl) {
+            // Redirect user to VNPay payment page to do payment
+            window.location.href = paymentUrl;
+          } else {
+            // fallback - handle no payment url returned
+            message.error("Không nhận được URL thanh toán.");
+            // Optional: fallback navigation like before if orderId exists
+            const orderId = response.data?.orderId || response.data?._id;
+            if (orderId) {
+              navigate(`/payment-success/${orderId}`);
+            }
+          }
+        },
+        onError: (error) => {
+          message.error(
+            "Thanh toán thất bại: " +
+              (error.response?.data?.message || error.message)
+          );
+          // Optional fallback if error response contains orderId
+          const orderId =
+            error.response?.data?.orderId || error.response?.data?._id;
           if (orderId) {
             navigate(`/payment-success/${orderId}`);
           }
-        }
-      },
-      onError: (error) => {
-        message.error(
-          "Thanh toán thất bại: " +
-            (error.response?.data?.message || error.message)
-        );
-        // Optional fallback if error response contains orderId
-        const orderId = error.response?.data?.orderId || error.response?.data?._id;
-        if (orderId) {
-          navigate(`/payment-success/${orderId}`);
-        }
-      },
-    }
-  );
-};
-
-
+        },
+      }
+    );
+  };
 
   const handleCancelPayment = () => {
     setIsPaymentModalVisible(false);
@@ -404,14 +405,20 @@ const CoursePlayer = () => {
                   ))}
               </Collapse>
             )}
-            <Button
-              type="primary"
-              block
-              style={{ marginTop: 16 }}
-              onClick={showPaymentModal}
-            >
-              Thanh toán
-            </Button>
+            {user && user.role === "User" ? (
+              <>
+                <Button
+                  type="primary"
+                  block
+                  style={{ marginTop: 16 }}
+                  onClick={showPaymentModal}
+                >
+                  Thanh toán
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
           </Card>
         </div>
       </div>
