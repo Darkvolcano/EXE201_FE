@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState, useMemo } from "react";
 import {
   Layout,
   Menu,
@@ -16,6 +17,7 @@ import {
   Modal,
   Divider,
   Tooltip,
+  Pagination,
 } from "antd";
 import {
   UserOutlined,
@@ -31,6 +33,7 @@ import {
 } from "@ant-design/icons";
 import { useProfileUser, useEditProfile } from "../hooks/ProfileApi";
 import { useGetOrderHistory } from "../hooks/ordersApi";
+import { useGetCourse } from "../hooks/coursesApi";
 import "../style/Profile.css";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -44,6 +47,8 @@ const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [showLogout, setShowLogout] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
@@ -57,11 +62,26 @@ const Profile = () => {
     isLoading: orderLoading,
     error: orderError,
   } = useGetOrderHistory();
+  const { data: coursesData } = useGetCourse(profileData?.account?._id);
 
   const editProfileMutation = useEditProfile();
 
   const profile = profileData || {};
   const orders = orderData?.data || [];
+  const courses = coursesData?.data?.courses || [];
+
+  // Map course IDs to account details
+  const courseMap = useMemo(() => {
+    const map = new Map();
+    courses.forEach((course) => {
+      map.set(course.course._id, {
+        fullName: course.account.fullName,
+        email: course.account.email,
+        phone: course.account.phone,
+      });
+    });
+    return map;
+  }, [courses]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -72,6 +92,16 @@ const Profile = () => {
       default:
         return "default";
     }
+  };
+
+  // Helper function to get completion status color
+  const getCompletionStatusColor = (isFinished) => {
+    return isFinished ? "green" : "red";
+  };
+
+  // Helper function to get completion status text
+  const getCompletionStatusText = (isFinished) => {
+    return isFinished ? "Đã hoàn thành" : "Chưa hoàn thành";
   };
 
   const onFinish = (values) => {
@@ -99,7 +129,6 @@ const Profile = () => {
     });
   };
 
-  // Handle avatar upload change
   const handleAvatarUpload = (info) => {
     if (info.file.status === "done") {
       message.success(`${info.file.name} tải lên thành công`);
@@ -125,7 +154,6 @@ const Profile = () => {
     setShowChangePassword(false);
   };
 
-  // MOCK DATA (replace with real data from your API)
   const totalMoneySpent = orders.reduce(
     (sum, order) => sum + order.totalAmount,
     0
@@ -134,7 +162,6 @@ const Profile = () => {
     (sum, order) => sum + (order.orderDetails?.length || 0),
     0
   );
-  // Example: count unique tutors from all orders
   const tutorSet = new Set();
   orders.forEach((order) => {
     order.orderDetails?.forEach((detail) => {
@@ -142,8 +169,17 @@ const Profile = () => {
     });
   });
   const totalTutors = tutorSet.size;
-  // Example: mock friend count (replace with real data)
   const totalFriends = 5;
+
+  const paginatedOrders = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    return orders.slice(start, end);
+  }, [currentPage, orders]);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Layout
@@ -206,7 +242,7 @@ const Profile = () => {
             Cài đặt tài khoản
           </Menu.Item>
         </Menu>
-        <Divider style={{ margin: "18px 0" }} />
+        <Divider style={{ margin: "16px 0" }} />
         <Button
           icon={<LogoutOutlined />}
           danger
@@ -241,7 +277,6 @@ const Profile = () => {
                     marginBottom: 32,
                   }}
                 >
-                  {/* User Info Card */}
                   <Card
                     className="profile-card"
                     style={{
@@ -292,7 +327,8 @@ const Profile = () => {
                                   marginBottom: 4,
                                 }}
                               >
-                                <MailOutlined /> {profile.email || "Chưa cập nhật email"}
+                                <MailOutlined />{" "}
+                                {profile.email || "Chưa cập nhật email"}
                               </Text>
                               <Text
                                 className="profile-detail"
@@ -301,7 +337,8 @@ const Profile = () => {
                                   marginBottom: 4,
                                 }}
                               >
-                                <PhoneOutlined /> {profile.phone || "Chưa cập nhật số điện thoại"}
+                                <PhoneOutlined />{" "}
+                                {profile.phone || "Chưa cập nhật số điện thoại"}
                               </Text>
                               <Text
                                 className="profile-detail"
@@ -320,7 +357,6 @@ const Profile = () => {
                       </>
                     )}
                   </Card>
-                  {/* Statistics Card */}
                   <Card
                     style={{
                       flex: 1,
@@ -349,10 +385,11 @@ const Profile = () => {
                     >
                       42
                     </div>
-                    <div style={{ color: "#888" }}>ngày hoạt động trên Tutorify</div>
+                    <div style={{ color: "#888" }}>
+                      ngày hoạt động trên Tutorify
+                    </div>
                   </Card>
                 </div>
-                {/* --- Stats Section --- */}
                 <Row gutter={24} style={{ marginBottom: 32 }}>
                   <Col xs={24} sm={8}>
                     <Card
@@ -449,61 +486,44 @@ const Profile = () => {
                   borderRadius: 12,
                 }}
               >
-                {orderLoading ? (
+                {orderLoading || !coursesData ? (
                   <div>Đang tải...</div>
                 ) : orderError ? (
                   <div>Lỗi: {orderError.message}</div>
                 ) : orders.length === 0 ? (
                   <div>Chưa có đơn hàng nào.</div>
                 ) : (
-                  <div className="order-list">
-                    {orders.map((order) => (
-                      <div
-                        key={order._id}
-                        className="order-item"
-                        style={{
-                          marginBottom: 18,
-                          padding: 16,
-                          borderRadius: 8,
-                          background: "#fafdff",
-                          boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
-                        }}
-                      >
-                        <Row gutter={16} align="middle">
-                          <Col xs={24} sm={6}>
-                            <img
-                              src={
-                                order.orderDetails[0]?.course?.image ||
-                                "https://placehold.co/100x100"
-                              }
-                              alt={order.orderDetails[0]?.course?.name}
-                              width={100}
-                              height={100}
-                              className="order-image"
-                              style={{
-                                borderRadius: 8,
-                                objectFit: "cover",
-                              }}
-                            />
-                          </Col>
-                          <Col xs={24} sm={18}>
-                            <Title
-                              level={5}
-                              className="order-title"
-                              style={{ marginBottom: 4 }}
-                            >
-                              {order.orderDetails[0]?.course?.name || "Không xác định"}
-                            </Title>
-                            <Text
-                              className="order-detail"
-                              style={{ display: "block" }}
-                            >
-                              Số tiền:{" "}
-                              {order.totalAmount.toLocaleString("vi-VN")} VNĐ
-                            </Text>
+                  <div>
+                    <div className="order-list">
+                      {paginatedOrders.map((order) => {
+                        const courseId = order.orderDetails[0]?.course?._id;
+                        const tutorDetails = courseMap.get(courseId) || {};
+                        // Fix: Access the first element of orderDetails array
+                        const firstOrderDetail = order.orderDetails[0];
+                        const isFinished =
+                          firstOrderDetail?.isFinishCourse || false;
+
+                        return (
+                          <div
+                            key={order._id}
+                            className="order-item"
+                            style={{
+                              marginBottom: 18,
+                              padding: 16,
+                              borderRadius: 8,
+                              background: "#fafdff",
+                              boxShadow: "0 1px 4px rgba(0,0,0,0.03)",
+                              position: "relative",
+                            }}
+                          >
                             <Tag
                               color={getStatusColor(order.status)}
                               className="order-status"
+                              style={{
+                                position: "absolute",
+                                top: 8,
+                                right: 8,
+                              }}
                             >
                               {order.status === "Completed"
                                 ? "Hoàn thành"
@@ -511,28 +531,108 @@ const Profile = () => {
                                 ? "Đang xử lý"
                                 : order.status}
                             </Tag>
-                            <Text
-                              className="order-detail"
-                              style={{ display: "block" }}
-                            >
-                              Ngày đặt:{" "}
-                              {new Date(order.createdAt).toLocaleDateString(
-                                "vi-VN"
-                              )}
-                            </Text>
-                            <Text
-                              className="order-detail"
-                              style={{ display: "block" }}
-                            >
-                              Đã hoàn thành:{" "}
-                              {order.orderDetails[0]?.isFinishCourse
-                                ? "Có"
-                                : "Chưa"}
-                            </Text>
-                          </Col>
-                        </Row>
-                      </div>
-                    ))}
+                            <Row gutter={16} align="middle">
+                              <Col xs={24} sm={6}>
+                                <img
+                                  src={
+                                    firstOrderDetail?.course?.image ||
+                                    "https://placehold.co/100x100"
+                                  }
+                                  alt={firstOrderDetail?.course?.name}
+                                  width={100}
+                                  height={100}
+                                  className="order-image"
+                                  style={{
+                                    borderRadius: 8,
+                                    objectFit: "cover",
+                                  }}
+                                />
+                              </Col>
+                              <Col xs={24} sm={18}>
+                                <Title
+                                  level={5}
+                                  className="order-title"
+                                  style={{ marginBottom: 4 }}
+                                >
+                                  {firstOrderDetail?.course?.name ||
+                                    "Không xác định"}
+                                </Title>
+                                <Text
+                                  className="order-detail"
+                                  style={{ display: "block" }}
+                                >
+                                  Giáo viên:{" "}
+                                  {tutorDetails.fullName || "Chưa xác định"} (
+                                  {tutorDetails.email || "Chưa xác định"})
+                                </Text>
+                                <Text
+                                  className="order-detail"
+                                  style={{ display: "block" }}
+                                >
+                                  Số điện thoại:{" "}
+                                  {tutorDetails.phone || "Chưa xác định"}
+                                </Text>
+                                <Text
+                                  className="order-detail"
+                                  style={{ display: "block" }}
+                                >
+                                  Số tiền:{" "}
+                                  {order.totalAmount.toLocaleString("vi-VN")}{" "}
+                                  VNĐ
+                                </Text>
+                                <Text
+                                  className="order-detail"
+                                  style={{ display: "block" }}
+                                >
+                                  Ngày đặt:{" "}
+                                  {new Date(order.createdAt).toLocaleDateString(
+                                    "vi-VN"
+                                  )}
+                                </Text>
+                                <Text
+                                  className="order-detail"
+                                  style={{ display: "block" }}
+                                >
+                                  Trạng thái học tập:{" "}
+                                  <Tag
+                                    color={getCompletionStatusColor(isFinished)}
+                                  >
+                                    {getCompletionStatusText(isFinished)}
+                                  </Tag>
+                                </Text>
+                                {/* Show completion time if finished */}
+                                {isFinished &&
+                                  firstOrderDetail?.timeFinishCourse && (
+                                    <Text
+                                      className="order-detail"
+                                      style={{ display: "block" }}
+                                    >
+                                      Thời gian hoàn thành:{" "}
+                                      {new Date(
+                                        firstOrderDetail.timeFinishCourse
+                                      ).toLocaleDateString("vi-VN")}
+                                    </Text>
+                                  )}
+                              </Col>
+                            </Row>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div
+                      style={{
+                        textAlign: "center",
+                        marginTop: 16,
+                      }}
+                    >
+                      <Pagination
+                        current={currentPage}
+                        pageSize={pageSize}
+                        total={orders.length}
+                        onChange={handlePageChange}
+                        showSizeChanger={false}
+                      />
+                    </div>
                   </div>
                 )}
               </Card>
@@ -578,7 +678,6 @@ const Profile = () => {
                       Cập nhật thông tin tài khoản hoặc đổi mật khẩu tại đây.
                     </Text>
                   </div>
-                  {/* Show edit form if editing */}
                   {isEditing && (
                     <Form
                       form={form}
@@ -682,7 +781,6 @@ const Profile = () => {
         </Content>
       </Layout>
 
-      {/* Modal: Xác nhận đăng xuất */}
       <Modal
         title="Xác nhận đăng xuất"
         open={showLogout}
@@ -694,7 +792,6 @@ const Profile = () => {
         <p>Bạn chắc chắn muốn đăng xuất?</p>
       </Modal>
 
-      {/* Modal: Đổi mật khẩu */}
       <Modal
         title="Đổi mật khẩu"
         open={showChangePassword}
@@ -710,9 +807,7 @@ const Profile = () => {
           <Form.Item
             name="oldPassword"
             label="Mật khẩu cũ"
-            rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu cũ" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu cũ" }]}
           >
             <Input.Password
               prefix={<LockOutlined />}
@@ -722,9 +817,7 @@ const Profile = () => {
           <Form.Item
             name="newPassword"
             label="Mật khẩu mới"
-            rules={[
-              { required: true, message: "Vui lòng nhập mật khẩu mới" },
-            ]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu mới" }]}
           >
             <Input.Password
               prefix={<LockOutlined />}
@@ -742,9 +835,7 @@ const Profile = () => {
                   if (!value || getFieldValue("newPassword") === value) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(
-                    new Error("Mật khẩu không khớp!")
-                  );
+                  return Promise.reject(new Error("Mật khẩu không khớp!"));
                 },
               }),
             ]}
