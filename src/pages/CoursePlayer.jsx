@@ -411,7 +411,8 @@ const CoursePlayer = () => {
                   type="primary"
                   block
                   style={{ marginTop: 16 }}
-                  onClick={showPaymentModal}
+                  // onClick={showPaymentModal}
+                  onClick={() => navigate(`/payment/${id}`)}
                 >
                   Thanh toán
                 </Button>

@@ -39,6 +39,8 @@ import TutorOrder from "./pages/TutorOrderDetail";
 import AccountManagement from "./pages/AccountManagement";
 import TutorOverview from "./pages/TutorOverview";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import Payment from "./pages/Payment";
+import CourseManagementForAdmin from "./pages/CourseManagementForAdmin";
 
 const LayoutWithNavFooter = () => (
   <>
@@ -78,12 +80,12 @@ function App() {
               />
               <Route path="tutor-orders" element={<TutorOrder />} />
               <Route path="courses-management" element={<CourseManagement />} />
-              
             </Route>
             {/* <Route path="/ai-chat" element={<AIChat />} /> */}
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/course-detail" element={<CoursePlayer />} />
             <Route path="/courses/:id" element={<CoursePlayer />} />
+            <Route path="/payment/:id" element={<Payment />} />
             <Route path="/tutors/:accountId" element={<TutorDetail />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/forum" element={<Forum />} />
@@ -103,7 +105,10 @@ function App() {
 
           <Route element={<LayoutWithSidebarAdmin />}>
             <Route path="/certificate" element={<CertificateManagement />} />
-            <Route path="/course-management" element={<CourseManagement />} />
+            <Route
+              path="/course-managements"
+              element={<CourseManagementForAdmin />}
+            />
             <Route path="/account-management" element={<AccountManagement />} />
           </Route>
         </Routes>

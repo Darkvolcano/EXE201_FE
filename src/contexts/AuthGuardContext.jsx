@@ -100,7 +100,14 @@ export function AuthGuardProvider(props) {
     }
 
     const restrictedPages = {
-      User: ["/profile", "/courses/:id", "/tutor", "/ai-chat", "/forum"],
+      User: [
+        "/profile",
+        "/courses/:id",
+        "/tutor",
+        "/ai-chat",
+        "/forum",
+        "/payment/:id",
+      ],
       Tutor: [
         "/profile-tutor",
         "/upload-certificate",
@@ -113,7 +120,7 @@ export function AuthGuardProvider(props) {
         "/profile-admin",
         "/dashboard",
         "/certificate",
-        "/course-management",
+        "/course-managements",
         "/view-tutor",
         "/account-management",
       ],

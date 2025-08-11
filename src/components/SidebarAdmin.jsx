@@ -49,9 +49,9 @@ export default function Sidebar({ title = "Tutorify" }) {
       icon: <NotebookText size={18} />,
       label: "Quản lý khóa học",
       onClick: () => {
-        navigate("/course-management");
+        navigate("/course-managements");
       },
-      path: "/course-management",
+      path: "/course-managements",
     },
     {
       icon: <UserOutlined size={18} />,
