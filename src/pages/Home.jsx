@@ -244,7 +244,8 @@ const ModernHomepage = () => {
           maxWidth: '1200px', 
           margin: '0 auto', 
           padding: '0 2rem',
-          width: '100%'
+          width: '100%',
+          marginTop: 10
         }}>
           <div style={{ 
             display: 'grid', 
