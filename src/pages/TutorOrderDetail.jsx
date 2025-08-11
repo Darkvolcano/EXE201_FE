@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Avatar, Pagination } from "antd";
+import { Card, Avatar, Pagination, Tag } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { useGetAllTutorOrder } from "../hooks/tutorsApi";
 import "../style/TutorOrderDetail.css";
@@ -14,6 +14,40 @@ const TutorOrder = () => {
     ? data.slice((currentPage - 1) * pageSize, currentPage * pageSize)
     : [];
 
+  // Helper function to get status color
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Pending":
+        return "orange";
+      case "Completed":
+        return "green";
+      default:
+        return "default";
+    }
+  };
+
+  // Helper function to get status text
+  const getStatusText = (status) => {
+    switch (status) {
+      case "Pending":
+        return "Đang xử lý";
+      case "Completed":
+        return "Hoàn thành";
+      default:
+        return status || "Không xác định";
+    }
+  };
+
+  // Helper function to get completion status color
+  const getCompletionStatusColor = (isFinished) => {
+    return isFinished ? "green" : "red";
+  };
+
+  // Helper function to get completion status text
+  const getCompletionStatusText = (isFinished) => {
+    return isFinished ? "Đã hoàn thành" : "Chưa hoàn thành";
+  };
+
   if (isLoading) return <div className="loading">Đang tải...</div>;
   if (error) return <div className="error">Lỗi: {error.message}</div>;
 
@@ -26,13 +60,9 @@ const TutorOrder = () => {
           title={orders.courseName}
           className="tutor-order-card"
           extra={
-            <span
-              className={`tutor-order-status ${
-                orders.order?.status === "Pending" ? "pending" : ""
-              }`}
-            >
-              {orders.order?.status || "Không xác định"}
-            </span>
+            <Tag color={getStatusColor(orders.order?.status)}>
+              {getStatusText(orders.order?.status)}
+            </Tag>
           }
         >
           <div className="tutor-order-details">
@@ -51,6 +81,10 @@ const TutorOrder = () => {
                 {orders.order?.account?.email || "Không xác định"}
               </p>
               <p>
+                <strong>Số điện thoại:</strong>{" "}
+                {orders.order?.account?.phone || "Không xác định"}
+              </p>
+              <p>
                 <strong>Giá:</strong> {orders.price?.toLocaleString() || "0"}{" "}
                 VND
               </p>
@@ -60,14 +94,41 @@ const TutorOrder = () => {
                   ? new Date(orders.createdAt).toLocaleDateString("vi-VN")
                   : "Không xác định"}
               </p>
+              {/* <p>
+                <strong>Trạng thái đơn hàng:</strong>{" "}
+                <Tag color={getStatusColor(orders.order?.status)}>
+                  {getStatusText(orders.order?.status)}
+                </Tag>
+              </p> */}
               <p>
-                <strong>Trạng thái:</strong>{" "}
-                {orders.order?.status || "Không xác định"}
+                <strong>Trạng thái học tập:</strong>{" "}
+                <Tag color={getCompletionStatusColor(orders.isFinishCourse)}>
+                  {getCompletionStatusText(orders.isFinishCourse)}
+                </Tag>
               </p>
-              <p>
-                <strong>Hoàn thành:</strong>{" "}
-                {orders.isFinishCourse ? "Đã hoàn thành" : "Chưa hoàn thành"}
-              </p>
+              {/* Show completion time if finished */}
+              {orders.isFinishCourse && orders.timeFinishCourse && (
+                <p>
+                  <strong>Thời gian hoàn thành:</strong>{" "}
+                  {new Date(orders.timeFinishCourse).toLocaleDateString(
+                    "vi-VN"
+                  )}
+                </p>
+              )}
+              {/* Show certificate link if available */}
+              {orders.isFinishCourse && orders.certificateOfCompletion && (
+                <p>
+                  <strong>Chứng chỉ:</strong>{" "}
+                  <a
+                    href={orders.certificateOfCompletion}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#1890ff" }}
+                  >
+                    Xem chứng chỉ hoàn thành
+                  </a>
+                </p>
+              )}
             </div>
           </div>
         </Card>
