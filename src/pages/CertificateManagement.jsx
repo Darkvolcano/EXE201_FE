@@ -224,7 +224,7 @@ const CertificateManagement = () => {
   return (
     <div style={{ display: "flex", width: "100%" }}>
       <div style={{ width: "100%", padding: 24 }}>
-        <h2>Quản lý Chứng chỉ</h2>
+        <h2 style={{ color: "black" }}>Quản lý Chứng chỉ</h2>
         {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
         <div style={{ display: "flex", gap: 16, marginBottom: 16 }}>
           <Input

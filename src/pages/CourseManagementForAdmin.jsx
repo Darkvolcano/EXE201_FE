@@ -146,7 +146,7 @@ const CourseManagementForAdmin = () => {
   return (
     <div style={{ display: "flex", width: "-webkit-fill-available" }}>
       <div style={{ width: "-webkit-fill-available", padding: 24 }}>
-        <h2>Quản Lý Khóa Học</h2>
+        <h2 style={{ color: "black" }}>Quản Lý Khóa Học</h2>
         {error && <p style={{ color: "red" }}>Lỗi: {error.message}</p>}
         <div
           style={{ display: "flex", gap: 16, marginBottom: 16, marginTop: 16 }}
