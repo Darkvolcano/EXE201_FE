@@ -84,3 +84,7 @@
 .error {
   color: #dc3545;
 }
+
+.image-input-wrapper .ant-upload-list.ant-upload-list-text {
+  display: none;
+}
