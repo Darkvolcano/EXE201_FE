@@ -9,11 +9,13 @@ import {
   message,
   Input,
   Space,
+  Upload,
 } from "antd";
 import {
   CheckCircleOutlined,
   CloseCircleOutlined,
   PlusOutlined,
+  UploadOutlined,
 } from "@ant-design/icons";
 import {
   useGetAllTutorCertifications,
@@ -21,6 +23,8 @@ import {
 } from "../hooks/tutorsApi";
 import "../style/TutorCertification.css";
 import dayjs from "dayjs";
+import { storage } from "../configs/firebase"; // Import Firebase storage
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 const TutorCertifications = () => {
   const { data, isLoading, error, refetch } = useGetAllTutorCertifications();
@@ -30,34 +34,58 @@ const TutorCertifications = () => {
   const [selectedCertificate, setSelectedCertificate] = useState(null);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
+  const [fileLists, setFileLists] = useState({}); // Store file lists per field key
 
   useEffect(() => {
     if (isUploadModalVisible) {
-      form.setFieldsValue({ image: [""] });
+      form.setFieldsValue({ image: [] });
+      setFileLists({});
     }
   }, [isUploadModalVisible, form]);
 
   if (isLoading) return <div className="loading">Đang tải dữ liệu...</div>;
   if (error) return <div className="error">Lỗi: {error.message}</div>;
 
-  const onFinish = (values) => {
-    const filteredImages = values.image.filter(
-      (url) => url && url.trim() !== ""
+  const handleUpload = async (options) => {
+    const { file, onSuccess, onError, fieldKey } = options;
+    const storageRef = ref(
+      storage,
+      `certifications/${file.name}_${Date.now()}`
     );
-    if (filteredImages.length === 0) {
-      message.error("Vui lòng nhập ít nhất một URL hình ảnh hợp lệ!");
+    try {
+      const snapshot = await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      setFileLists((prev) => ({
+        ...prev,
+        [fieldKey]: prev[fieldKey]
+          ? [...prev[fieldKey], downloadURL]
+          : [downloadURL],
+      }));
+      onSuccess("Upload successful");
+      message.success(`${file.name} đã được tải lên thành công!`);
+    } catch (error) {
+      onError(error);
+      message.error("Tải lên thất bại!");
+    }
+  };
+
+  const onFinish = (values) => {
+    const imageUrls = Object.values(fileLists).flat();
+    if (imageUrls.length === 0) {
+      message.error("Vui lòng tải lên ít nhất một hình ảnh!");
       return;
     }
     const payload = {
       name: values.name,
       description: values.description,
-      image: filteredImages,
+      image: imageUrls,
       experience: parseInt(values.experience, 10),
     };
     registerCertificate(payload, {
-      onSuccess: (data) => {
-        message.success(data.message || "Tải chứng chỉ thành công!");
+      onSuccess: () => {
+        message.success("Tải chứng chỉ thành công. Vui lòng chờ xét duyệt!");
         form.resetFields();
+        setFileLists({});
         setIsUploadModalVisible(false);
         refetch();
       },
@@ -82,6 +110,7 @@ const TutorCertifications = () => {
 
   const openUploadModal = () => {
     form.resetFields();
+    setFileLists({});
     setIsUploadModalVisible(true);
   };
 
@@ -262,56 +291,104 @@ const TutorCertifications = () => {
           >
             <Input.TextArea placeholder="VD: Chứng chỉ chuyên sâu về phương pháp giảng dạy toán học" />
           </Form.Item>
-          <Form.Item
-            label="Đường dẫn hình ảnh"
-            required
-            className="image-urls-section"
-          >
+          <Form.Item label="Tải lên hình ảnh" required>
             <Form.List name="image">
-              {(fields, { add }) => (
+              {(fields, { add, remove }) => (
                 <>
                   {fields.map((field) => (
                     <Space
                       key={field.key}
-                      style={{ display: "flex", marginBottom: 8 }}
+                      style={{
+                        display: "flex",
+                        marginBottom: 8,
+                        flexDirection: "column",
+                      }}
                       align="baseline"
                       className="image-input-wrapper"
                     >
-                      <Form.Item
-                        {...field}
-                        noStyle
-                        rules={[
-                          {
-                            required: true,
-                            message: "Vui lòng nhập URL hình ảnh!",
-                          },
-                          {
-                            type: "url",
-                            message: "URL không hợp lệ!",
-                          },
-                        ]}
-                      >
-                        <Input placeholder="VD: https://example.com/image.jpg" />
-                      </Form.Item>
-                      <Button
-                        type="dashed"
-                        onClick={() => add()}
-                        icon={<PlusOutlined />}
-                        className="add-image-button"
-                      />
+                      <Space style={{ display: "flex", alignItems: "center" }}>
+                        <Form.Item
+                          {...field}
+                          noStyle
+                          rules={[
+                            {
+                              required: true,
+                              message: "Vui lòng tải lên hình ảnh!",
+                            },
+                          ]}
+                        >
+                          <Upload
+                            customRequest={(options) =>
+                              handleUpload({ ...options, fieldKey: field.key })
+                            }
+                            fileList={
+                              fileLists[field.key]
+                                ? fileLists[field.key].map((url, index) => ({
+                                    uid: `-${field.key}-${index}`,
+                                    name: `image-${field.key}-${index}.jpg`,
+                                    status: "done",
+                                    url: url, // Ensure URL is set for preview
+                                  }))
+                                : []
+                            }
+                            onChange={({ file, fileList: newFileList }) => {
+                              if (file.status === "done" && file.response) {
+                                const urls = newFileList
+                                  .filter((f) => f.status === "done")
+                                  .map((f) => f.url || f.response);
+                                setFileLists((prev) => ({
+                                  ...prev,
+                                  [field.key]: urls,
+                                }));
+                              }
+                            }}
+                            multiple
+                            accept="image/*"
+                            maxCount={1} // Limit to 1 file per upload field
+                          >
+                            <Button icon={<UploadOutlined />}>Chọn tệp</Button>
+                          </Upload>
+                        </Form.Item>
+                        <Button
+                          type="dashed"
+                          onClick={() => remove(field.name)}
+                          danger
+                          style={{ marginLeft: 8 }}
+                        >
+                          Xóa
+                        </Button>
+                      </Space>
+                      {/* Preview section for uploaded images */}
+                      {fileLists[field.key] &&
+                        fileLists[field.key].length > 0 && (
+                          <div style={{ marginTop: 8 }}>
+                            {fileLists[field.key].map((url, index) => (
+                              <Image
+                                key={index}
+                                src={url}
+                                alt={`Uploaded Image ${index + 1}`}
+                                style={{
+                                  maxWidth: "100px",
+                                  maxHeight: "100px",
+                                  marginRight: "10px",
+                                }}
+                              />
+                            ))}
+                          </div>
+                        )}
                     </Space>
                   ))}
-                  {fields.length === 0 && (
+                  <Form.Item>
                     <Button
                       type="dashed"
                       onClick={() => add()}
                       icon={<PlusOutlined />}
-                      className="add-image-button"
                       style={{ width: "100%" }}
+                      className="add-image-button"
                     >
-                      Thêm đường dẫn hình ảnh
+                      Thêm hình ảnh
                     </Button>
-                  )}
+                  </Form.Item>
                 </>
               )}
             </Form.List>
